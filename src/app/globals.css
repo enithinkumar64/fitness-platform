@@ -1,26 +1,148 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Dark by default, independent of the device theme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme static {
+  --color-background: #090b0d;
+  --color-surface: #171b20;
+  --color-surface-hover: #222830;
+  --color-primary: #c7ff42;
+  --color-primary-hover: #d6ff75;
+  --color-primary-active: #b4ed2b;
+  --color-on-primary: #090b0d;
+  --color-foreground: #f5f7f8;
+  --color-secondary: #939ba5;
+  --color-border: #2b3035;
+  /* Stronger border for controls; subtle border for decoration. */
+  --color-border-control: #687480;
+  --color-focus: #c7ff42;
+  --color-disabled: #222830;
+  --color-on-disabled: #939ba5;
+  /* Semantic text colors for use on background and surface. */
+  --color-success: #7ee2a8;
+  --color-warning: #ffd166;
+  --color-error: #ff929c;
+
+  --text-display: clamp(2.75rem, 1.75rem + 4vw, 5rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.04em;
+  --text-heading-1: clamp(2.25rem, 1.5rem + 3vw, 4rem);
+  --text-heading-2: clamp(1.875rem, 1.375rem + 2vw, 3rem);
+  --text-heading-3: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --text-heading-4: 1.25rem;
+  --text-heading-5: 1.125rem;
+  --text-heading-6: 1rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.6;
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.5;
+
+  /* Tailwind's existing 4px spacing scale remains available. */
+  --spacing-page: clamp(1rem, 0.5rem + 2vw, 2rem);
+  --spacing-section: clamp(3rem, 2rem + 4vw, 6rem);
+  --spacing-control: 2.75rem;
+  --radius-control: 0.75rem;
+  --radius-panel: 1.25rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --font-mono: var(--font-geist-mono), "Courier New", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    accent-color: var(--color-primary);
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  h1 { font-size: var(--text-heading-1); }
+  h2 { font-size: var(--text-heading-2); }
+  h3 { font-size: var(--text-heading-3); }
+  h4 { font-size: var(--text-heading-4); }
+  h5 { font-size: var(--text-heading-5); }
+  h6 { font-size: var(--text-heading-6); }
+
+  :where(code, kbd, pre, samp) {
+    font-family: var(--font-geist-mono), "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 0.08em;
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover { color: var(--color-primary-hover); }
+
+  :where(button, input, select, textarea) { font: inherit; }
+
+  :where(button, input[type="button"], input[type="submit"], input[type="reset"]) {
+    min-height: var(--spacing-control);
+    padding: 0.625rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  :where(button, input[type="button"], input[type="submit"], input[type="reset"]):hover:not(:disabled) {
+    background: var(--color-primary-hover);
+  }
+
+  :where(button, input[type="button"], input[type="submit"], input[type="reset"]):active:not(:disabled) {
+    background: var(--color-primary-active);
+  }
+
+  :where(button, input, select, textarea):disabled {
+    background: var(--color-disabled);
+    color: var(--color-on-disabled);
+    cursor: not-allowed;
+    opacity: 1;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+  }
+
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Honor reduced motion even when future components add transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
