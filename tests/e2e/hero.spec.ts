@@ -16,12 +16,12 @@ test("hero presents the FormFuel vision and categories", async ({ page }) => {
     await expect(categories.getByText(category, { exact: false })).toBeVisible();
   }
   await expect(categories.getByRole("link")).toHaveCount(0);
-  await expect(page.getByText(/These tools aren't available yet/)).toBeVisible();
+  await expect(page.getByRole("region", { name: "Everything you need. Nothing behind a paywall.", exact: true }).getByText("Coming Soon", { exact: true })).toHaveCount(6);
 });
 
 for (const [label, hash, destination] of [
   ["Explore Our Vision", "#our-vision", "Our vision"],
-  ["See What's Coming", "#whats-coming", "What's coming"],
+  ["See What's Coming", "#whats-coming", "Everything you need. Nothing behind a paywall."],
 ] as const) {
   test(`${label} works as a keyboard-accessible in-page link`, async ({ page }) => {
     const link = page.getByRole("link", { name: label, exact: true });
@@ -57,5 +57,5 @@ test("hero remains readable and within the viewport", async ({ page, isMobile },
 test("hero anchors work with reduced motion enabled", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.getByRole("link", { name: "See What's Coming", exact: true }).click();
-  await expect(page.getByRole("region", { name: "What's coming", exact: true })).toBeInViewport();
+  await expect(page.getByRole("region", { name: "Everything you need. Nothing behind a paywall.", exact: true })).toBeInViewport();
 });

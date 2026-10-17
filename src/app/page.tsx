@@ -1,3 +1,12 @@
+const freeTools = [
+  { name: "Fitness Calculators", description: "Calories, macros, and TDEE.", icon: "M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM8 7h8M8 11h1m6 0h1m-8 4h1m6 0h1m-8 3h1m6 0h1" },
+  { name: "Workout Plans", description: "Training plans tailored to your goals and schedule.", icon: "M7 12h10M3 10v4m4-7v10m10-10v10m4-7v4M3 12h4m10 0h4" },
+  { name: "Exercise Library", description: "Learn exercises and proper technique.", icon: "M4 4h6l2 2 2-2h6v15h-6l-2 2-2-2H4V4Zm8 2v15M7 8h2m-2 4h2m6-4h2m-2 4h2" },
+  { name: "Nutrition Tracking", description: "Track meals, calories, and macros.", icon: "M4 3v5a3 3 0 0 0 6 0V3M7 3v18M20 21V3c-4 2-5 8 0 9" },
+  { name: "Healthy Recipes", description: "Discover nutritious meal ideas.", icon: "M12 20C4 19 3 13 4 5c8-1 14 0 15 7 0 5-3 8-7 8Zm0 0V12m0 4-4-4m4 1 4-4" },
+  { name: "Progress Tracking", description: "Monitor your fitness journey over time.", icon: "M4 3v17h17M8 15l4-4 4 2 5-7m-5 0h5v5" },
+];
+
 export default function Home() {
   return (
     <main className="flex-1 bg-background text-foreground">
@@ -55,7 +64,7 @@ export default function Home() {
           ))}
         </ul>
 
-        <div className="grid gap-8 pt-8 sm:grid-cols-2 sm:gap-12">
+        <div className="pt-8">
           <section id="our-vision" tabIndex={-1} aria-labelledby="vision-heading" className="scroll-mt-8 rounded-control">
             <p className="mb-3 font-mono text-xs tracking-widest text-primary">THE WHY</p>
             <h2 id="vision-heading" className="text-heading-4">Our vision</h2>
@@ -65,16 +74,38 @@ export default function Home() {
               stay completely free.
             </p>
           </section>
-          <section id="whats-coming" tabIndex={-1} aria-labelledby="coming-heading" className="scroll-mt-8 rounded-control">
-            <p className="mb-3 font-mono text-xs tracking-widest text-primary">THE NEXT STEP</p>
-            <h2 id="coming-heading" className="text-heading-4">What&apos;s coming</h2>
-            <p className="mt-3 max-w-lg text-sm leading-7 text-secondary">
-              Fitness calculators, personalized workout plans, nutrition tools,
-              and progress tracking are planned. These tools aren&apos;t available
-              yet. We&apos;re building them one step at a time.
-            </p>
-          </section>
         </div>
+      </section>
+      <section id="whats-coming" tabIndex={-1} aria-labelledby="tools-heading" className="mx-auto max-w-7xl scroll-mt-8 px-page pb-section pt-8 sm:pt-12">
+        <div className="border-t border-border pt-10 sm:pt-14">
+          <p className="mb-4 font-mono text-xs font-medium tracking-[0.14em] text-primary sm:text-sm">
+            BUILT FOR YOUR FITNESS JOURNEY
+          </p>
+          <h2 id="tools-heading" className="max-w-3xl text-heading-2 font-bold tracking-tight">
+            Everything you need. Nothing behind a paywall.
+          </h2>
+          <p className="mt-4 text-body text-secondary sm:text-lg">
+            Explore the free fitness tools we’re building for you.
+          </p>
+        </div>
+        <ul aria-label="Free tools" className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5">
+          {freeTools.map((tool, index) => (
+            <li key={tool.name} className="min-w-0">
+              <article aria-labelledby={`tool-${index}`} className="flex h-full flex-col rounded-panel border border-border bg-surface p-6 sm:p-7">
+                <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
+                  <span className="flex size-12 items-center justify-center rounded-control border border-primary/20 bg-primary/5 text-primary" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" focusable="false">
+                      <path d={tool.icon} />
+                    </svg>
+                  </span>
+                  <span className="rounded-full border border-border-control px-3 py-1 font-mono text-xs text-secondary">Coming Soon</span>
+                </div>
+                <h3 id={`tool-${index}`} className="text-heading-4 font-semibold">{tool.name}</h3>
+                <p className="mt-3 text-sm leading-7 text-secondary">{tool.description}</p>
+              </article>
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   );
