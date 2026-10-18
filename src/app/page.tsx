@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const freeTools = [
   { name: "Fitness Calculators", description: "Calories, macros, and TDEE.", icon: "M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM8 7h8M8 11h1m6 0h1m-8 4h1m6 0h1m-8 3h1m6 0h1" },
   { name: "Workout Plans", description: "Training plans tailored to your goals and schedule.", icon: "M7 12h10M3 10v4m4-7v10m10-10v10m4-7v4M3 12h4m10 0h4" },
@@ -75,6 +77,7 @@ export default function Home() {
             </p>
           </section>
         </div>
+        <p className="mt-6 text-sm text-secondary">Available now: <Link href="/calculators/tdee" className="inline-flex min-h-control items-center rounded-control font-semibold">Free TDEE &amp; daily calorie calculator</Link>. The previews below are still coming soon.</p>
       </section>
       <section id="whats-coming" tabIndex={-1} aria-labelledby="tools-heading" className="mx-auto max-w-7xl scroll-mt-8 px-page pb-section pt-8 sm:pt-12">
         <div className="border-t border-border pt-10 sm:pt-14">
