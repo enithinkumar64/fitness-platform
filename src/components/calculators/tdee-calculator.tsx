@@ -69,6 +69,7 @@ export function TdeeCalculator() {
   const numericProps = (key: keyof InputErrors) => ({ "aria-invalid": !!errors[key], "aria-describedby": errors[key] ? `error-${key}` : undefined });
   const kcal = (value: number) => `${Math.round(value)} kcal/day`;
 
+
   return (
     <div className="grid min-w-0 gap-8 lg:grid-cols-2">
       <form onSubmit={submit} noValidate className="min-w-0 rounded-panel border border-border bg-surface p-5 sm:p-8" aria-label="TDEE calculator">
@@ -97,6 +98,11 @@ export function TdeeCalculator() {
         <p role="status" className="mt-2 text-sm text-secondary">{result ? "Calculation complete. Daily calorie estimates are ready." : "Enter your measurements and calculate to see your estimates."}</p>
         {result && <>
           <dl className="mt-6"><div className="rounded-control border border-primary/30 bg-background p-5"><dt className="text-sm text-secondary">Maintenance calories (TDEE)</dt><dd className="mt-2 break-words font-mono text-3xl font-bold text-primary">{kcal(result.maintenance)}</dd></div><div className="mt-4 flex flex-wrap justify-between gap-2 border-b border-border pb-4"><dt>BMR</dt><dd className="font-mono">{kcal(result.bmr)}</dd></div></dl>
+          <div className="mt-6 border-t border-border pt-5">
+            <h3 className="text-heading-5">Explore your macros</h3>
+            <p className="mt-2 text-xs leading-6 text-secondary">Estimate macros from your measurements, activity, and goal. You will enter your measurements there; no personal data is passed through the link.</p>
+            <a href="/calculators/macros" className="mt-3 inline-flex min-h-control items-center rounded-control text-sm font-semibold">Open goal-guided Macro Calculator</a>
+          </div>
           <h3 className="mt-6 text-heading-5">Weight-goal estimates</h3>
           <p className="mt-2 text-sm leading-6 text-secondary">Illustrative adjustments, not a prescription. A deficit is not appropriate for everyone; discuss your goals with a qualified professional.</p>
           <dl className="mt-4 space-y-4">{([
