@@ -77,7 +77,7 @@ export default function Home() {
             </p>
           </section>
         </div>
-        <p className="mt-6 text-sm text-secondary">Available now: <Link href="/calculators/tdee" className="inline-flex min-h-control items-center rounded-control font-semibold">Free TDEE &amp; daily calorie calculator</Link> and <Link href="/calculators/macros" className="inline-flex min-h-control items-center rounded-control font-semibold">Free goal-guided macro calculator</Link>. The previews below are still coming soon.</p>
+        <p className="mt-6 text-sm text-secondary">Available now: <Link href="/calculators/tdee" className="inline-flex min-h-control items-center rounded-control font-semibold">Free TDEE &amp; daily calorie calculator</Link>, <Link href="/calculators/macros" className="inline-flex min-h-control items-center rounded-control font-semibold">Free goal-guided macro calculator</Link>, and <Link href="/calculators/bmi" className="inline-flex min-h-control items-center rounded-control font-semibold">Free adult BMI calculator</Link>. The previews below are still coming soon.</p>
       </section>
       <section id="whats-coming" tabIndex={-1} aria-labelledby="tools-heading" className="mx-auto max-w-7xl scroll-mt-8 px-page pb-section pt-8 sm:pt-12">
         <div className="border-t border-border pt-10 sm:pt-14">
