@@ -1,0 +1,28 @@
+import type { Equipment } from "../exercises/types.ts";
+import type { GroupId, SubstitutionGroup } from "./types.ts";
+// Approval here means explicitly included in FormFuel's editorial program,
+// not individual clearance, certification, or equivalence of exact loading.
+export const GYM_EQUIPMENT: readonly { value: Equipment; label: string }[] = [
+  { value: "Dumbbells", label: "Dumbbells" }, { value: "Bench", label: "Stable adjustable exercise bench" },
+  { value: "Cable", label: "Cable station with bar/rope and row, pulldown and curl attachments" },
+  { value: "Barbell", label: "Barbell and plates" }, { value: "Rack", label: "Rack with suitable safety catches" },
+  { value: "Machine", label: "Chest press, leg press AND seated leg curl machines (confirm all three)" },
+];
+export const SUBSTITUTIONS: Record<GroupId, SubstitutionGroup> = {
+  squat: { label: "Squat / knee-dominant compound", pattern: "Squat", categories: ["Legs and quads"], options: { bodyweight: ["ex-bodyweight-squat"], dumbbells: ["ex-goblet-squat"], gym: ["ex-leg-press","ex-goblet-squat","ex-barbell-back-squat"] }, strengthPriority: ["ex-barbell-back-squat","ex-goblet-squat","ex-leg-press"] },
+  "hip-extension": { label: "Hip extension", pattern: "Hip extension", categories: ["Glutes and hamstrings"], options: { bodyweight: ["ex-glute-bridge"], dumbbells: ["ex-glute-bridge"], gym: ["ex-glute-bridge","ex-barbell-hip-thrust"] } },
+  hinge: { label: "Bilateral hip hinge", pattern: "Hip hinge", categories: ["Glutes and hamstrings"], options: { bodyweight: [], dumbbells: ["ex-dumbbell-romanian-deadlift"], gym: ["ex-dumbbell-romanian-deadlift","ex-barbell-romanian-deadlift","ex-cable-pull-through"] }, strengthPriority: ["ex-barbell-romanian-deadlift","ex-dumbbell-romanian-deadlift"] },
+  "chest-press": { label: "Horizontal chest press", pattern: "Horizontal push", categories: ["Chest"], options: { bodyweight: ["ex-push-up","ex-kneeling-push-up"], dumbbells: ["ex-dumbbell-bench-press","ex-dumbbell-floor-press"], gym: ["ex-machine-chest-press","ex-dumbbell-bench-press","ex-barbell-bench-press","ex-dumbbell-floor-press"] }, strengthPriority: ["ex-barbell-bench-press","ex-dumbbell-bench-press","ex-machine-chest-press","ex-dumbbell-floor-press"] },
+  row: { label: "Horizontal back row", pattern: "Horizontal pull", categories: ["Back"], options: { bodyweight: ["ex-band-row"], dumbbells: ["ex-one-arm-dumbbell-row","ex-chest-supported-dumbbell-row"], gym: ["ex-seated-cable-row","ex-chest-supported-dumbbell-row","ex-one-arm-dumbbell-row","ex-barbell-bent-over-row"] }, strengthPriority: ["ex-barbell-bent-over-row","ex-seated-cable-row","ex-chest-supported-dumbbell-row","ex-one-arm-dumbbell-row"] },
+  "vertical-pull": { label: "Vertical back pull", pattern: "Vertical pull", categories: ["Back"], options: { bodyweight: [], dumbbells: [], gym: ["ex-lat-pulldown","ex-neutral-grip-lat-pulldown"] } },
+  "lateral-raise": { label: "Lateral shoulder raise", pattern: "Shoulder abduction", categories: ["Shoulders"], options: { bodyweight: [], dumbbells: ["ex-dumbbell-lateral-raise"], gym: ["ex-dumbbell-lateral-raise","ex-cable-lateral-raise"] } },
+  "vertical-press": { label: "Overhead shoulder press", pattern: "Vertical push", categories: ["Shoulders"], options: { bodyweight: [], dumbbells: ["ex-seated-dumbbell-shoulder-press","ex-standing-dumbbell-shoulder-press"], gym: ["ex-seated-dumbbell-shoulder-press","ex-standing-dumbbell-shoulder-press","ex-barbell-overhead-press"] }, strengthPriority: ["ex-barbell-overhead-press","ex-standing-dumbbell-shoulder-press","ex-seated-dumbbell-shoulder-press"] },
+  biceps: { label: "Biceps elbow flexion", pattern: "Elbow flexion", categories: ["Biceps"], options: { bodyweight: [], dumbbells: ["ex-dumbbell-biceps-curl","ex-hammer-curl"], gym: ["ex-cable-curl","ex-dumbbell-biceps-curl","ex-hammer-curl","ex-barbell-curl"] } },
+  triceps: { label: "Triceps elbow extension", pattern: "Elbow extension", categories: ["Triceps"], options: { bodyweight: [], dumbbells: ["ex-dumbbell-triceps-kickback","ex-overhead-dumbbell-triceps-extension"], gym: ["ex-cable-triceps-pushdown","ex-dumbbell-triceps-kickback","ex-overhead-cable-triceps-extension","ex-overhead-dumbbell-triceps-extension"] } },
+  "rear-delts": { label: "Rear shoulder opening", pattern: "Horizontal abduction", categories: ["Back","Shoulders"], options: { bodyweight: ["ex-band-pull-apart"], dumbbells: ["ex-bent-over-dumbbell-reverse-fly"], gym: ["ex-bent-over-dumbbell-reverse-fly"] } },
+  lunge: { label: "Split-stance leg work", pattern: "Lunge", categories: ["Legs and quads"], options: { bodyweight: ["ex-reverse-lunge","ex-walking-lunge"], dumbbells: ["ex-reverse-lunge","ex-bulgarian-split-squat","ex-walking-lunge"], gym: ["ex-reverse-lunge","ex-bulgarian-split-squat","ex-walking-lunge"] } },
+  calf: { label: "Calf raise", pattern: "Ankle plantar flexion", categories: ["Legs and quads"], options: { bodyweight: ["ex-standing-calf-raise"], dumbbells: ["ex-standing-calf-raise"], gym: ["ex-standing-calf-raise"] } },
+  "leg-curl": { label: "Hamstring knee flexion", pattern: "Knee flexion", categories: ["Glutes and hamstrings"], options: { bodyweight: [], dumbbells: [], gym: ["ex-seated-leg-curl"] } },
+  core: { label: "Trunk anti-extension", pattern: "Anti-extension", categories: ["Core and abs"], options: { bodyweight: ["ex-dead-bug","ex-forearm-plank"], dumbbells: ["ex-dead-bug","ex-forearm-plank"], gym: ["ex-dead-bug","ex-forearm-plank"] } },
+  walk: { label: "Easy walking", pattern: "Locomotion", categories: ["Cardio and conditioning"], options: { bodyweight: ["ex-brisk-walking"], dumbbells: ["ex-brisk-walking"], gym: ["ex-brisk-walking"] } },
+};

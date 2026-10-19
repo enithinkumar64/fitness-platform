@@ -80,7 +80,7 @@ export function SiteHeader() {
         </li>
         {navigationSections.map((section) => (
           <li key={section}>
-            {section === "Exercises" ? <Link
+            {section === "Workouts" ? <Link href="/workout-planner" aria-current={pathname === "/workout-planner" ? "page" : undefined} onClick={mobile ? closeMenu : undefined} className={`flex min-h-control items-center rounded-control border px-3 py-2 text-sm font-semibold no-underline hover:bg-surface-hover hover:text-primary ${pathname === "/workout-planner" ? "border-primary/30 bg-surface text-primary" : "border-transparent text-foreground"}`}>Workouts</Link> : section === "Exercises" ? <Link
               href="/exercises"
               aria-current={pathname === "/exercises" ? "page" : pathname.startsWith("/exercises/") ? "location" : undefined}
               onClick={mobile ? closeMenu : undefined}

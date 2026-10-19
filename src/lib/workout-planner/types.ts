@@ -1,0 +1,17 @@
+import type { Difficulty, Equipment } from "../exercises/types.ts";
+export const GOALS = { fitness: "General fitness", muscle: "Build muscle", strength: "Build strength" } as const;
+export const EQUIPMENT_MODES = { bodyweight: "Bodyweight / Home", dumbbells: "Dumbbells", gym: "Full Gym" } as const;
+export type TemplateId = "full" | "upper" | "lower" | "push" | "pull" | "legs" | "conditioning";
+export type SplitId = "fb-2" | "ul-2" | "fb-3" | "ppl-3" | "uul-3" | "ul-4" | "pplfb-4" | "fbulfb-4" | "uulul-5" | "pplul-5" | "ulppl-5";
+export type Preferences = { goal: keyof typeof GOALS; experience: Difficulty; days: 2 | 3 | 4 | 5; split: SplitId; equipment: keyof typeof EQUIPMENT_MODES; hasBench: boolean; hasBand: boolean; gymEquipment: Equipment[] };
+export type PreferenceErrors = Partial<Record<keyof Preferences | "seed", string>>;
+export type Split = { id: SplitId; name: string; description: string; days: Preferences["days"]; structure: readonly TemplateId[]; trainingDays: readonly number[]; recommended: boolean; benefits: string; tradeoffs: string; suitability: string };
+export type GroupId = "squat" | "hip-extension" | "hinge" | "chest-press" | "row" | "vertical-pull" | "lateral-raise" | "vertical-press" | "biceps" | "triceps" | "rear-delts" | "lunge" | "calf" | "leg-curl" | "core" | "walk";
+export type SubstitutionGroup = { label: string; pattern: string; categories: readonly string[]; options: Record<Preferences["equipment"], readonly string[]>; strengthPriority?: readonly string[] };
+export type Slot = { id: string; label: string; group: GroupId | "hip-main"; kind: "main" | "secondary" | "accessory"; optional?: boolean; experiencedOnly?: boolean };
+export type WorkoutTemplate = { id: TemplateId; name: string; requiredPatterns: readonly string[]; notes: string; slots: readonly Slot[] };
+export type Dose = { sets: number; target: { unit: "reps" | "seconds" | "minutes"; min: number; max: number }; restSeconds: number; effort: string };
+export type PlannedExercise = { slotId: string; label: string; group: GroupId; kind: Slot["kind"]; exerciseId: string; alternatives: string[]; dose: Dose };
+export type Workout = { id: string; name: string; templateId: TemplateId; programKey: string; exercises: PlannedExercise[]; omitted: string[] };
+export type WorkoutPlan = { version: 2; preferences: Preferences; seed: number; workouts: Workout[]; schedule: { day: string; workoutId: string | null }[]; rotation: string; notes: string[] };
+export type GenerationResult = { ok: true; plan: WorkoutPlan } | { ok: false; errors: PreferenceErrors; message: string };
