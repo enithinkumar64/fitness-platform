@@ -1,0 +1,1627 @@
+{
+  "retrievedOn": "2026-10-19",
+  "source": "USDA FoodData Central full food details API",
+  "note": "Subset of official response fields. No key retained. All 29 foods reviewed; not all portions are exposed in the UI.",
+  "records": [
+    {
+      "fdcId": 171688,
+      "description": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 89191,
+          "dataPoints": 60,
+          "gramWeight": 109.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup slices",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89193,
+          "dataPoints": 113,
+          "gramWeight": 182.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "medium (3\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89194,
+          "dataPoints": 113,
+          "gramWeight": 149.0,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "small (2-3/4\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89196,
+          "gramWeight": 242.0,
+          "sequenceNumber": 7,
+          "amount": 1.0,
+          "modifier": "NLEA serving",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89190,
+          "gramWeight": 125.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, quartered or chopped",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89195,
+          "gramWeight": 101.0,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "extra small (2-1/2\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89192,
+          "dataPoints": 113,
+          "gramWeight": 223.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "large (3-1/4\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 173944,
+      "description": "Bananas, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 93518,
+          "gramWeight": 126.0,
+          "sequenceNumber": 8,
+          "amount": 1.0,
+          "modifier": "NLEA serving",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 93517,
+          "gramWeight": 152.0,
+          "sequenceNumber": 7,
+          "amount": 1.0,
+          "modifier": "extra large (9\" or longer)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 93516,
+          "gramWeight": 136.0,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "large (8\" to 8-7/8\" long)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 93512,
+          "gramWeight": 150.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup, sliced",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 93514,
+          "gramWeight": 101.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "small (6\" to 6-7/8\" long)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 93513,
+          "gramWeight": 81.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "extra small (less than 6\" long)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 93515,
+          "gramWeight": 118.0,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "medium (7\" to 7-7/8\" long)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 93511,
+          "gramWeight": 225.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, mashed",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 169910,
+      "description": "Mangos, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 85652,
+          "dataPoints": 12,
+          "gramWeight": 336.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "fruit without refuse",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85651,
+          "dataPoints": 3,
+          "gramWeight": 165.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup pieces",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 171705,
+      "description": "Avocados, raw, all commercial varieties",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 89224,
+          "gramWeight": 230.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup, pureed",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89223,
+          "gramWeight": 150.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, cubes",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89225,
+          "gramWeight": 146.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "cup, sliced",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89227,
+          "gramWeight": 50.0,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "NLEA Serving",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 89226,
+          "gramWeight": 201.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "avocado, NS as to Florida or California",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 173424,
+      "description": "Egg, whole, cooked, hard-boiled",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 92499,
+          "gramWeight": 8.5,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "tbsp",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 92498,
+          "gramWeight": 136.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, chopped",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 92500,
+          "gramWeight": 50.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "large",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 170457,
+      "description": "Tomatoes, red, ripe, raw, year round average",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 86686,
+          "gramWeight": 123.0,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "medium whole (2-3/5\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86687,
+          "gramWeight": 20.0,
+          "sequenceNumber": 7,
+          "amount": 1.0,
+          "modifier": "slice, medium (1/4\" thick)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86685,
+          "gramWeight": 182.0,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "large whole (3\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86684,
+          "gramWeight": 17.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "cherry",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86683,
+          "gramWeight": 62.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "Italian tomato",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86692,
+          "gramWeight": 15.0,
+          "sequenceNumber": 12,
+          "amount": 1.0,
+          "modifier": "slice, thin/small",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86682,
+          "gramWeight": 180.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup, chopped or sliced",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86689,
+          "gramWeight": 91.0,
+          "sequenceNumber": 9,
+          "amount": 1.0,
+          "modifier": "small whole (2-2/5\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86690,
+          "gramWeight": 27.0,
+          "sequenceNumber": 10,
+          "amount": 1.0,
+          "modifier": "slice, thick/large (1/2\" thick)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86681,
+          "gramWeight": 149.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup cherry tomatoes",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86691,
+          "gramWeight": 31.0,
+          "sequenceNumber": 11,
+          "amount": 1.0,
+          "modifier": "wedge (1/4 of medium tomato)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86693,
+          "gramWeight": 148.0,
+          "sequenceNumber": 13,
+          "amount": 1.0,
+          "modifier": "NLEA serving",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86688,
+          "gramWeight": 62.0,
+          "sequenceNumber": 8,
+          "amount": 1.0,
+          "modifier": "plum tomato",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 168462,
+      "description": "Spinach, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 83133,
+          "gramWeight": 340.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "bunch",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 83134,
+          "gramWeight": 10.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "leaf",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 83132,
+          "gramWeight": 30.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 83135,
+          "gramWeight": 284.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "package (10 oz)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 169975,
+      "description": "Cabbage, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 85794,
+          "gramWeight": 33.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "leaf, large",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85795,
+          "gramWeight": 908.0,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "head, medium (about 5-3/4\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85791,
+          "gramWeight": 89.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, chopped",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85792,
+          "gramWeight": 70.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup, shredded",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85796,
+          "gramWeight": 23.0,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "leaf, medium",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85798,
+          "gramWeight": 15.0,
+          "sequenceNumber": 8,
+          "amount": 1.0,
+          "modifier": "leaf",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85793,
+          "gramWeight": 1248.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "head, large (about 7\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85797,
+          "gramWeight": 714.0,
+          "sequenceNumber": 7,
+          "amount": 1.0,
+          "modifier": "head, small (about 4-1/2\" dia)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 170379,
+      "description": "Broccoli, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 86529,
+          "gramWeight": 608.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "bunch",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86532,
+          "gramWeight": 44.0,
+          "sequenceNumber": 5,
+          "amount": 0.5,
+          "modifier": "cup, chopped or diced",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86531,
+          "gramWeight": 151.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "stalk",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86530,
+          "gramWeight": 31.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "spear (about 5\" long)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86533,
+          "gramWeight": 148.0,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "NLEA serving",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86528,
+          "dataPoints": 9,
+          "gramWeight": 91.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup chopped",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 171477,
+      "description": "Chicken, broilers or fryers, breast, meat only, cooked, roasted",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 88817,
+          "gramWeight": 140.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, chopped or diced",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88818,
+          "gramWeight": 52.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "unit (yield from 1 lb ready-to-cook chicken)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88819,
+          "gramWeight": 86.0,
+          "sequenceNumber": 3,
+          "amount": 0.5,
+          "modifier": "breast, bone and skin removed",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 172421,
+      "description": "Lentils, mature seeds, cooked, boiled, without salt",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 90596,
+          "gramWeight": 198.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 90597,
+          "gramWeight": 12.3,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "tbsp",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 172688,
+      "description": "Bread, whole-wheat, commercially prepared",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 91109,
+          "gramWeight": 28.35,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "oz",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 91108,
+          "dataPoints": 19,
+          "gramWeight": 32.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "slice",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 172183,
+      "description": "Egg, white, raw, fresh",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 90044,
+          "gramWeight": 243.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 90043,
+          "gramWeight": 33.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "large",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 174276,
+      "description": "Soy protein isolate",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 94067,
+          "gramWeight": 28.35,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "oz",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 173757,
+      "description": "Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 93226,
+          "gramWeight": 164.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 170567,
+      "description": "Nuts, almonds",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 86867,
+          "gramWeight": 28.35,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "oz (23 whole kernels)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86868,
+          "gramWeight": 1.2,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "almond",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86863,
+          "dataPoints": 23,
+          "gramWeight": 143.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, whole",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86865,
+          "gramWeight": 108.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "cup, slivered",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86866,
+          "gramWeight": 95.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "cup, ground",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86864,
+          "dataPoints": 4,
+          "gramWeight": 92.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup, sliced",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 171287,
+      "description": "Egg, whole, raw, fresh",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 88377,
+          "gramWeight": 243.0,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "cup (4.86 large eggs)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88378,
+          "gramWeight": 44.0,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "medium",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88375,
+          "gramWeight": 56.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "extra large",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88379,
+          "gramWeight": 38.0,
+          "sequenceNumber": 7,
+          "amount": 1.0,
+          "modifier": "small",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88376,
+          "gramWeight": 63.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "jumbo",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88374,
+          "gramWeight": 50.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "large",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 172470,
+      "description": "Peanut butter, smooth style, without salt",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 90674,
+          "gramWeight": 258.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 90673,
+          "gramWeight": 32.0,
+          "sequenceNumber": 1,
+          "amount": 2.0,
+          "modifier": "tbsp",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 173686,
+      "description": "Fish, salmon, Atlantic, wild, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 93106,
+          "gramWeight": 85.0,
+          "sequenceNumber": 1,
+          "amount": 3.0,
+          "modifier": "oz",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 93107,
+          "gramWeight": 198.0,
+          "sequenceNumber": 2,
+          "amount": 0.5,
+          "modifier": "fillet",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 171077,
+      "description": "Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 87919,
+          "gramWeight": 113.0,
+          "sequenceNumber": 1,
+          "amount": 4.0,
+          "modifier": "oz",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 87921,
+          "dataPoints": 13,
+          "gramWeight": 926.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "package",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 87920,
+          "dataPoints": 13,
+          "gramWeight": 272.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "piece",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 168917,
+      "description": "Quinoa, cooked",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 83990,
+          "dataPoints": 6,
+          "gramWeight": 185.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 168878,
+      "description": "Rice, white, long-grain, regular, enriched, cooked",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 83928,
+          "gramWeight": 158.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 171413,
+      "description": "Oil, olive, salad or cooking",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 88667,
+          "gramWeight": 13.5,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "tablespoon",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88669,
+          "gramWeight": 4.5,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "tsp",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88668,
+          "gramWeight": 216.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 169228,
+      "description": "Eggplant, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 84476,
+          "gramWeight": 548.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "eggplant, unpeeled (approx 1-1/4 lb)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 84475,
+          "gramWeight": 458.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "eggplant, peeled (yield from 1-1/4 lb)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 84474,
+          "gramWeight": 82.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, cubes",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 170393,
+      "description": "Carrots, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 86556,
+          "gramWeight": 110.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup grated",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86561,
+          "gramWeight": 3.0,
+          "sequenceNumber": 7,
+          "amount": 1.0,
+          "modifier": "slice",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86562,
+          "gramWeight": 7.0,
+          "sequenceNumber": 8,
+          "amount": 1.0,
+          "modifier": "strip large (3\" long)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86560,
+          "gramWeight": 50.0,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "small (5-1/2\" long)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86559,
+          "gramWeight": 61.0,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "medium",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86558,
+          "gramWeight": 72.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "large (7-1/4\" to 8-/1/2\" long)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86555,
+          "gramWeight": 128.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup chopped",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86563,
+          "gramWeight": 4.0,
+          "sequenceNumber": 9,
+          "amount": 1.0,
+          "modifier": "strip medium",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 86557,
+          "gramWeight": 122.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "cup strips or slices",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 170020,
+      "description": "Peas and onions, frozen, unprepared",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 85910,
+          "gramWeight": 284.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "package (10 oz)",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 85909,
+          "gramWeight": 69.0,
+          "sequenceNumber": 1,
+          "amount": 0.5,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 168482,
+      "description": "Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program)",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 83166,
+          "gramWeight": 133.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, cubes",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 83167,
+          "gramWeight": 130.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "sweetpotato, 5\" long",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 169291,
+      "description": "Squash, summer, zucchini, includes skin, raw",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 84609,
+          "gramWeight": 323.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "large",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 84610,
+          "gramWeight": 196.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "medium",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 84611,
+          "gramWeight": 9.9,
+          "sequenceNumber": 5,
+          "amount": 1.0,
+          "modifier": "slice",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 84612,
+          "gramWeight": 118.0,
+          "sequenceNumber": 6,
+          "amount": 1.0,
+          "modifier": "small",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 84607,
+          "gramWeight": 124.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup, chopped",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 84608,
+          "gramWeight": 113.0,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "cup, sliced",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    },
+    {
+      "fdcId": 171265,
+      "description": "Milk, whole, 3.25% milkfat, with added vitamin D",
+      "dataType": "SR Legacy",
+      "foodPortions": [
+        {
+          "id": 88315,
+          "gramWeight": 30.5,
+          "sequenceNumber": 2,
+          "amount": 1.0,
+          "modifier": "fl oz",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88314,
+          "gramWeight": 244.0,
+          "sequenceNumber": 1,
+          "amount": 1.0,
+          "modifier": "cup",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88316,
+          "gramWeight": 15.0,
+          "sequenceNumber": 3,
+          "amount": 1.0,
+          "modifier": "tbsp",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        },
+        {
+          "id": 88317,
+          "gramWeight": 976.0,
+          "sequenceNumber": 4,
+          "amount": 1.0,
+          "modifier": "quart",
+          "measureUnit": {
+            "id": 9999,
+            "name": "undetermined",
+            "abbreviation": "undetermined"
+          }
+        }
+      ]
+    }
+  ]
+}

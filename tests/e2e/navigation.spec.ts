@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const sections = ["Calculators", "Nutrition", "Progress"];
+const sections = ["Calculators", "Progress"];
 const mobileMenu = (page: Page) =>
   page.getByRole("navigation", { name: "Primary mobile", exact: true });
 const toggle = (page: Page) =>
@@ -42,7 +42,7 @@ test("desktop navigation is visible and Home is active", async ({ page, isMobile
   const home = nav.getByRole("link", { name: "Home", exact: true });
   await expect(home).toHaveAttribute("aria-current", "page");
   await expect(home).toHaveCSS("color", "rgb(199, 255, 66)");
-  await expect(nav.getByText("Coming Soon", { exact: true })).toHaveCount(3);
+  await expect(nav.getByText("Coming Soon", { exact: true })).toHaveCount(2);
   await expect(nav.getByRole("link", { name: "Exercises", exact: true })).toHaveAttribute("href", "/exercises");
   for (const section of sections) {
     await expect(nav.getByText(section, { exact: true })).toBeVisible();
@@ -55,7 +55,7 @@ test("Coming Soon sections cannot navigate", async ({ page, isMobile }) => {
     name: isMobile ? "Primary mobile" : "Primary",
     exact: true,
   });
-  await expect(nav.getByRole("link")).toHaveCount(3);
+  await expect(nav.getByRole("link")).toHaveCount(4);
   for (const section of sections) {
     // Clicking plain text can move focus outside the header and dismiss it.
     // Reopen the disclosure as needed to check each independent item.

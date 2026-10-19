@@ -1,0 +1,159 @@
+'use client';
+import Link from 'next/link';
+import { FoodQuantityFields } from './food-quantity-fields';
+import { GRAM, formatServing, servingOptions } from '@/lib/nutrition/servings';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { EMPTY, KEYS, MEALS, STORAGE_KEY, deleteEntry, foodForEditing, localDate, makeEntry, parseDiary, progress, saveEntry, shiftDate, totals, validDate, validFood, validTargets, type Diary, type Food, type Meal } from '@/lib/nutrition/core';
+import { STARTER_FOODS } from '@/lib/nutrition/foods';
+const control = 'mt-2 block min-h-control w-full min-w-0 rounded-control border border-border-control bg-background px-3 py-2';
+const panel = 'min-w-0 rounded-panel border border-border bg-surface p-5 sm:p-7';
+const labels = { calories: 'Calories', protein: 'Protein', carbohydrates: 'Carbohydrates', fat: 'Fat' };
+type SearchResult = {
+    sourceId: string;
+    name: string;
+    dataType: string;
+    brand: string;
+};
+export function NutritionTracker() {
+    const [diary, setDiary] = useState<Diary>(EMPTY), [ready, setReady] = useState(false), [date, setDate] = useState('');
+    const [storageMessage, setStorageMessage] = useState(''), [message, setMessage] = useState(''), [error, setError] = useState('');
+    const [query, setQuery] = useState(''), [remote, setRemote] = useState<SearchResult[]>([]), [loading, setLoading] = useState(false), [usdaError, setUsdaError] = useState('');
+    const [food, setFood] = useState<Food | null>(null), [quantity, setQuantity] = useState('100'), [servingId, setServingId] = useState('g'), [meal, setMeal] = useState<Meal>('Breakfast'), [editing, setEditing] = useState<string | null>(null);
+    const [targetInputs, setTargetInputs] = useState<Record<string, string>>({}), [targetError, setTargetError] = useState('');
+    const formHeading = useRef<HTMLHeadingElement>(null), alert = useRef<HTMLParagraphElement>(null);
+    const requestVersion = useRef(0);
+    useEffect(() => {
+        let active = true;
+        queueMicrotask(() => {
+            if (!active)
+                return;
+            let initial = structuredClone(EMPTY);
+            try {
+                initial = parseDiary(localStorage.getItem(STORAGE_KEY));
+            }
+            catch {
+                setStorageMessage('Saved diary could not be read. It has not been overwritten. You can continue in this session or clear stored data.');
+            }
+            setDiary(initial);
+            setTargetInputs(Object.fromEntries(KEYS.map(k => [k, initial.targets[k]?.toString() ?? ''])));
+            setDate(localDate());
+            setReady(true);
+        });
+        return () => { active = false; };
+    }, []);
+    function update(next: Diary) {
+        setDiary(next);
+        // A corrupt or inaccessible store is never automatically overwritten.
+        if (storageMessage)
+            return;
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+        }
+        catch {
+            setStorageMessage('Browser storage is unavailable or full. Changes remain in this session only.');
+        }
+    }
+    function changeDate(next: string) { if (validDate(next)) {
+            requestVersion.current++;
+            setLoading(false);
+        setDate(next);
+        setEditing(null);
+        setFood(null);
+        setError('');
+    } }
+    function chooseFood(next: Food) {
+        setFood(next);
+        setEditing(null);
+        const serving=servingOptions(next)[0];
+        setServingId(serving.id);
+        setQuantity(serving.id === 'g' ? '100' : '1');
+        setError('');
+    }
+    function changeServing(nextId: string) {
+        const options=servingOptions(food ?? {});
+        const current=options.find(s=>s.id===servingId) ?? GRAM;
+        const next=options.find(s=>s.id===nextId);
+        if (!next) return;
+        const value=quantity.trim() === '' ? NaN : Number(quantity);
+        if (Number.isFinite(value) && value > 0) setQuantity(String(value*current.gramsPerServing/next.gramsPerServing));
+        setServingId(nextId);
+        setError('');
+    }
+    async function usda(id?: string) {
+        const version = ++requestVersion.current;
+        setLoading(true);
+        setUsdaError('');
+        try {
+            const response = await fetch(id ? `/api/nutrition/food?id=${encodeURIComponent(id)}` : `/api/nutrition/search?q=${encodeURIComponent(query.trim())}`);
+            const data = await response.json();
+            if (version !== requestVersion.current)
+                return;
+            if (!response.ok)
+                throw new Error(data.error ?? 'USDA request failed.');
+            if (id) {
+                if (!validFood(data.food))
+                    throw new Error('Complete nutrition is unavailable.');
+                chooseFood(data.food);
+            }
+            else {
+                setRemote(data.foods);
+                if (data.foods.length === 0)
+                    setUsdaError('No USDA matches. Try a different search.');
+            }
+        }
+        catch (e) {
+            if (version === requestVersion.current)
+                setUsdaError(e instanceof Error ? e.message : 'USDA is unavailable.');
+        }
+        finally {
+            if (version === requestVersion.current)
+                setLoading(false);
+        }
+    }
+    function submit(e: FormEvent) {
+        e.preventDefault();
+        setError('');
+        try {
+            if (!food)
+                throw new Error('Select a food first.');
+            const entry = makeEntry(editing ?? crypto.randomUUID(), date, meal, food, quantity.trim() === '' ? NaN : Number(quantity), servingId);
+            update(saveEntry(diary, entry));
+            setMessage(editing ? 'Entry updated.' : 'Food added.');
+            setEditing(null);
+            setFood(null);
+        }
+        catch (e) {
+            setError((e as Error).message);
+            requestAnimationFrame(() => alert.current?.focus());
+        }
+    }
+    const daily = totals(diary.entries, date);
+    const local = STARTER_FOODS.filter(f => f.name.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 12);
+    if (!ready)
+        return <p role="status" className="mt-8">Loading your browser diary…</p>;
+    return <div className="mt-10 space-y-8">
+    <div className={panel}><h2 className="text-heading-4">Your browser, your diary</h2><p className="mt-3 text-sm text-secondary">Entries and targets are stored only in this browser using localStorage. They are not encrypted, backed up to the cloud, or synchronized across devices. Clearing browser data removes them. Food searches send search terms to USDA only when you request them; your diary is not sent.</p>{storageMessage && <p role="alert" className="mt-3 text-warning">{storageMessage}</p>}<button type="button" className="mt-4 border-border-control bg-background text-foreground" onClick={() => { try {
+        localStorage.removeItem(STORAGE_KEY);
+        setStorageMessage('');
+        setDiary(structuredClone(EMPTY));
+        setTargetInputs({});
+        setMessage('Stored diary and targets cleared.');
+    }
+    catch {
+        setStorageMessage('Unable to clear browser storage.');
+    } }}>Clear stored diary and targets</button></div>
+    <section aria-label="Diary date" className="flex flex-wrap items-end gap-3"><button type="button" onClick={() => changeDate(shiftDate(date, -1))}>Previous day</button><label className="min-w-0">Diary date<input className={control} type="date" value={date} onChange={e => changeDate(e.target.value)}/></label><button type="button" onClick={() => changeDate(shiftDate(date, 1))}>Next day</button><button type="button" onClick={() => changeDate(localDate())}>Today</button></section>
+    <section aria-labelledby="summary-heading"><h2 id="summary-heading" className="text-heading-3">Daily nutrition summary</h2><div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{KEYS.map(k => { const p = progress(daily[k], diary.targets[k]); return <article key={k} className={panel} aria-label={`${labels[k]} summary`}><h3 className="text-heading-5">{labels[k]}</h3><p className="mt-3 font-mono text-2xl text-primary">{daily[k].toFixed(1)} <span className="text-sm">{k === 'calories' ? 'kcal' : 'g'}</span></p><p className="mt-2 text-sm text-secondary">{p.difference === undefined ? 'No target set' : `Target ${diary.targets[k]} · ${Math.abs(p.difference).toFixed(1)} ${k === 'calories' ? 'kcal' : 'g'} ${p.difference >= 0 ? 'remaining' : 'above target'}`}</p><div role="progressbar" aria-label={labels[k]} aria-valuemin={0} aria-valuemax={100} aria-valuenow={p.percent} aria-valuetext={`${daily[k].toFixed(1)} consumed; ${diary.targets[k] ?? 'no'} target`} className="mt-4 h-2 overflow-hidden rounded-full bg-background"><div className="h-full bg-primary" style={{ width: `${p.percent}%` }}/></div></article>; })}</div></section>
+    <details className={panel}><summary className="cursor-pointer font-semibold">Edit daily targets</summary><p className="mt-3 text-sm text-secondary">Optional personal reference targets, applied across dates. A value within these software bounds is not an assurance of safety. Use the <Link href="/calculators/tdee">TDEE Calculator</Link> and <Link href="/calculators/macros">Macro Calculator</Link> for educational estimates.</p><form noValidate onSubmit={e => { e.preventDefault(); const t = Object.fromEntries(KEYS.filter(k => targetInputs[k]?.trim()).map(k => [k, Number(targetInputs[k])])); if (!validTargets(t)) {
+        setTargetError('Use positive targets: up to 10,000 kcal and 1,000 g per macro, or leave blank.');
+        return;
+    } update({ ...diary, targets: t }); setTargetError(''); setMessage('Daily targets saved.'); }}><div className="mt-4 grid gap-4 sm:grid-cols-2">{KEYS.map(k => <label key={k}>{labels[k]} target ({k === 'calories' ? 'kcal' : 'g'})<input className={control} inputMode="decimal" value={targetInputs[k] ?? ''} aria-describedby={targetError ? 'target-error' : undefined} onChange={e => setTargetInputs({ ...targetInputs, [k]: e.target.value })}/></label>)}</div>{targetError && <p id="target-error" role="alert" className="mt-3 text-error">{targetError}</p>}<button className="mt-4 min-h-control rounded-control bg-primary px-5 py-3 font-semibold text-on-primary">Save targets</button></form></details>
+    <div className="grid items-start gap-8 lg:grid-cols-2"><section className={panel} aria-labelledby="food-heading"><h2 id="food-heading" ref={formHeading} tabIndex={-1} className="text-heading-3">{editing ? 'Edit diary entry' : 'Find a food'}</h2><label className="mt-4 block">Search foods<input className={control} value={query} maxLength={80} onChange={e => { setQuery(e.target.value); setRemote([]); requestVersion.current++; setLoading(false); }}/></label><p className="mt-3 text-sm text-secondary">FormFuel starter catalog · USDA-sourced · {STARTER_FOODS.length} foods. Showing up to 12 matches; refine your search. Raw and cooked records are distinct.</p><ul className="mt-4 space-y-2">{local.map(f => <li key={f.id}><button type="button" className="w-full break-words border-border-control bg-background text-left text-sm text-foreground" onClick={() => { requestVersion.current++; setLoading(false); chooseFood(f); }}>{f.name}</button></li>)}</ul>{local.length === 0 && <p className="mt-4">No starter foods match.</p>}<button type="button" disabled={loading || query.trim().length < 2} className="mt-5 min-h-control rounded-control bg-primary px-5 py-3 font-semibold text-on-primary" onClick={() => usda()}>Search USDA FoodData Central</button><p className="mt-3 text-sm text-secondary">Optional: requires server configuration. USDA details are checked before you can add a food.</p>{loading && <p role="status">Loading USDA foods…</p>}{usdaError && <p role="status" className="mt-3 text-warning">{usdaError}</p>}<ul className="mt-4 space-y-2">{remote.filter(r => !local.some(f => f.sourceId === r.sourceId)).map(r => <li key={r.sourceId}><button type="button" disabled={loading} className="w-full break-words border-border-control bg-background text-left text-foreground" onClick={() => usda(r.sourceId)}>{r.name} · {r.dataType}{r.brand ? ` · ${r.brand}` : ''} · USDA FoodData Central</button></li>)}</ul>
+      <form onSubmit={submit} noValidate className="mt-6 border-t border-border pt-5"><h3 className="text-heading-4">{food ? food.name : 'Select a food to log'}</h3>{food && <p className="mt-3 break-words text-sm text-secondary">{food.source} · {food.dataType} · <a href={`https://fdc.nal.usda.gov/food-details/${food.sourceId}/nutrients`} target="_blank" rel="noopener noreferrer">Source record {food.sourceId}</a> · Per 100 g: {food.per100g.calories} kcal, {food.per100g.protein} g protein, {food.per100g.carbohydrates} g carbs, {food.per100g.fat} g fat.</p>}<FoodQuantityFields food={food} quantity={quantity} servingId={servingId} onQuantity={value=>{setQuantity(value);setError('');}} onServing={changeServing} error={error} /><label className="mt-4 block">Meal<select className={control} value={meal} onChange={e => setMeal(e.target.value as Meal)}>{MEALS.map(m => <option key={m}>{m}</option>)}</select></label>{error && <p id="entry-error" ref={alert} tabIndex={-1} role="alert" className="mt-3 text-error">{error}</p>}<button className="mt-5 min-h-control rounded-control bg-primary px-5 py-3 font-semibold text-on-primary">{editing ? 'Save entry' : 'Add food'}</button>{editing && <button type="button" className="ml-2 mt-3 bg-background text-foreground" onClick={() => { setEditing(null); setFood(null); }}>Cancel edit</button>}</form></section>
+      <section aria-label="Daily meals" className="space-y-5">{MEALS.map(m => { const entries = diary.entries.filter(e => e.date === date && e.meal === m), t = totals(diary.entries, date, m); return <article className={panel} key={m} aria-label={m}><h2 className="text-heading-4">{m}</h2><p className="mt-2 text-sm text-secondary">{t.calories.toFixed(1)} kcal · P {t.protein.toFixed(1)} g · C {t.carbohydrates.toFixed(1)} g · F {t.fat.toFixed(1)} g</p>{entries.length === 0 ? <p className="mt-4 text-secondary">No foods logged yet.</p> : <ul className="mt-4 space-y-5">{entries.map(e => <li key={e.id} className="min-w-0 border-t border-border pt-4"><p className="break-words font-semibold">{e.food.name}</p><p className="mt-2 text-sm">{formatServing(e.quantity,e.serving)} · {Number(e.grams.toFixed(3))} g · {e.consumed.calories.toFixed(1)} kcal</p><div className="mt-3 flex flex-wrap gap-2"><button type="button" aria-label={`Edit ${e.food.name}`} className="border-border-control bg-background text-foreground" onClick={() => { requestVersion.current++; setLoading(false); setEditing(e.id); setFood(foodForEditing(e,STARTER_FOODS.find(f=>f.sourceId===e.food.sourceId))); setQuantity(String(e.quantity)); setServingId(e.serving.id); setMeal(e.meal); setError(''); formHeading.current?.focus(); }}>Edit</button><button type="button" aria-label={`Delete ${e.food.name}`} className="border-border-control bg-background text-foreground" onClick={() => { update(deleteEntry(diary, e.id)); if (editing === e.id) {
+        setEditing(null);
+        setFood(null);
+    } setMessage('Entry deleted.'); }}>Delete</button></div></li>)}</ul>}</article>; })}</section></div>
+    <p role="status" className="text-primary">{message}</p><section className={panel}><h2 className="text-heading-4">Estimates, with context</h2><p className="mt-3 text-sm text-secondary">Nutrition values are estimates. Brands, preparation, and USDA data types affect results. Only complete per-100-g records can be logged; serving conventions differ. Household portions use food-specific USDA gram conversions; size and preparation matter. Grams remain available for weighed portions. Nutrients are multiplied by grams ÷ 100, preserving precision internally; displays round to one decimal. Targets are your references, and exceeding one is not a medical warning. This is general nutrition tracking, not medical advice.</p></section>
+  </div>;
+}
