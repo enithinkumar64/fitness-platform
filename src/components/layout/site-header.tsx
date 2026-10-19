@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 
-const upcomingSections = [
+const navigationSections = [
   "Calculators",
   "Workouts",
   "Exercises",
@@ -78,8 +78,14 @@ export function SiteHeader() {
             Home
           </Link>
         </li>
-        {upcomingSections.map((section) => (
+        {navigationSections.map((section) => (
           <li key={section}>
+            {section === "Exercises" ? <Link
+              href="/exercises"
+              aria-current={pathname === "/exercises" ? "page" : pathname.startsWith("/exercises/") ? "location" : undefined}
+              onClick={mobile ? closeMenu : undefined}
+              className={`flex min-h-control items-center rounded-control border px-3 py-2 text-sm font-semibold no-underline hover:bg-surface-hover hover:text-primary ${pathname === "/exercises" || pathname.startsWith("/exercises/") ? "border-primary/30 bg-surface text-primary" : "border-transparent text-foreground"}`}
+            >Exercises</Link> :
             <span
               aria-disabled="true"
               className={`flex min-h-control cursor-default gap-1 rounded-control px-3 py-2 text-secondary ${
@@ -93,6 +99,7 @@ export function SiteHeader() {
                 Coming Soon
               </span>
             </span>
+            }
           </li>
         ))}
       </ul>
