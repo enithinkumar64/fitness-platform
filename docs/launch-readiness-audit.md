@@ -4,7 +4,7 @@
 
 ## Fix 1 follow-up — verified
 
-FF-01 is **addressed for new USDA imports**. The original Phase 1 audit and severity counts below are retained as a historical snapshot; three of the original four P1 issues remain open. No other finding was fixed in this task.
+FF-01 is **addressed for new USDA imports**. The original Phase 1 audit and severity counts below are retained as a historical snapshot. At the completion of Fix 1, three original P1 issues remained open; see the later FF-02 follow-up for the current retention fix. No other finding was fixed in Fix 1.
 
 - `src/lib/nutrition/usda.ts` now requires an explicit positive finite gram-based serving for Branded records before interpreting full nutrients as per 100 g. Branded mL, missing basis, and incompatible units are rejected; no density or household text is used to guess a nutrient denominator. Foundation, SR Legacy and Survey (FNDDS) retain their documented per-100-g interpretation.
 - `src/lib/nutrition/server.ts` returns HTTP 422 with a fixed helpful message and no food payload. The existing UI therefore cannot select/log that rejected food. Unexpected upstream errors still use the generic response rather than exposing upstream details or secrets.
@@ -12,6 +12,29 @@ FF-01 is **addressed for new USDA imports**. The original Phase 1 audit and seve
 - Final verification: lint passed; TypeScript passed; standalone production build passed; unit tests **126 passed, 0 failed**; two final complete browser runs each **320 passed, 8 intentional skips, 0 failed** (40.2 s and 43.4 s).
 - Earlier attempts: sandbox build failed on port binding (`Operation not permitted`); an overlapping browser startup hit the build lock. The first unrestricted browser run had **318 passed, 2 failed, 8 skips** because the new test incorrectly expected the Add food button to disappear. That assertion was corrected to verify the existing form's “Select a food first” rejection. No UI redesign was needed. Unrestricted retries succeeded.
 - Limits: no volume-to-mass nutrient conversion is supported. Valid volume-based products may be unavailable until a trustworthy conversion can be established. Starter values, household portions and saved diary snapshots are unchanged. Historical imports are not retroactively revalidated; questionable old branded snapshots still require separate review. Automated tests use fixtures/mocked upstream responses rather than live API availability.
+
+## FF-02 follow-up — resolved and verified for cooperating updated tabs
+
+**Root cause:** Nutrition and Progress loaded localStorage once, then wrote an entire React snapshot without rereading saved state. A later save from a stale tab removed other tabs' newer records or targets. This was confirmed by the original two-tab reproductions below before implementation.
+
+**Implementation/evidence:**
+
+- New `src/hooks/use-browser-store.ts:8` centralizes safe loading, per-key storage-event and focus synchronization, session-only protection, accessible warnings/status, retry/reload, and clears. Its write and clear paths use exclusive `navigator.locks.request` locks named separately for the two existing storage keys, with a five-second wait timeout.
+- New `src/lib/storage/transactions.ts:14` reads and validates the latest store inside that lock, applies an intended operation, validates the proposed schema, and writes it. It also checks the raw document again before writing. `unchanged` compares structured content independent of object-key ordering. This extra check is not atomic compare-and-swap.
+- Nutrition adds merge into latest entries; edits/deletes check the original entry snapshot; dirty targets check the original target group. Progress's weight, measurement and strength forms retain their original edited record, pass it to the parent, and reset only on accepted changes. New Progress sequences are allocated from latest saved data under the lock. Existing IDs, units and calculation functions remain unchanged.
+- Storage events update histories and summaries without replacing form drafts. Deleted records cannot be recreated by stale editors. Conflicts display an alert with cancel/reopen instructions; reload buttons reread saved data while keeping drafts. Nutrition also offers **Use latest saved targets** to explicitly discard a conflicting target draft.
+- Clears participate in the lock and compare the snapshot captured at confirmation time. A queued clear refuses to erase a newer save. Nutrition now confirms bulk clear and resets its local editor/pending request identity after success, necessary to avoid local stale-editor recreation. Remote clears retain the draft but reject attempts to save the deleted ID. This also hardens related FF-03 behavior; its separate follow-up remains recorded below.
+- A failed storage write retains session-only data with a clear warning. Synchronization cannot silently replace those session-only records. Reloading them requires explicit confirmation to discard session-only records. Corrupt stores are not overwritten. No migration/schema bump is needed: Nutrition version 2 with existing version-1 migration, Progress version 1, and both existing keys are preserved.
+
+**Regression proof:** new `tests/e2e/tracker-sync.spec.ts` has twelve scenarios run in desktop and mobile projects, using real same-origin pages. They cover simultaneous additions, edits and deletions, target drafts, all three Progress record types, missed storage/focus events, storage failures, cross-tracker isolation, missing Web Locks, and a deliberately queued clear behind a newer save. Existing household-serving, migration, canonical-unit, CSV, calculator and library tests remain passing. New `tests/unit/storage-transactions.test.mjs` has seven tests for latest-state commits, structural conflicts, preparation-time changes, validation/failures, key isolation and compatibility.
+
+**Final verification:** lint passed; TypeScript passed (`npx --no-install tsc --noEmit`); standalone `npm run build` passed; unit suite **133 passed, 0 failed, 0 skipped**. Two full final `npm run test` runs each **344 passed, 8 intentional skips, 0 failed**, taking **50.3 s** and **47.7 s**. Build/Chromium used approved unrestricted execution to permit worker ports and browser startup. No final check is blocked.
+
+Earlier targeted development runs had 52 passes/12 failures, then 62 passes/2 failures. These caught object-key-order false conflicts, a form-reset/input race, a test's incorrect exercise selector, and tests reading storage before asynchronous saves/clears finished. Structural comparison, pending fieldsets, and completion assertions corrected them. An intermediate full run also passed 344 with 8 skips (46.5 s); the two final runs above include the last schema-validation and storage-failure refinements.
+
+**Guarantees/limits:** serialized read-modify-write applies to updated same-origin tabs that all participate in Web Locks. Web Locks require a supported secure context (HTTPS/localhost); without them persistent mutations fail closed and inputs remain available. Old open versions, unrelated scripts/extensions/DevTools and browser/site-data clearing are outside the protocol. Reload **all** FormFuel tabs after updating. A raw snapshot check alone cannot prevent a non-cooperating simultaneous writer. Equal content that changes and later reverts is not a persistent revision history. No cloud backup, cross-device sync, storage encryption or new service was added. Chromium is tested; other browsers require manual review. See both tracker documents for recovery details.
+
+FF-01 and FF-02 are now addressed within their stated scope. Original Phase 1 severity counts below are historical; FF-03/FF-04 remain separately tracked, with related FF-03 clear hardening noted rather than silently erasing the original evidence.
 
 ## A. Executive summary
 
@@ -87,7 +110,7 @@ Stack: Next.js 16.4.2 App Router, React 19.3.0, TypeScript 5, Tailwind CSS v4, G
 
 ### FF-02 — Stale tabs silently overwrite diary data
 
-- **Severity/status:** **P1 — confirmed for both trackers** in isolated two-tab reproductions.
+- **Severity/status:** originally **P1 — confirmed for both trackers**; **resolved and verified for cooperating updated tabs** in the FF-02 follow-up above. Pre-fix evidence follows.
 - **Affected routes:** `/nutrition-tracker`, `/progress-tracker`.
 - **Files/lines:** `src/components/nutrition/nutrition-tracker.tsx:25–40,44–54`; `src/components/progress/progress-tracker.tsx:10–24`. Both initialize once, retain an in-memory snapshot, and replace the whole localStorage document. Neither subscribes to storage changes or checks a write revision.
 - **Reproduction:** open two tabs before making any entries. In Progress, save 80 kg in A, then 81 kg in B. Storage contains **one entry, 81 kg**; A still shows 80 kg. In Nutrition, save eggs in A, then apples in B; storage contains only the apple entry. No conflict prompt appears. These tests used synthetic records only.
@@ -95,6 +118,8 @@ Stack: Next.js 16.4.2 App Router, React 19.3.0, TypeScript 5, Tailwind CSS v4, G
 - **Recommended fix:** detect external revisions, block stale writes with a clear refresh/conflict flow, or merge operations safely by entry ID with explicit deletion/conflict semantics. Include two-tab add/edit/delete and clear tests. At minimum, do not let a known-stale tab replace the entire store. Shared localStorage alone is not a transaction/merge mechanism.
 
 ### FF-03 — Nutrition bulk clear is irreversible without confirmation and retains stale editing state
+
+**Related FF-02 hardening:** Nutrition now confirms clear, resets the local editor on success, and blocks remote stale-editor saves. This original finding is retained for its separate destructive-action/undo and pending-request follow-up; the following reproduction describes the pre-fix audit snapshot.
 
 - **Severity/status:** **P1 — confirmed**.
 - **Affected route:** `/nutrition-tracker`.
@@ -322,7 +347,7 @@ Coverage limits: Chromium only; not a full assistive-technology test, clinical v
 - [x] Active FDC key did not appear in the scoped source/history/client-bundle scan.
 - [x] Production dependency audit has no known findings on this date.
 - [x] Gate unsupported USDA nutrient bases and add regression coverage (FF-01); verified in Fix 1. Historical snapshots remain unchanged.
-- [ ] Prevent silent stale-tab overwrites in both trackers (FF-02).
+- [x] Prevent silent stale-tab overwrites in both trackers (FF-02); verified for updated cooperating tabs using Web Locks and content conflict checks.
 - [ ] Confirm/undo Nutrition clearing and reset stale editor/request state (FF-03).
 - [ ] Establish actual public USDA abuse controls or disable the live proxy (FF-04).
 - [ ] Correct available-tool messaging and navigation (FF-05).
@@ -352,7 +377,7 @@ Suggested fixes are recommendations for separately approved tasks. None were imp
 1. What is the real production HTTPS domain and hosting platform? Will preview environments be public/indexable?
 2. Should public launch include live USDA search, or start with the verified starter foods while rate limiting and basis validation are finished?
 3. For unsupported volume-based branded foods, is a clear “not supported yet” message acceptable until verified food-specific mass conversions exist?
-4. Should stale tabs be blocked until refreshed, or should a more involved merge/conflict flow be implemented? Which tabs/devices do you expect people to use?
+4. FF-02 implemented locked latest-state operations for non-conflicting records and explicit blocking for conflicting drafts. Confirm the supported-browser policy: browsers without Web Locks can read/export but cannot persist mutations. Which additional browsers/devices should receive manual verification?
 5. Should Nutrition bulk clearing use confirmation, undo, or both? Is a Nutrition export/import feature a later priority for browser-only data recovery?
 6. Should existing homepage cards become links to available tools, and should Calculators use a small menu or a new approved index page?
 7. What brand favicon/social card and public contact/privacy information should be used? Jurisdiction-specific policy needs require an owner/legal review; no policy content or domain has been invented.
