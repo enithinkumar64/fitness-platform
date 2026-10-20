@@ -109,3 +109,21 @@ test('unsupported USDA nutrient basis cannot be selected or logged; starter cata
     await expect(page.getByRole('article', { name: 'Calories summary', exact: true })).toContainText('52.0');
     await expect(page.getByRole('article', { name: 'Breakfast', exact: true })).not.toContainText('ORANGE JUICE');
 });
+
+test('USDA rate limit is explained separately and starter logging remains available',async({page})=>{
+ await page.route('**/api/nutrition/search?*',route=>route.fulfill({status:429,headers:{'Retry-After':'60'},json:{error:'USDA search is busy or its request limit was reached. Please wait and try again, or use the starter catalog.'}}));
+ await page.getByLabel('Search foods',{exact:true}).fill('apple');await page.getByRole('button',{name:'Search USDA FoodData Central',exact:true}).click();
+ await expect(page.getByText(/USDA search is busy or its request limit was reached/)).toBeVisible();
+ await selectApple(page);await page.getByRole('button',{name:'Add food',exact:true}).click();await expect(page.getByRole('article',{name:'Calories summary',exact:true})).toContainText('52.0');
+ await page.route('**/api/nutrition/search?*',route=>route.fulfill({json:{foods:[{sourceId:'999',name:'Mock protected food',dataType:'Foundation',brand:''}]}}));
+ await page.route('**/api/nutrition/food?*',route=>route.fulfill({status:429,headers:{'Retry-After':'1'},json:{error:'USDA search is busy or its request limit was reached. Please wait and try again, or use the starter catalog.'}}));
+ await page.getByRole('button',{name:'Search USDA FoodData Central',exact:true}).click();await page.getByRole('button',{name:/Mock protected food · Foundation/}).click();
+ await expect(page.getByText(/USDA search is busy or its request limit was reached/)).toBeVisible();await expect(page.getByRole('heading',{name:'Select a food to log',exact:true})).toBeVisible();
+});
+
+test('real search and detail routes reject invalid inputs before any USDA request',async({request})=>{
+ for(const path of ['/api/nutrition/search?q=a','/api/nutrition/food?id=0']){
+  const response=await request.get(path);expect(response.status()).toBe(400);expect(response.headers()['cache-control']).toBe('private, no-store');
+  const body=await response.json();expect(body.error).toMatch(/Search must|Invalid USDA food/);expect(body.food).toBeUndefined();
+ }
+});

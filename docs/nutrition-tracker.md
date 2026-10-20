@@ -8,7 +8,7 @@ The tracker works without configuration at `/nutrition-tracker`. No dependencies
 2. Create `.env.local` (already ignored by Git) and add `FDC_API_KEY=your_key_here`.
 3. Restart the Next.js server. Never use a `NEXT_PUBLIC_` key or commit `.env.local`.
 
-Only route handlers read the key. It is sent in the server's X-Api-Key header, never in browser requests or responses. Search terms and selected USDA IDs are sent to USDA on explicit user actions; diary contents are not. No remote calls occur on typing. Search query length is 2–80 characters; results limited to 12; detail IDs are positive integers up to nine digits. Requests time out after eight seconds. Safe errors never include upstream bodies or credentials. HTTP 429 prompts retry later. Process-local cache holds at most 100 records: search five minutes, details 24 hours. Cache is best effort and resets on restarts; distributed deployments do not share it. This does not provide global rate limiting; public deployments should monitor USDA quota and add hosting-level abuse controls if necessary.
+Only route handlers read the key. It is sent in the server's X-Api-Key header, never in browser requests or responses. Search terms and selected USDA IDs are sent to USDA on explicit user actions; diary contents are not. No remote calls occur on typing. Search query length is 2–80 characters; results limited to 12; detail IDs are positive integers up to nine digits. Requests time out after eight seconds. Safe errors never include upstream bodies or credentials. HTTP 429 prompts retry later. Process-local cache holds at most 100 records and 8 MiB of serialized payloads: search five minutes, details 24 hours. Cache is best effort and resets on restarts; distributed deployments do not share it. This does not provide deployment-wide rate limiting; public exposure requires verified hosting/shared abuse controls as described below.
 
 ## Food values and verification
 
@@ -145,3 +145,38 @@ No schema or storage-key change is needed. Nutrition remains version 2 under `fo
 [Web Locks](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) serialize cooperating same-origin tabs and require a supported secure context (HTTPS or localhost). If unavailable, persistent edits and clears fail closed, keeping inputs for retry; read/export remain usable. The snapshot check is additional protection, **not an atomic localStorage compare-and-swap**. Older already-open application versions, scripts that ignore the lock, browser extensions and manual DevTools edits do not participate in this protocol. Reload all FormFuel tabs after updating; no guarantee is made against a non-cooperating writer after the final check. There is no cross-device synchronization or backup. Same-value changes that are later reverted are indistinguishable by content snapshots; no persistent audit history is introduced.
 
 Automated coverage uses real same-context browser pages (shared origin/storage), simultaneous adds, stale editors, deletion, targets, all Progress sections, suppressed storage/focus events, queued clear, key isolation, session-only failures and absent Web Locks. Pure tests cover latest-state commits, structural comparisons, corrupt data, rejected proposed states, key isolation and existing migrations. Actual Safari/Firefox and multiple browser profiles/devices are not certified by Chromium tests.
+
+## USDA proxy protection — partial deployment mitigation
+
+The task called this FF-03; the original launch-audit proxy finding is **FF-04** (FF-03 concerns diary clearing). Both GET endpoints use the same `nutritionRequest` handler and runtime-local protection state. Previously, unique valid requests bypassed successful-response caching without an attempt budget, concurrency limit or in-flight coalescing. This could consume the key's quota or exhaust server work. No destructive load test or live USDA quota test was performed.
+
+### Exact application limits
+
+| Control | Threshold / behavior |
+| --- | --- |
+| Incoming requests | 120 accepted requests per rolling 60 seconds, shared by search and detail, including invalid inputs, missing-key requests, cache hits and coalesced callers |
+| New USDA attempts | 30 per rolling 60 seconds **and** 600 per rolling hour, shared by both endpoints; failed attempts count too |
+| Concurrent upstream calls | 4 distinct calls; no waiting queue for additional distinct calls |
+| Identical in-flight requests | Same normalized endpoint/query or ID shares one upstream call; each caller still consumes an incoming allowance |
+| Upstream timeout | 8 seconds, including body consumption through the fetch abort signal |
+| Upstream response body | 1 MiB (1,048,576 bytes), checked using declared length and streamed decoded bytes before JSON parsing |
+| Successful response cache | 100 entries and 8 MiB serialized payloads; search 5 minutes, details 24 hours; expired/oldest entries evicted |
+| Query and results | Existing 2–80-character search validation, maximum 12 results; positive food IDs with at most 9 digits |
+
+HTTP 429 includes integer-seconds `Retry-After` and a safe message explaining that users can wait/retry or use the starter catalog. A budget rejection reports remaining time until a slot frees; concurrency rejection reports 1 second. Upstream USDA 429 creates a shared-runtime cooldown: numeric Retry-After is bounded to 1–3,600 seconds; absent, date-format or invalid values use 60 seconds. Safe cached results remain usable during upstream cooldown/budget exhaustion, within the incoming limit. Do not automatically retry in a loop.
+
+Missing key returns 503, invalid input 400, missing USDA **food** record 404, unsupported nutrient basis 422, and upstream/timeout/oversized/malformed-response failures 502. These are separate from rate-limit 429. Failures and rejected imports are not cached. Response bodies from upstream errors and exception messages are not returned or logged. Credentials remain server-side in `X-Api-Key`, never in URLs or normalized payloads. The current UI displays the safe error and keeps local search/logging functional. Starter foods, diary storage, household snapshots and nutrition calculations are unchanged.
+
+### Scope and launch requirements
+
+These are **runtime/process-local shared limits, not per-user limits and not deployment-wide limits**. State is shared across the two route bundles only when they use the same `globalThis`; workers, isolates, replicas, regions and serverless cold starts can have independent/reset budgets, cooldowns, caches and in-flight maps. A restart resets state. Restart a development server after changing the proxy implementation. No client-controlled IP header is trusted as an identity, and no IP/identity table is maintained.
+
+Before enabling USDA publicly, choose/verify the actual host and add edge/reverse-proxy controls for trusted per-client request limits, URL/body size and slow-client protections, plus a durable atomic shared USDA-key budget across **all** instances/consumers. Use a shared limiter/concurrency policy appropriate to that host (for example an approved shared datastore or platform-managed control). An in-memory cache or CDN alone does not establish that budget. No infrastructure/service, payment requirement or extra credentials have been introduced by this change. See the installed Next.js self-hosting guide (`node_modules/next/dist/docs/01-app/02-guides/self-hosting.md`) for reverse-proxy and multi-instance considerations.
+
+If shared protection is not ready, leave `FDC_API_KEY` unset on the public deployment so USDA is unavailable while the starter catalog/diary still work. Do not print the key while configuring hosting. Other applications using the same USDA key also consume its quota. Monitor aggregate quota/rejections at the chosen host without logging secrets or diary contents.
+
+Remaining risks: an attacker can consume the shared local budget and temporarily affect other users; traffic can still reach Next.js before these guards; multiple instances can exceed aggregate USDA allowances; large otherwise-valid USDA records may be refused by the response cap. This is **partial mitigation**, not proof of denial-of-service resistance or completed production protection. No intended production host/global limiter has yet been verified.
+
+### Regression coverage
+
+`tests/unit/nutrition-proxy.test.mjs` invokes the actual handler with a fake clock, synthetic API key and mocked USDA responses. It checks thresholds/recovery, rolling boundaries, both endpoints' shared budgets, coalescing/concurrency, cache behavior, invalid input, missing configuration, 404/429/502 distinctions, upstream cooldown and bounded/aborted bodies. Existing nutrition tests use fresh handler instances to isolate budgets and caches. Browser tests exercise rate-limit messages/starter fallback and real invalid-input routes without contacting USDA. No test consumes live USDA quota. Final verification results are recorded in the audit follow-up.

@@ -36,6 +36,32 @@ Earlier targeted development runs had 52 passes/12 failures, then 62 passes/2 fa
 
 FF-01 and FF-02 are now addressed within their stated scope. Original Phase 1 severity counts below are historical; FF-03/FF-04 remain separately tracked, with related FF-03 clear hardening noted rather than silently erasing the original evidence.
 
+## USDA API protection follow-up — partially mitigated (audit FF-04)
+
+**ID clarification:** this implementation was requested as “FF-03: USDA API Rate Limiting and Protection.” In the original audit, this is **FF-04**; FF-03 remains the separate Nutrition clearing finding. IDs are not renamed.
+
+**Root cause and scope:** existing route handlers delegated to `src/lib/nutrition/server.ts`, which validated queries/IDs, used an eight-second timeout and cached successful normalized responses, but had no attempt budgets, concurrency control or in-flight coalescing. Unique queries bypassed cache reuse. Public callers could spend the shared USDA key allowance or create excessive concurrent work. There was no deployment-wide limiter/host policy established by repository configuration.
+
+**Implemented:** both route handlers still call the same `nutritionRequest`. `src/lib/nutrition/server.ts` now uses a shared `globalThis` handler within a JavaScript runtime, with testable clock/fetch dependencies. New `src/lib/nutrition/proxy-protection.ts` contains rolling-window budgets and bounded JSON body reading. Actual thresholds are:
+
+| Control | Per-runtime threshold |
+| --- | --- |
+| Incoming calls across both routes | 120 per rolling minute, including invalid requests/cache hits/coalesced callers |
+| New upstream attempts | 30 per rolling minute **and** 600 per rolling hour, including failed attempts |
+| Distinct concurrent upstream calls | 4; excess gets HTTP 429, Retry-After: 1 |
+| Identical in-flight calls | Coalesced by normalized endpoint/query or ID |
+| Upstream body | 1 MiB maximum; declared and streamed byte checks, cancellable reader |
+| Cache | Successful normalized responses only, max 100 entries and 8 MiB serialized payloads, search TTL 5 minutes/detail TTL 24 hours |
+| Existing controls retained | 2–80-character search, 12 results, positive IDs up to 9 digits, 8-second abort timeout |
+
+Budget rejections return HTTP 429 with integer-seconds Retry-After until budget recovery and a fixed helpful starter-catalog fallback message. Upstream 429 applies a shared-runtime cooldown: numeric retry is bounded to 1–3,600 seconds; other formats/missing values default to 60 seconds. Cached results are available during upstream quota/cooldown limits, subject to the incoming allowance. State has bounded cache/counter/pending-map sizes; no untrusted IP-header identity map or unbounded waiting queue is added. Missing configuration, invalid inputs, missing food, unsupported nutrition basis and upstream failures remain distinct HTTP 503/400/404/422/502 outcomes. Error bodies/exception details and API credentials are not exposed.
+
+**Verification:** lint passed; `npx --no-install tsc --noEmit` passed; standalone production build passed; unit suite **144 passed, 0 failed, 0 skipped**. Two final complete browser runs each **348 passed, 8 intentional skips, 0 failed**, taking **45.7 s** and **46.6 s**. An intermediate full run passed 348 with 8 skips (45.1 s) before the final distinct-404 handling and extra unit cases. Eleven new deterministic handler/helper tests use synthetic credentials, fake time and mocked USDA responses; no live USDA quota was consumed. They cover normal/cache/result limits, shared search/detail thresholds, rolling recovery/boundaries, hourly budget, concurrency/coalescing, missing key, validation, cooldown/errors/timeouts, response size/cancellation, and released slots. Browser/API coverage adds 429 UX/local-catalog fallback and real invalid-input route checks. Existing nutrition units, migrations, household servings and cross-tab regressions remain passing. A private exact-value scan found no configured USDA key in 23 generated client JS assets; only boolean/count results were emitted. No dependency, food catalog, nutrition formula, diary, serving or styling change was made.
+
+**Status: PARTIALLY MITIGATED, not fully resolved for public deployment.** JavaScript workers, isolates, processes, replicas, serverless cold starts and regions have independent/reset state. These controls are neither per-user nor deployment-wide. An attacker can exhaust the shared local budget and affect other legitimate users; Next.js still receives the incoming traffic; other consumers of the same USDA key still spend its allowance. No claim of denial-of-service resistance or production-host verification is made.
+
+**Required before public USDA exposure:** verify the intended hosting model; add trusted edge/reverse-proxy per-client/request-size/slow-client protections and an atomic shared USDA-key budget/concurrency policy across all instances, using approved infrastructure. Do not use client-supplied IP headers as trusted identity without the host overwriting them. No paid service/new credentials were introduced. If those controls are unavailable, leave `FDC_API_KEY` unset publicly: the starter catalog and diary still work. Monitor actual aggregate quota/rejection rates without secrets or diary data. See `docs/nutrition-tracker.md` for exact cache/retry/error semantics and the installed official Next.js self-hosting guide for reverse-proxy and multi-instance considerations. Production host/global limiter configuration remains an owner decision; the launch checklist item stays open.
+
 ## A. Executive summary
 
 **Recommendation: address the four P1 findings before an unrestricted public launch.** The core site is functional, and the existing verification suite passes. Those tests do not cover several confirmed nutrition and data-retention defects found during this audit.
@@ -130,7 +156,7 @@ Stack: Next.js 16.4.2 App Router, React 19.3.0, TypeScript 5, Tailwind CSS v4, G
 
 ### FF-04 — USDA proxy lacks application-level abuse protection
 
-- **Severity/status:** **P1 — confirmed repository control gap; deployment exposure requires verification**.
+- **Severity/status:** **P1 — partially mitigated** by the USDA API protection follow-up above; shared deployment-wide protection remains unverified. The evidence below describes the original pre-fix snapshot.
 - **Affected routes:** `/api/nutrition/search`, `/api/nutrition/food`.
 - **Files/lines:** both `src/app/api/nutrition/*/route.ts:1–2`; `src/lib/nutrition/server.ts:8–27,48–50`; `next.config.ts:3–14`.
 - **Evidence:** bounded input, 12 search results, an eight-second timeout and a bounded process cache are present, but there is no per-client/global request budget, concurrency cap or in-flight request deduplication. Unique valid searches bypass cache reuse. Successful unauthenticated local requests were verified; no quota-exhaustion or denial-of-service test was attempted.
@@ -349,7 +375,7 @@ Coverage limits: Chromium only; not a full assistive-technology test, clinical v
 - [x] Gate unsupported USDA nutrient bases and add regression coverage (FF-01); verified in Fix 1. Historical snapshots remain unchanged.
 - [x] Prevent silent stale-tab overwrites in both trackers (FF-02); verified for updated cooperating tabs using Web Locks and content conflict checks.
 - [ ] Confirm/undo Nutrition clearing and reset stale editor/request state (FF-03).
-- [ ] Establish actual public USDA abuse controls or disable the live proxy (FF-04).
+- [ ] Establish deployment-wide public USDA abuse controls or disable the live proxy (FF-04). Per-runtime budgets/coalescing/size controls are implemented and verified, but do not close this launch requirement.
 - [ ] Correct available-tool messaging and navigation (FF-05).
 - [ ] Confirm production host, canonical policy, sitemap and robots/staging rules (FF-06).
 - [ ] Repair and verify nutrition source destinations without exposing a key (FF-07).
