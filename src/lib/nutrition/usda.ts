@@ -23,14 +23,30 @@ type Raw = PortionRecord & {
         };
     }[];
 };
+// Only this fixed, user-safe error is exposed by the route handler.
+export class UnsupportedNutritionBasisError extends Error {
+    constructor() {
+        super("This food cannot be imported reliably because USDA does not establish a gram-based nutrition basis. Volume-based or unknown servings cannot be converted to grams safely. Choose another food or the starter catalog.");
+    }
+}
 export function normalizeFood(raw: Raw): Food {
     if (!['Foundation', 'SR Legacy', 'Survey (FNDDS)', 'Branded'].includes(raw.dataType ?? ''))
         throw new Error("Unsupported USDA data type.");
+    // USDA GBFPD standardizes Branded nutrients per 100 g OR 100 mL, according
+    // to the submitted serving unit. A household portion alone does not establish
+    // the nutrient denominator. Require a positive explicit gram serving; do not
+    // infer density from names, label text, foodPortions, or labelNutrients.
+    // https://fdc.nal.usda.gov/GBFPD_Documentation/
+    if (raw.dataType === 'Branded' && (
+        !['g', 'gram', 'grams'].includes(raw.servingSizeUnit?.trim().toLowerCase() ?? '') ||
+        typeof raw.servingSize !== 'number' || !Number.isFinite(raw.servingSize) || raw.servingSize <= 0
+    )) throw new UnsupportedNutritionBasisError();
     const get = (id: number, unit: string) => {
         const n = raw.foodNutrients?.filter(n => n.nutrient?.id === id && n.nutrient.unitName?.toLowerCase() === unit);
         return n?.length === 1 && typeof n[0].amount === 'number' && Number.isFinite(n[0].amount) && n[0].amount >= 0 ? n[0].amount : undefined;
     };
-    // Full FDC foodNutrients amounts are per 100 g, including Branded. Never use labelNutrients (per serving).
+    // Foundation, SR Legacy and FNDDS full details use per 100 g; Branded is gated above.
+    // Never use labelNutrients (per serving) or search nutrient summaries.
     // Prefer total energy 1008, then Atwater specific 2048, then general 2047; never sum energy definitions.
     const calories = get(1008, 'kcal') ?? get(2048, 'kcal') ?? get(2047, 'kcal') ?? (get(1062, 'kj') === undefined ? undefined : get(1062, 'kj')! / 4.184);
     const protein = get(1003, 'g'), carbohydrates = get(1005, 'g'), fat = get(1004, 'g');

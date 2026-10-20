@@ -12,7 +12,7 @@ test('entries snapshots, edits, deletion, date and meal totals',()=>{const entry
 test('local calendar dates including leap and DST transitions',()=>{assert.equal(n.localDate(new Date(2026,0,1,0,1)),'2026-01-01');assert.equal(n.shiftDate('2024-02-28',1),'2024-02-29');assert.equal(n.shiftDate('2026-03-08',1),'2026-03-09');assert.ok(!n.validDate('2026-02-30'));assert.throws(()=>n.makeEntry('a','bad','Breakfast',apple,100));});
 test('target bounds and progress overflow',()=>{assert.deepEqual(n.progress(150,100),{percent:100,difference:-50});assert.equal(n.progress(0).difference,undefined);assert.ok(n.validTargets({}));for(const v of [{calories:0},{fat:NaN},{protein:1001},{calories:10001},{x:1}])assert.ok(!n.validTargets(v));});
 test('storage safely rejects corruption and recomputes derived values',()=>{for(const raw of ['{','null','{}',JSON.stringify({version:3,entries:[],targets:{}})])assert.throws(()=>n.parseDiary(raw));const entry=n.makeEntry('a','2026-10-19','Breakfast',apple,100);entry.consumed.calories=999;assert.equal(n.parseDiary(JSON.stringify({...n.EMPTY,entries:[entry]})).entries[0].consumed.calories,52);assert.throws(()=>n.parseDiary(JSON.stringify({...n.EMPTY,entries:[entry,entry]})));assert.deepEqual(n.parseDiary(null),n.EMPTY);});
-test('USDA full records normalized for supported data types',()=>{for(const dataType of ['Foundation','SR Legacy','Survey (FNDDS)','Branded'])assert.deepEqual(normalizeFood({...raw,dataType}).per100g,{calories:100,protein:5,carbohydrates:10,fat:2});});
+test('USDA full records normalized for supported data types',()=>{for(const dataType of ['Foundation','SR Legacy','Survey (FNDDS)','Branded'])assert.deepEqual(normalizeFood({...raw,dataType,...(dataType==='Branded'?{servingSize:32,servingSizeUnit:'g'}:{})}).per100g,{calories:100,protein:5,carbohydrates:10,fat:2});});
 test('missing, incorrect units and nonfinite nutrients rejected; actual zero retained',()=>{for(const v of [undefined,null,NaN,-1,Infinity])assert.throws(()=>normalizeFood({...raw,foodNutrients:raw.foodNutrients.map((x,i)=>i===1?{...x,amount:v}:x)}));assert.throws(()=>normalizeFood({...raw,foodNutrients:raw.foodNutrients.slice(1)}));assert.equal(normalizeFood({...raw,foodNutrients:raw.foodNutrients.map((x,i)=>i===1?{...x,amount:0}:x)}).per100g.protein,0);});
 test('kJ conversion, kcal precedence and alternate energy not summed',()=>{const nutrients=raw.foodNutrients.slice(1);assert.ok(Math.abs(normalizeFood({...raw,foodNutrients:[...nutrients,{nutrient:{id:1062,unitName:'kJ'},amount:418.4}]}).per100g.calories-100)<1e-10);assert.equal(normalizeFood({...raw,foodNutrients:[...raw.foodNutrients,{nutrient:{id:2048,unitName:'kcal'},amount:99}]}).per100g.calories,100);});
 test('API validation and deduplication',()=>{assert.equal(searchQuery(' apple '),'apple');for(const q of [null,'a','x'.repeat(81),'hi\n']){if(q==='hi\n')continue;assert.throws(()=>searchQuery(q));}for(const id of ['0','-1','1x',null])assert.throws(()=>foodId(id));assert.equal(n.deduplicate([apple,apple]).length,1);});
@@ -85,4 +85,41 @@ test('Branded gram-based label servings are supported; mL never silently becomes
  assert.equal(normalizePortions({...branded,householdServingFullText:undefined})[0].gramsPerServing,32);
  for(const bad of [{...branded,servingSize:0},{...branded,servingSize:NaN},{...branded,servingSizeUnit:'mL'},{...branded,servingSizeUnit:'oz'},{...branded,householdServingFullText:'about two spoons'}])assert.deepEqual(normalizePortions(bad),[]);
  const explicitVolume={fdcId:123,dataType:'Foundation',description:'Mock liquid',foodPortions:[{id:1,amount:100,gramWeight:104,measureUnit:{name:'milliliters'}}]};assert.equal(normalizePortions(explicitVolume)[0].gramsPerServing,1.04);
+});
+
+// Public USDA record 2133897: relevant fields captured during the launch audit.
+// Nutrient units do not establish whether the food denominator is grams or mL.
+const juice = {fdcId:2133897,description:'ORANGE JUICE',dataType:'Branded',servingSize:240,servingSizeUnit:'ml',householdServingFullText:'8 OZA',foodNutrients:[
+ {nutrient:{id:1008,unitName:'kcal'},amount:46},
+ {nutrient:{id:1003,unitName:'g'},amount:0.83},
+ {nutrient:{id:1005,unitName:'g'},amount:10.83},
+ {nutrient:{id:1004,unitName:'g'},amount:0}
+]};
+test('USDA nutrient basis rejects real-shaped liquid and unknown Branded records',()=>{
+ for(const patch of [{},{servingSizeUnit:'mL'},{servingSizeUnit:undefined},{servingSizeUnit:''},{servingSizeUnit:'oz'},{servingSizeUnit:'g',servingSize:undefined},{servingSizeUnit:'g',servingSize:0},{servingSizeUnit:'g',servingSize:-1},{servingSizeUnit:'g',servingSize:Infinity},{servingSizeUnit:'g',servingSize:NaN}])
+  assert.throws(()=>normalizeFood({...juice,...patch}),/cannot be imported reliably/);
+ // An unrelated portion cannot establish the denominator of Branded nutrients.
+ assert.throws(()=>normalizeFood({...juice,foodPortions:[{id:1,amount:1,gramWeight:250,measureUnit:{name:'cup'}}]}),/gram-based/);
+ for(const servingSizeUnit of ['g','gram','grams',' G ']){
+  const food=normalizeFood({...raw,dataType:'Branded',servingSize:32,servingSizeUnit});
+  assert.deepEqual(food.per100g,{calories:100,protein:5,carbohydrates:10,fat:2});
+  assert.equal(n.scale(food.per100g,64).calories,64); // Already per 100 g, not per 32 g serving.
+ }
+ for(const dataType of ['Foundation','SR Legacy','Survey (FNDDS)'])
+  assert.equal(normalizeFood({...raw,dataType}).per100g.calories,100);
+});
+test('food route rejects unsupported basis without food payload; gram detail remains importable',async()=>{
+ const oldFetch=globalThis.fetch,oldKey=process.env.FDC_API_KEY;
+ try{
+  process.env.FDC_API_KEY='unit-only-key';
+  for(const servingSizeUnit of ['ml',undefined]){
+   globalThis.fetch=async()=>Response.json({...juice,servingSizeUnit});
+   const response=await nutritionRequest(new Request('http://local?id=2133897'),'food');
+   assert.equal(response.status,422);const body=await response.json();
+   assert.match(body.error,/cannot be imported reliably/);assert.equal(body.food,undefined);
+  }
+  globalThis.fetch=async()=>Response.json({...raw,fdcId:987654,dataType:'Branded',servingSize:32,servingSizeUnit:'g'});
+  const response=await nutritionRequest(new Request('http://local?id=987654'),'food');
+  assert.equal(response.status,200);assert.equal((await response.json()).food.per100g.calories,100);
+ }finally{globalThis.fetch=oldFetch;if(oldKey===undefined)delete process.env.FDC_API_KEY;else process.env.FDC_API_KEY=oldKey;}
 });

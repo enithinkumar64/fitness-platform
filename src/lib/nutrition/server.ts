@@ -1,6 +1,6 @@
 // Server-only: imported exclusively by route handlers, never by Client Components.
 import { deduplicate } from './core.ts';
-import { foodId, normalizeFood, searchQuery } from './usda.ts';
+import { foodId, normalizeFood, searchQuery, UnsupportedNutritionBasisError } from './usda.ts';
 const cache = new Map<string, {
     until: number;
     value: unknown;
@@ -50,7 +50,9 @@ export async function nutritionRequest(request: Request, kind: 'search' | 'food'
         cache.set(cacheId, { until: Date.now() + (kind === 'food' ? 86400000 : 300000), value: payload });
         return Response.json(payload, { headers });
     }
-    catch {
+    catch (error) {
+        if (error instanceof UnsupportedNutritionBasisError)
+            return Response.json({ error: error.message }, { status: 422, headers });
         return Response.json({ error: 'USDA could not provide complete nutrition details. Try another food or the starter catalog.' }, { status: 502, headers });
     }
 }

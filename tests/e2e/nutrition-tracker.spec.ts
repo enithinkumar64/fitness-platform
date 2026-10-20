@@ -88,3 +88,24 @@ test('legacy grams diary migrates and can be edited using supported household po
  await page.evaluate(()=>localStorage.setItem('formfuel-nutrition-v1',JSON.stringify({version:1,targets:{},entries:[{id:'legacy',date:new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')+'-'+String(new Date().getDate()).padStart(2,'0'),meal:'Breakfast',food:{id:'starter-171688',name:'Apples, raw',source:'FormFuel starter catalog · USDA FoodData Central',sourceId:'171688',dataType:'SR Legacy',per100g:{calories:52,protein:0.26,carbohydrates:13.81,fat:0.17}},grams:100,consumed:{calories:52,protein:0.26,carbohydrates:13.81,fat:0.17}}]})));
  await page.reload();const breakfast=page.getByRole('article',{name:'Breakfast',exact:true});await expect(breakfast).toContainText('100 grams · 100 g');await breakfast.getByRole('button',{name:'Edit Apples, raw',exact:true}).click();await expect(page.getByLabel('Quantity',{exact:true})).toHaveValue('100');await page.getByRole('combobox',{name:'Serving size',exact:true}).selectOption('usda-171688-portion-89193');await page.getByLabel('Quantity',{exact:true}).fill('2');await page.getByRole('button',{name:'Save entry',exact:true}).click();await expect(breakfast).toContainText('2 medium apples · 364 g');await page.reload();await expect(breakfast).toContainText('2 medium apples · 364 g');
 });
+
+test('unsupported USDA nutrient basis cannot be selected or logged; starter catalog remains usable', async ({ page }) => {
+    await page.route('**/api/nutrition/search?*', r => r.fulfill({ json: { foods: [
+        { sourceId: '2133897', name: 'ORANGE JUICE', dataType: 'Branded', brand: '' },
+    ] } }));
+    await page.route('**/api/nutrition/food?*', r => r.fulfill({ status: 422, json: {
+        error: 'This food cannot be imported reliably because USDA does not establish a gram-based nutrition basis. Volume-based or unknown servings cannot be converted to grams safely. Choose another food or the starter catalog.',
+    } }));
+    await page.getByLabel('Search foods', { exact: true }).fill('orange juice');
+    await page.getByRole('button', { name: 'Search USDA FoodData Central', exact: true }).click();
+    await page.getByRole('button', { name: /ORANGE JUICE · Branded/ }).click();
+    await expect(page.getByText(/This food cannot be imported reliably/)).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Select a food to log', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Add food', exact: true }).click();
+    await expect(page.getByRole('main').getByRole('alert')).toContainText('Select a food first.');
+    await expect(page.getByRole('article', { name: 'Calories summary', exact: true })).toContainText('0.0');
+    await selectApple(page);
+    await page.getByRole('button', { name: 'Add food', exact: true }).click();
+    await expect(page.getByRole('article', { name: 'Calories summary', exact: true })).toContainText('52.0');
+    await expect(page.getByRole('article', { name: 'Breakfast', exact: true })).not.toContainText('ORANGE JUICE');
+});
