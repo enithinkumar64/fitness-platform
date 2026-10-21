@@ -82,3 +82,32 @@ No schema or storage-key change is needed. Nutrition remains version 2 under `fo
 [Web Locks](https://developer.mozilla.org/en-US/docs/Web/API/Web_Locks_API) serialize cooperating same-origin tabs and require a supported secure context (HTTPS or localhost). If unavailable, persistent edits and clears fail closed, keeping inputs for retry; read/export remain usable. The snapshot check is additional protection, **not an atomic localStorage compare-and-swap**. Older already-open application versions, scripts that ignore the lock, browser extensions and manual DevTools edits do not participate in this protocol. Reload all FormFuel tabs after updating; no guarantee is made against a non-cooperating writer after the final check. There is no cross-device synchronization or backup. Same-value changes that are later reverted are indistinguishable by content snapshots; no persistent audit history is introduced.
 
 Automated coverage uses real same-context browser pages (shared origin/storage), simultaneous adds, stale editors, deletion, targets, all Progress sections, suppressed storage/focus events, queued clear, key isolation, session-only failures and absent Web Locks. Pure tests cover latest-state commits, structural comparisons, corrupt data, rejected proposed states, key isolation and existing migrations. Actual Safari/Firefox and multiple browser profiles/devices are not certified by Chromium tests.
+
+## Progress accessibility follow-up — FF-10 and FF-11 (original P2 findings)
+
+### FF-10: populated description lists
+
+The original axe evidence in `docs/audit-artifacts/evidence.json` identified `definition-list` violations at 320px and 1440px: the populated weight/latest-date and measurement/date-change paragraphs were siblings of `dt`/`dd` inside a `dl > div` group. Description-list groups must contain the ordered terms and their descriptions; the extra sibling paragraph was outside that relationship. Empty-state scans missed it because the paragraphs only render after logging data.
+
+`weight-tracker.tsx` and `measurement-tracker.tsx` now put those paragraphs inside the matching `dd`. The weight number retains its original monospace/size/color styling in a span while the supplementary date retains its original small secondary styling. Strength already used valid term/description groups and did not need a markup change. Heading levels, labels, edit/delete accessible names, native confirmation dialogs, chart text alternatives and native expandable tables remain intact. No extra ARIA is needed for the summary relationship.
+
+### FF-11: repeated Progress operation notifications
+
+Previously repeated saves set the same string, leaving the existing `role="status"` paragraph unchanged. `progress-tracker.tsx` now gives each operation a presentation-only sequence and replaces the child span inside that stable polite status container, even if visible wording repeats. The sequence is not saved, announced as a number, or used for record IDs, calculations or synchronization. Accepted saves, deletions, clear and export notifications use this path. Rejected save/delete attempts also issue a fresh status directing the user to the existing storage/conflict alert while retaining their draft.
+
+This fixes the documented DOM-update mechanism for **Progress**. Nutrition's similar constant-message pattern is unchanged and remains part of the broader FF-11 follow-up. DOM mutations alone cannot establish actual spoken announcements across browser/screen-reader combinations.
+
+### Regression evidence and manual review
+
+New `tests/e2e/progress-accessibility.spec.ts` covers populated weight/measurement/strength summaries, description-list nesting and value associations, keyboard chart/table expansion, focus outlines, edit/delete controls, validation focus, repeated add/edit/delete DOM notifications, unchanged IDs/schema, and repeated blocked conflict attempts in two real tabs. It uses the existing locked `axe-core` 4.14.0 dependency without installing packages, runs populated main-region checks at 320px and 1440px in both Chromium profiles, and attaches axe results (including incomplete checks) and populated screenshots to the Playwright report. An available automated scan is not a WCAG compliance certification. Existing add/edit/delete, units, CSV, storage and cross-tab tests remain in the full suite.
+
+FF-10 is resolved for the documented markup defect: lint, TypeScript and standalone build passed; both final browser runs passed 356 tests with 8 intentional skips (47.6 s / 48.3 s); all 144 unit tests passed. The launch audit records the evidence and development-test correction. The Progress-specific FF-11 DOM defect is corrected; its Nutrition counterpart and real assistive-technology verification remain open. Calculations, storage schemas/keys, record IDs and the shared synchronization hook are unchanged.
+
+Before launch, manually review:
+
+1. VoiceOver with Safari on the Mac (and iOS where available): navigate the populated description lists and confirm dates/changes are read with their labels/values.
+2. VoiceOver/Safari and NVDA/Firefox or Chrome: verify repeated saves, edits, deletes, blocked conflicts, storage warnings and external synchronization notices are spoken clearly without excessive duplicate announcements. The shared synchronization announcer itself was not redesigned.
+3. Native delete/clear dialogs: verify prompt reading, keyboard cancel/confirm and returned focus with the actual browser/OS controls. Playwright tests confirm dialog handling, not OS-level assistive interaction.
+4. Real mobile keyboards/date/select controls, 200% zoom/text spacing, focus visibility and chart/table reading. Review any axe incomplete results in the generated report.
+
+Use synthetic records or a separate browser profile for review. No cloud service or new data persistence was added.

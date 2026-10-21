@@ -62,6 +62,27 @@ Budget rejections return HTTP 429 with integer-seconds Retry-After until budget 
 
 **Required before public USDA exposure:** verify the intended hosting model; add trusted edge/reverse-proxy per-client/request-size/slow-client protections and an atomic shared USDA-key budget/concurrency policy across all instances, using approved infrastructure. Do not use client-supplied IP headers as trusted identity without the host overwriting them. No paid service/new credentials were introduced. If those controls are unavailable, leave `FDC_API_KEY` unset publicly: the starter catalog and diary still work. Monitor actual aggregate quota/rejection rates without secrets or diary data. See `docs/nutrition-tracker.md` for exact cache/retry/error semantics and the installed official Next.js self-hosting guide for reverse-proxy and multi-instance considerations. Production host/global limiter configuration remains an owner decision; the launch checklist item stays open.
 
+## Progress accessibility follow-up — original FF-10 / FF-11 (P2)
+
+**Original evidence reviewed before editing:** FF-10's axe-core 4.14.0 populated scans in `docs/audit-artifacts/evidence.json` show two serious `definition-list` violations at both 320px and 1440px: `#body-weight > dl` and the measurement summary list, with `div > p` disallowed siblings. FF-11's original MutationObserver reproduction recorded zero live-region mutations on the second successful Progress save. The original audit priorities remain **P2**, independent of axe's rule-impact label.
+
+**FF-10 status: resolved for the documented populated-summary markup defect.** `src/components/progress/weight-tracker.tsx:14` and `measurement-tracker.tsx:14` now place supplementary date/change paragraphs inside their corresponding `dd`, leaving each description-list group as a term plus description. The weight value uses a styled span so its number and supplementary date retain their original typography. Strength summaries already had valid term/description structure; they are tested but not rewritten. No unnecessary ARIA, new design system, calculation or storage change was made.
+
+**FF-11 status: Progress-specific DOM defect corrected; broader finding partially addressed.** `src/components/progress/progress-tracker.tsx` uses a presentation-only operation sequence to replace the status child for each notification inside the same existing `role="status"` container. Repeated add/edit/delete wording now produces DOM updates without showing or persisting the sequence. Rejected save/delete attempts produce a fresh status directing users to the existing conflict/storage alert while preserving the form draft. Clear/export notifications use the same presentation mechanism. No shared synchronization code or mutation logic changed. Nutrition's analogous constant-message pattern remains outside this task; actual spoken announcements still require assistive-technology review. This is not a claim of full FF-11 closure or WCAG conformance.
+
+**Automated evidence:** new `tests/e2e/progress-accessibility.spec.ts` has four scenarios run in both Chromium projects:
+
+1. Real UI-populated weight, measurement and strength summaries; valid description-list children; date/change/value association; unchanged missing measurements; expected strength values. Existing locked `axe-core` runs against populated `main` at 320px and 1440px, with **zero violations** in all four profile/width combinations per final suite. Axe results (including incomplete checks) and screenshots are attached to the Playwright report; no dependency was added.
+2. Keyboard Enter/Space expansion/collapse of all chart data tables; meaningful chart accessible names; three-pixel focus outlines; meaningful edit/delete names; edit focus, validation focus, and native cancel/confirm deletion handling.
+3. MutationObserver confirms updates for repeated successful adds, edits and deletions. Edited record IDs and the version-1 storage shape remain unchanged.
+4. Two real tabs confirm conflicting input remains, saved data is not overwritten, the conflict alert is present, and repeated rejected saves create status mutations. Existing cross-tab and all other functional tests remain passing.
+
+**Final verification:** lint passed; `npx --no-install tsc --noEmit` passed; standalone `npm run build` passed; unit suite **144 passed, 0 failed, 0 skipped**. Two final full browser runs each **356 passed, 8 intentional skips, 0 failed**, taking **47.6 s** and **48.3 s**. Production worker ports/Chromium used approved unrestricted execution; no final check was blocked. Earlier focused tests passed 50/50. The first full run passed 354 with two failures and eight skips because the new test's unscoped alert selector also matched Next.js's separate route announcer. Scoping it to Progress's `main` corrected the test; no application workaround was added.
+
+**Remaining manual checks:** VoiceOver/Safari and NVDA/Firefox or Chrome for actual term/value reading, repeated operation/conflict/error announcements and duplicate/coalesced notifications; native OS/browser confirmation-dialog keyboard/announcement behavior; real mobile date/select/keyboard controls; 200% zoom/text spacing; and any axe incomplete results. The shared synchronization announcer was not redesigned. Automated keyboard/dialog tests and DOM mutations do not prove real screen-reader behavior. No complete WCAG compliance claim is made. Review details are in `docs/progress-tracker.md`.
+
+**Files:** three Progress components above, new `tests/e2e/progress-accessibility.spec.ts`, and the requested two documents. No formula, storage key/schema, record ID, shared synchronization hook, catalog, package, branding or unrelated component was changed. Historical audit evidence below is retained.
+
 ## A. Executive summary
 
 **Recommendation: address the four P1 findings before an unrestricted public launch.** The core site is functional, and the existing verification suite passes. Those tests do not cover several confirmed nutrition and data-retention defects found during this audit.
@@ -210,7 +231,7 @@ Stack: Next.js 16.4.2 App Router, React 19.3.0, TypeScript 5, Tailwind CSS v4, G
 
 ### FF-10 — Populated Progress summaries have invalid definition-list structure
 
-- **Severity/status:** **P2 — confirmed automated accessibility defect**.
+- **Severity/status:** **P2 — resolved for the documented markup defect**, supported by the Progress accessibility follow-up above. Original pre-fix evidence follows.
 - **Affected route:** `/progress-tracker`, after weight/measurement data exists.
 - **Files/lines:** `src/components/progress/weight-tracker.tsx:14`; `src/components/progress/measurement-tracker.tsx:14`.
 - **Evidence:** axe-core 4.14.0, WCAG-tagged checks, reports serious `definition-list` violations in both populated 320px and 1440px states. The latest-date/change `<p>` is placed after `<dd>` as a sibling within the `<dl>` grouping `<div>`, producing `div > p` content that is not part of a valid term/description group. Two affected list nodes were detected per populated scan. Empty-state scans had no such error because the paragraphs are conditional.
@@ -219,7 +240,7 @@ Stack: Next.js 16.4.2 App Router, React 19.3.0, TypeScript 5, Tailwind CSS v4, G
 
 ### FF-11 — Repeated save notifications do not update the live region
 
-- **Severity/status:** **P2 — confirmed DOM behavior; screen-reader impact requires manual verification**.
+- **Severity/status:** **P2 — partially addressed**: Progress DOM notifications corrected/verified; Nutrition counterpart and real screen-reader verification remain open. Original pre-fix evidence follows.
 - **Affected routes:** `/progress-tracker`; the same constant-message pattern exists in Nutrition.
 - **Files/lines:** `src/components/progress/progress-tracker.tsx:26–27,45`; `src/components/nutrition/nutrition-tracker.tsx:117–125,157`.
 - **Evidence:** after a first successful Progress save, a MutationObserver attached to the `Progress entry saved.` live region recorded **zero mutations on the next successful save**. React receives the same status string, so the live-region text does not change. Nutrition repeatedly sets `Food added.` in the same way; that route's repeated-save screen-reader behavior was not separately measured.
@@ -380,7 +401,8 @@ Coverage limits: Chromium only; not a full assistive-technology test, clinical v
 - [ ] Confirm production host, canonical policy, sitemap and robots/staging rules (FF-06).
 - [ ] Repair and verify nutrition source destinations without exposing a key (FF-07).
 - [ ] Choose safe development-tooling advisory mitigation; do not downgrade blindly (FF-08).
-- [ ] Fix populated list semantics and test repeated announcements with assistive technology (FF-10/11).
+- [x] Fix populated Progress list semantics (FF-10); verified with populated axe and structural tests.
+- [ ] Verify real repeated announcements with assistive technology and address Nutrition counterpart (FF-11); Progress DOM mechanism is corrected.
 - [ ] Complete Safari/Firefox, real mobile pickers, zoom/text-spacing and screen-reader review.
 - [ ] Verify deployment HTTPS/headers/rate limits and obtain production performance observations.
 - [ ] Approve branding/social/favicon and refresh project work records (FF-12/14).
