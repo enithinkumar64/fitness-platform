@@ -16,39 +16,39 @@ Only route handlers read the key. It is sent in the server's X-Api-Key header, n
 
 USDA source: https://fdc.nal.usda.gov/api-guide/ and https://fdc.nal.usda.gov/data-documentation.html. FoodData Central data are public domain (CC0). Source: U.S. Department of Agriculture, Agricultural Research Service, FoodData Central.
 
-`src/lib/nutrition/foods.ts` preserves the numeric values. Each link below identifies the record used. Values are per 100 g, energy in kcal, other nutrients in grams.
+`src/lib/nutrition/foods.ts` preserves the numeric values. The IDs below identify the records used. Links open the official USDA Food Search page, not individual record pages; search by food name and match the displayed FDC ID. Values are per 100 g, energy in kcal, other nutrients in grams.
 
 | USDA record | Food |
 | --- | --- |
-| [171688](https://fdc.nal.usda.gov/food-details/171688/nutrients) | Apples, raw, with skin (Includes foods for USDA's Food Distribution Program) |
-| [173944](https://fdc.nal.usda.gov/food-details/173944/nutrients) | Bananas, raw |
-| [169910](https://fdc.nal.usda.gov/food-details/169910/nutrients) | Mangos, raw |
-| [171705](https://fdc.nal.usda.gov/food-details/171705/nutrients) | Avocados, raw, all commercial varieties |
-| [173424](https://fdc.nal.usda.gov/food-details/173424/nutrients) | Egg, whole, cooked, hard-boiled |
-| [170457](https://fdc.nal.usda.gov/food-details/170457/nutrients) | Tomatoes, red, ripe, raw, year round average |
-| [168462](https://fdc.nal.usda.gov/food-details/168462/nutrients) | Spinach, raw |
-| [169975](https://fdc.nal.usda.gov/food-details/169975/nutrients) | Cabbage, raw |
-| [170379](https://fdc.nal.usda.gov/food-details/170379/nutrients) | Broccoli, raw |
-| [171477](https://fdc.nal.usda.gov/food-details/171477/nutrients) | Chicken, broilers or fryers, breast, meat only, cooked, roasted |
-| [172421](https://fdc.nal.usda.gov/food-details/172421/nutrients) | Lentils, mature seeds, cooked, boiled, without salt |
-| [172688](https://fdc.nal.usda.gov/food-details/172688/nutrients) | Bread, whole-wheat, commercially prepared |
-| [172183](https://fdc.nal.usda.gov/food-details/172183/nutrients) | Egg, white, raw, fresh |
-| [174276](https://fdc.nal.usda.gov/food-details/174276/nutrients) | Soy protein isolate |
-| [173757](https://fdc.nal.usda.gov/food-details/173757/nutrients) | Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt |
-| [170567](https://fdc.nal.usda.gov/food-details/170567/nutrients) | Nuts, almonds |
-| [171287](https://fdc.nal.usda.gov/food-details/171287/nutrients) | Egg, whole, raw, fresh |
-| [172470](https://fdc.nal.usda.gov/food-details/172470/nutrients) | Peanut butter, smooth style, without salt |
-| [173686](https://fdc.nal.usda.gov/food-details/173686/nutrients) | Fish, salmon, Atlantic, wild, raw |
-| [171077](https://fdc.nal.usda.gov/food-details/171077/nutrients) | Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw |
-| [168917](https://fdc.nal.usda.gov/food-details/168917/nutrients) | Quinoa, cooked |
-| [168878](https://fdc.nal.usda.gov/food-details/168878/nutrients) | Rice, white, long-grain, regular, enriched, cooked |
-| [171413](https://fdc.nal.usda.gov/food-details/171413/nutrients) | Oil, olive, salad or cooking |
-| [169228](https://fdc.nal.usda.gov/food-details/169228/nutrients) | Eggplant, raw |
-| [170393](https://fdc.nal.usda.gov/food-details/170393/nutrients) | Carrots, raw |
-| [170020](https://fdc.nal.usda.gov/food-details/170020/nutrients) | Peas and onions, frozen, unprepared |
-| [168482](https://fdc.nal.usda.gov/food-details/168482/nutrients) | Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program) |
-| [169291](https://fdc.nal.usda.gov/food-details/169291/nutrients) | Squash, summer, zucchini, includes skin, raw |
-| [171265](https://fdc.nal.usda.gov/food-details/171265/nutrients) | Milk, whole, 3.25% milkfat, with added vitamin D |
+| [171688](https://fdc.nal.usda.gov/food-search/) | Apples, raw, with skin (Includes foods for USDA's Food Distribution Program) |
+| [173944](https://fdc.nal.usda.gov/food-search/) | Bananas, raw |
+| [169910](https://fdc.nal.usda.gov/food-search/) | Mangos, raw |
+| [171705](https://fdc.nal.usda.gov/food-search/) | Avocados, raw, all commercial varieties |
+| [173424](https://fdc.nal.usda.gov/food-search/) | Egg, whole, cooked, hard-boiled |
+| [170457](https://fdc.nal.usda.gov/food-search/) | Tomatoes, red, ripe, raw, year round average |
+| [168462](https://fdc.nal.usda.gov/food-search/) | Spinach, raw |
+| [169975](https://fdc.nal.usda.gov/food-search/) | Cabbage, raw |
+| [170379](https://fdc.nal.usda.gov/food-search/) | Broccoli, raw |
+| [171477](https://fdc.nal.usda.gov/food-search/) | Chicken, broilers or fryers, breast, meat only, cooked, roasted |
+| [172421](https://fdc.nal.usda.gov/food-search/) | Lentils, mature seeds, cooked, boiled, without salt |
+| [172688](https://fdc.nal.usda.gov/food-search/) | Bread, whole-wheat, commercially prepared |
+| [172183](https://fdc.nal.usda.gov/food-search/) | Egg, white, raw, fresh |
+| [174276](https://fdc.nal.usda.gov/food-search/) | Soy protein isolate |
+| [173757](https://fdc.nal.usda.gov/food-search/) | Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt |
+| [170567](https://fdc.nal.usda.gov/food-search/) | Nuts, almonds |
+| [171287](https://fdc.nal.usda.gov/food-search/) | Egg, whole, raw, fresh |
+| [172470](https://fdc.nal.usda.gov/food-search/) | Peanut butter, smooth style, without salt |
+| [173686](https://fdc.nal.usda.gov/food-search/) | Fish, salmon, Atlantic, wild, raw |
+| [171077](https://fdc.nal.usda.gov/food-search/) | Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw |
+| [168917](https://fdc.nal.usda.gov/food-search/) | Quinoa, cooked |
+| [168878](https://fdc.nal.usda.gov/food-search/) | Rice, white, long-grain, regular, enriched, cooked |
+| [171413](https://fdc.nal.usda.gov/food-search/) | Oil, olive, salad or cooking |
+| [169228](https://fdc.nal.usda.gov/food-search/) | Eggplant, raw |
+| [170393](https://fdc.nal.usda.gov/food-search/) | Carrots, raw |
+| [170020](https://fdc.nal.usda.gov/food-search/) | Peas and onions, frozen, unprepared |
+| [168482](https://fdc.nal.usda.gov/food-search/) | Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program) |
+| [169291](https://fdc.nal.usda.gov/food-search/) | Squash, summer, zucchini, includes skin, raw |
+| [171265](https://fdc.nal.usda.gov/food-search/) | Milk, whole, 3.25% milkfat, with added vitamin D |
 
 ## Normalization and limitations
 
@@ -80,35 +80,35 @@ No milk mL option is inferred from its cup portion. Milk has a directly verified
 
 | USDA source record | Food | Implemented household options (grams per one option) |
 | --- | --- | --- |
-| [171688](https://fdc.nal.usda.gov/food-details/171688/nutrients) | Apples, raw, with skin (Includes foods for USDA's Food Distribution Program) | medium apple = 182 g (portion 89193); small apple = 149 g (portion 89194); large apple = 223 g (portion 89192); cup (quartered or chopped) = 125 g (portion 89190); cup (slices) = 109 g (portion 89191) |
-| [173944](https://fdc.nal.usda.gov/food-details/173944/nutrients) | Bananas, raw | medium banana = 118 g (portion 93515); small banana = 101 g (portion 93514); large banana = 136 g (portion 93516); cup (sliced) = 150 g (portion 93512); cup (mashed) = 225 g (portion 93511) |
-| [169910](https://fdc.nal.usda.gov/food-details/169910/nutrients) | Mangos, raw | cup (pieces) = 165 g (portion 85651) |
-| [171705](https://fdc.nal.usda.gov/food-details/171705/nutrients) | Avocados, raw, all commercial varieties | cup (cubes) = 150 g (portion 89223); cup (sliced) = 146 g (portion 89225); cup (pureed) = 230 g (portion 89224) |
-| [173424](https://fdc.nal.usda.gov/food-details/173424/nutrients) | Egg, whole, cooked, hard-boiled | large egg = 50 g (portion 92500); cup (chopped) = 136 g (portion 92498) |
-| [170457](https://fdc.nal.usda.gov/food-details/170457/nutrients) | Tomatoes, red, ripe, raw, year round average | medium tomato = 123 g (portion 86686); small tomato = 91 g (portion 86689); large tomato = 182 g (portion 86685); cup (chopped or sliced) = 180 g (portion 86682) |
-| [168462](https://fdc.nal.usda.gov/food-details/168462/nutrients) | Spinach, raw | cup = 30 g (portion 83132) |
-| [169975](https://fdc.nal.usda.gov/food-details/169975/nutrients) | Cabbage, raw | cup (chopped) = 89 g (portion 85791); cup (shredded) = 70 g (portion 85792) |
-| [170379](https://fdc.nal.usda.gov/food-details/170379/nutrients) | Broccoli, raw | cup (chopped) = 91 g (portion 86528); cup (chopped or diced) = 88 g (portion 86532) |
-| [171477](https://fdc.nal.usda.gov/food-details/171477/nutrients) | Chicken, broilers or fryers, breast, meat only, cooked, roasted | cup (chopped or diced) = 140 g (portion 88817) |
-| [172421](https://fdc.nal.usda.gov/food-details/172421/nutrients) | Lentils, mature seeds, cooked, boiled, without salt | cup = 198 g (portion 90596); tablespoon = 12.3 g (portion 90597) |
-| [172688](https://fdc.nal.usda.gov/food-details/172688/nutrients) | Bread, whole-wheat, commercially prepared | slice = 32 g (portion 91108) |
-| [172183](https://fdc.nal.usda.gov/food-details/172183/nutrients) | Egg, white, raw, fresh | large egg white = 33 g (portion 90043); cup = 243 g (portion 90044) |
-| [174276](https://fdc.nal.usda.gov/food-details/174276/nutrients) | Soy protein isolate | Grams only — mass-only ounces, or insufficiently qualified piece/package sizes |
-| [173757](https://fdc.nal.usda.gov/food-details/173757/nutrients) | Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt | cup = 164 g (portion 93226) |
-| [170567](https://fdc.nal.usda.gov/food-details/170567/nutrients) | Nuts, almonds | almond = 1.2 g (portion 86868); cup (whole) = 143 g (portion 86863); cup (sliced) = 92 g (portion 86864); cup (slivered) = 108 g (portion 86865); cup (ground) = 95 g (portion 86866) |
-| [171287](https://fdc.nal.usda.gov/food-details/171287/nutrients) | Egg, whole, raw, fresh | large egg = 50 g (portion 88374); medium egg = 44 g (portion 88378); small egg = 38 g (portion 88379); cup = 243 g (portion 88377) |
-| [172470](https://fdc.nal.usda.gov/food-details/172470/nutrients) | Peanut butter, smooth style, without salt | tablespoon = 16 g (portion 90673); cup = 258 g (portion 90674) |
-| [173686](https://fdc.nal.usda.gov/food-details/173686/nutrients) | Fish, salmon, Atlantic, wild, raw | fillet (USDA reference size) = 396 g (portion 93107) |
-| [171077](https://fdc.nal.usda.gov/food-details/171077/nutrients) | Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw | Grams only — mass-only ounces, or insufficiently qualified piece/package sizes |
-| [168917](https://fdc.nal.usda.gov/food-details/168917/nutrients) | Quinoa, cooked | cup = 185 g (portion 83990) |
-| [168878](https://fdc.nal.usda.gov/food-details/168878/nutrients) | Rice, white, long-grain, regular, enriched, cooked | cup = 158 g (portion 83928) |
-| [171413](https://fdc.nal.usda.gov/food-details/171413/nutrients) | Oil, olive, salad or cooking | tablespoon = 13.5 g (portion 88667); teaspoon = 4.5 g (portion 88669); cup = 216 g (portion 88668) |
-| [169228](https://fdc.nal.usda.gov/food-details/169228/nutrients) | Eggplant, raw | cup (cubes) = 82 g (portion 84474) |
-| [170393](https://fdc.nal.usda.gov/food-details/170393/nutrients) | Carrots, raw | medium carrot = 61 g (portion 86559); small carrot = 50 g (portion 86560); large carrot = 72 g (portion 86558); cup (chopped) = 128 g (portion 86555); cup (grated) = 110 g (portion 86556) |
-| [170020](https://fdc.nal.usda.gov/food-details/170020/nutrients) | Peas and onions, frozen, unprepared | cup = 138 g (portion 85909) |
-| [168482](https://fdc.nal.usda.gov/food-details/168482/nutrients) | Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program) | cup (cubes) = 133 g (portion 83166); sweet potato (5 inches long) = 130 g (portion 83167) |
-| [169291](https://fdc.nal.usda.gov/food-details/169291/nutrients) | Squash, summer, zucchini, includes skin, raw | medium zucchini = 196 g (portion 84610); small zucchini = 118 g (portion 84612); large zucchini = 323 g (portion 84609); cup (chopped) = 124 g (portion 84607); cup (sliced) = 113 g (portion 84608) |
-| [171265](https://fdc.nal.usda.gov/food-details/171265/nutrients) | Milk, whole, 3.25% milkfat, with added vitamin D | cup = 244 g (portion 88314); tablespoon = 15 g (portion 88316) |
+| [171688](https://fdc.nal.usda.gov/food-search/) | Apples, raw, with skin (Includes foods for USDA's Food Distribution Program) | medium apple = 182 g (portion 89193); small apple = 149 g (portion 89194); large apple = 223 g (portion 89192); cup (quartered or chopped) = 125 g (portion 89190); cup (slices) = 109 g (portion 89191) |
+| [173944](https://fdc.nal.usda.gov/food-search/) | Bananas, raw | medium banana = 118 g (portion 93515); small banana = 101 g (portion 93514); large banana = 136 g (portion 93516); cup (sliced) = 150 g (portion 93512); cup (mashed) = 225 g (portion 93511) |
+| [169910](https://fdc.nal.usda.gov/food-search/) | Mangos, raw | cup (pieces) = 165 g (portion 85651) |
+| [171705](https://fdc.nal.usda.gov/food-search/) | Avocados, raw, all commercial varieties | cup (cubes) = 150 g (portion 89223); cup (sliced) = 146 g (portion 89225); cup (pureed) = 230 g (portion 89224) |
+| [173424](https://fdc.nal.usda.gov/food-search/) | Egg, whole, cooked, hard-boiled | large egg = 50 g (portion 92500); cup (chopped) = 136 g (portion 92498) |
+| [170457](https://fdc.nal.usda.gov/food-search/) | Tomatoes, red, ripe, raw, year round average | medium tomato = 123 g (portion 86686); small tomato = 91 g (portion 86689); large tomato = 182 g (portion 86685); cup (chopped or sliced) = 180 g (portion 86682) |
+| [168462](https://fdc.nal.usda.gov/food-search/) | Spinach, raw | cup = 30 g (portion 83132) |
+| [169975](https://fdc.nal.usda.gov/food-search/) | Cabbage, raw | cup (chopped) = 89 g (portion 85791); cup (shredded) = 70 g (portion 85792) |
+| [170379](https://fdc.nal.usda.gov/food-search/) | Broccoli, raw | cup (chopped) = 91 g (portion 86528); cup (chopped or diced) = 88 g (portion 86532) |
+| [171477](https://fdc.nal.usda.gov/food-search/) | Chicken, broilers or fryers, breast, meat only, cooked, roasted | cup (chopped or diced) = 140 g (portion 88817) |
+| [172421](https://fdc.nal.usda.gov/food-search/) | Lentils, mature seeds, cooked, boiled, without salt | cup = 198 g (portion 90596); tablespoon = 12.3 g (portion 90597) |
+| [172688](https://fdc.nal.usda.gov/food-search/) | Bread, whole-wheat, commercially prepared | slice = 32 g (portion 91108) |
+| [172183](https://fdc.nal.usda.gov/food-search/) | Egg, white, raw, fresh | large egg white = 33 g (portion 90043); cup = 243 g (portion 90044) |
+| [174276](https://fdc.nal.usda.gov/food-search/) | Soy protein isolate | Grams only — mass-only ounces, or insufficiently qualified piece/package sizes |
+| [173757](https://fdc.nal.usda.gov/food-search/) | Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt | cup = 164 g (portion 93226) |
+| [170567](https://fdc.nal.usda.gov/food-search/) | Nuts, almonds | almond = 1.2 g (portion 86868); cup (whole) = 143 g (portion 86863); cup (sliced) = 92 g (portion 86864); cup (slivered) = 108 g (portion 86865); cup (ground) = 95 g (portion 86866) |
+| [171287](https://fdc.nal.usda.gov/food-search/) | Egg, whole, raw, fresh | large egg = 50 g (portion 88374); medium egg = 44 g (portion 88378); small egg = 38 g (portion 88379); cup = 243 g (portion 88377) |
+| [172470](https://fdc.nal.usda.gov/food-search/) | Peanut butter, smooth style, without salt | tablespoon = 16 g (portion 90673); cup = 258 g (portion 90674) |
+| [173686](https://fdc.nal.usda.gov/food-search/) | Fish, salmon, Atlantic, wild, raw | fillet (USDA reference size) = 396 g (portion 93107) |
+| [171077](https://fdc.nal.usda.gov/food-search/) | Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw | Grams only — mass-only ounces, or insufficiently qualified piece/package sizes |
+| [168917](https://fdc.nal.usda.gov/food-search/) | Quinoa, cooked | cup = 185 g (portion 83990) |
+| [168878](https://fdc.nal.usda.gov/food-search/) | Rice, white, long-grain, regular, enriched, cooked | cup = 158 g (portion 83928) |
+| [171413](https://fdc.nal.usda.gov/food-search/) | Oil, olive, salad or cooking | tablespoon = 13.5 g (portion 88667); teaspoon = 4.5 g (portion 88669); cup = 216 g (portion 88668) |
+| [169228](https://fdc.nal.usda.gov/food-search/) | Eggplant, raw | cup (cubes) = 82 g (portion 84474) |
+| [170393](https://fdc.nal.usda.gov/food-search/) | Carrots, raw | medium carrot = 61 g (portion 86559); small carrot = 50 g (portion 86560); large carrot = 72 g (portion 86558); cup (chopped) = 128 g (portion 86555); cup (grated) = 110 g (portion 86556) |
+| [170020](https://fdc.nal.usda.gov/food-search/) | Peas and onions, frozen, unprepared | cup = 138 g (portion 85909) |
+| [168482](https://fdc.nal.usda.gov/food-search/) | Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program) | cup (cubes) = 133 g (portion 83166); sweet potato (5 inches long) = 130 g (portion 83167) |
+| [169291](https://fdc.nal.usda.gov/food-search/) | Squash, summer, zucchini, includes skin, raw | medium zucchini = 196 g (portion 84610); small zucchini = 118 g (portion 84612); large zucchini = 323 g (portion 84609); cup (chopped) = 124 g (portion 84607); cup (sliced) = 113 g (portion 84608) |
+| [171265](https://fdc.nal.usda.gov/food-search/) | Milk, whole, 3.25% milkfat, with added vitamin D | cup = 244 g (portion 88314); tablespoon = 15 g (portion 88316) |
 
 Soy protein isolate (174276) remains grams-only because the only USDA portion is mass in ounces, not a household measure. Raw chicken breast (171077) remains grams-only because the piece/package weights do not identify a clear household size; no cooked portions are borrowed. Other foods expose only the selected, qualified portions above, not every portion returned by USDA.
 
@@ -205,3 +205,21 @@ Repeated target/validation messages and blocked storage/conflict attempts also r
 `tests/e2e/nutrition-announcements.spec.ts` covers repeated additions/edits/deletions, unchanged record IDs and serving snapshots, repeated target saves/errors, repeated invalid quantities with retained input, repeated synchronization notices, stale-edit conflicts with drafts preserved, session-only failures, repeated confirmed clearing/cancel behavior, keyboard focus and populated/error axe scans at 320px/1440px. Observers verify actual live-region DOM updates. Existing Nutrition/USDA/storage/cross-tab tests and the Progress FF-11 counterpart are included in full verification. Axe is the existing locked dependency; none was installed.
 
 The confirmed FF-11 DOM-update defect is resolved and verified in both trackers. Lint, TypeScript and standalone production build passed; all 144 unit tests passed. Two final full browser runs each passed 368 tests with 8 intentional skips (48.7 s / 50.5 s), including the Progress counterpart. Details are recorded in `docs/launch-readiness-audit.md`. This does not certify complete WCAG compliance or prove announcements on every screen reader. Before release, use VoiceOver/Safari and NVDA with Chrome/Firefox to check actual repeated success/error/conflict speech, polite/assertive ordering and excessive duplication or coalescing. Also review native dialog reading/keyboard controls, real mobile date/select controls, 200% zoom/text spacing and any axe incomplete checks. Use synthetic records in an isolated profile. The existing live nutrition preview was not changed; its verbosity can be reviewed separately if real users find it excessive.
+
+## USDA attribution links — FF-07 (October 20, 2026)
+
+The public web pattern `https://fdc.nal.usda.gov/food-details/{FDC_ID}/nutrients` returned HTTP 404 for the sampled apple (171688), banana (173944), and cooked-rice (168878) records. These are valid SR Legacy IDs: the full FoodData Central API returned HTTP 200 with exactly the expected IDs and food descriptions. The confirmed defect is an unsuccessful public web destination, not a demonstrated mismatch in food data. We cannot establish when/whether USDA changed that routing or guarantee an alternative direct-record permalink.
+
+The verified fallback is **[USDA Food Search](https://fdc.nal.usda.gov/food-search/)**. USDA's homepage links to it, the web tool rendered its search interface, and a redirected HTTP GET returned 200. Both UI attribution links explicitly say they open Food Search and retain the FDC ID beside the link. Search by the full food name and match the FDC ID/data type; the fallback does not automatically select a record. Documentation table links above also open this search page, rather than pretending to be individual food pages.
+
+| Food | Original failed destination | Current public destination |
+| --- | --- | --- |
+| Apple, raw, with skin, FDC 171688 | `https://fdc.nal.usda.gov/food-details/171688/nutrients` (404) | `https://fdc.nal.usda.gov/food-search/` (200; search, not direct record) |
+| Banana, raw, FDC 173944 | `https://fdc.nal.usda.gov/food-details/173944/nutrients` (404) | Same official search |
+| Rice, long-grain white, enriched, cooked, FDC 168878 | `https://fdc.nal.usda.gov/food-details/168878/nutrients` (404) | Same official search |
+
+Verification intentionally used only three sampled old URLs, one shared replacement and three public-demo API record lookups, avoiding an exhaustive burst of requests. Offline inspection confirmed all **29** starter foods and **65** household references share the same original URL pattern. The presentation fix covers all starter foods, optional imported USDA foods and historical diary entries through a single constant in `src/lib/nutrition/attribution.ts`.
+
+**Compatibility:** `foods.ts`, `usda.ts`, `usda-portions.ts`, `servings.ts`, core storage and API handlers are unchanged. The legacy `serving.reference` value is retained as historical source provenance, not rendered as the current hyperlink. Its original validator remains unchanged so old diary entries continue to load. No nutrition value, source ID, serving gram conversion, storage schema or normalization behavior is migrated or rewritten. The UI does not trust a stored URL to choose the external destination. A golden catalog digest and historical-entry regression protect these invariants, in addition to existing portion-evidence tests.
+
+Evidence is in `docs/audit-artifacts/ff07-2026-10-20.json`. Unit/browser checks validate rendering and compatibility offline; actual external HTTP results and the inspected USDA page are separate evidence, not inferred from URL shape. USDA can change its site later; the fallback may require JavaScript and manual record selection. No claim is made that every historical deep link was fetched or that individual record pages are permanently unavailable. Recheck the official search on release and review record matches manually as needed.

@@ -1,3 +1,4 @@
+import { USDA_FOOD_SEARCH_URL } from '@/lib/nutrition/attribution';
 import { KEYS, scale, type Food } from '@/lib/nutrition/core';
 import { servingGrams, servingOptions } from '@/lib/nutrition/servings';
 const control = 'mt-2 block min-h-control w-full min-w-0 rounded-control border border-border-control bg-background px-3 py-2';
@@ -31,7 +32,7 @@ export function FoodQuantityFields({ food, quantity, servingId, onQuantity, onSe
       </label>
     </div>
     <p id="quantity-help" className="text-sm text-secondary">Fractions such as 0.5 are welcome. Switching serving units preserves the current gram equivalent. Use grams when your portion differs from the reference size.</p>
-    {food && serving && serving.id!=='g' && <p className="break-words text-sm text-secondary">{serving.qualifier} · <a href={serving.reference} target="_blank" rel="noopener noreferrer">USDA portion source</a>{food.servings?.length?'':' · Historical conversion'}</p>}
+    {food && serving && serving.id!=='g' && <p className="break-words text-sm text-secondary">{serving.qualifier} · FDC ID {serving.sourceId} · <a href={USDA_FOOD_SEARCH_URL} target="_blank" rel="noopener noreferrer">Find portion source on USDA</a> (opens Food Search; match the food name and FDC ID){food.servings?.length?'':' · Historical conversion'}</p>}
     {food && <div role="status" aria-label="Nutrition preview" className="rounded-control border border-border p-4 text-sm">
       {preview ? <><p className="font-semibold text-primary">Estimated equivalent: {Number(preview.grams.toFixed(3))} g</p><dl className="mt-3 grid gap-2 sm:grid-cols-2">{KEYS.map(k=><div key={k}><dt className="inline">{{calories:'Calories',protein:'Protein',carbohydrates:'Carbohydrates',fat:'Fat'}[k]}: </dt><dd className="inline font-mono">{preview.nutrients[k].toFixed(1)} {k==='calories'?'kcal':'g'}</dd></div>)}</dl></> : <p>{previewError}</p>}
     </div>}
