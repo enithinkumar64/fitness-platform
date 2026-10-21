@@ -682,3 +682,62 @@ Manual release review: inspect at desktop and real mobile widths; open Calculato
 **Verification:** lint passed; TypeScript passed; standalone production build passed. Unit suite **148 passed, 0 failed, 0 skipped**. Two complete browser runs each **376 passed, 8 intentional skips, 0 failed**, taking **52.5 s** and **52.6 s**. New unit tests pin the entire unchanged 29-food catalog/65-serving snapshot digest and historical conversion behavior; the destination-format test explicitly does not claim liveness. Browser tests check all three sampled foods, secure external destinations, displayed IDs/search instructions, mocked imported USDA food, logging, reload/editing and preservation of the old serialized reference. Existing Nutrition and other feature regressions pass. No dependency was installed and no final verification was blocked.
 
 **Remaining limitations/manual review:** USDA controls the external site's availability, JavaScript and mobile search behavior. Users must choose the matching record themselves; a direct-record link is not promised. The three API identity checks do not independently revalidate every nutrient in the entire catalog. On release, select apple, banana and cooked rice, open both source links, search by the food name and match ID/data type; confirm new-tab behavior and readable wrapping on mobile. Log/edit/reload a household quantity and confirm its grams/nutrition are unchanged. If USDA later documents reliable individual permalinks, a future presentation-only improvement can adopt them without rewriting saved snapshots. No commit, push or deployment was performed.
+
+## L. FF-08 follow-up — no safe published remediation, October 20, 2026
+
+**Original issue: FF-08, P2. Status: still open; no dependency remediation applied.** Investigation confirmed the development-only advisory remains. Original findings and previous audit snapshots above are preserved. Passing application tests must not be interpreted as clearing this security finding.
+
+### Advisory and installed dependency chain
+
+Fresh `npm audit` reports **one underlying advisory propagated through five high-severity affected nodes**, not five independent vulnerabilities: [GHSA-vfj7-8cjw-p6xm / CVE-2026-93687](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm), stack exhaustion caused by deeply nested brace patterns. The reviewed advisory lists affected braces versions through **3.0.3** and **no patched version**. npm reports CVSS v3.1 7.5; its high severity is not evidence of a public VAJRYA endpoint exposing this parser.
+
+| Package | Installed | Relationship and scope | Relevant published update/fix assessment |
+| --- | --- | --- | --- |
+| eslint-config-next | 16.4.2 | Direct devDependency | Highest published stable 16.x version returned by npm at investigation time; keep matched to Next 16.4.2. |
+| @next/eslint-plugin-next | 16.4.2 | Transitive, development-only | Config pins this version; plugin pins fast-glob exactly 3.3.1. |
+| fast-glob | 3.3.1 | Transitive, development-only | Latest 3.3.3 still requires micromatch ^4.0.8, so a patch override does not remove the advisory. |
+| micromatch | 4.0.8 | Transitive, development-only | Latest published version remains 4.0.8 and requires braces ^3.0.3. |
+| braces | 3.0.3 | Transitive, development-only; advisory origin | Latest published release is still 3.0.3; no patched registry/advisory version is available. |
+
+Versions, dev flags and dependency ranges were inspected in the complete lockfile package map (lockfile version 3) and installed `npm ls` tree, then compared with read-only `npm view` registry queries. The chain is **eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces**. The production-only audit has zero known findings.
+
+### Fix options evaluated and rejected
+
+- A lockfile-only refresh cannot fetch a nonexistent patched braces version. An unrelated update adds churn without resolving the known issue.
+- Overriding fast-glob 3.3.1 to compatible-line 3.3.3 still resolves through the same vulnerable micromatch/braces chain. Overriding braces to 3.0.3 merely pins the affected version. No safe patched override was identified.
+- Npm suggests **eslint-config-next 14.2.35**, a semver-major downgrade, not a compatible fix for this stack. Registry metadata requires ESLint `^7.23.0 || ^8.0.0`, while this project uses **ESLint 9.39.5**, plus the Next 16 flat-config imports in `eslint.config.mjs`. That is a demonstrated peer-version mismatch; no downgrade was attempted. Changing framework/tooling major versions requires a separate migration assessment.
+- Replacing parser packages with differently named libraries, disabling the Next plugin, adopting an unreviewed fork or editing node_modules would change supported APIs, remove lint coverage or introduce maintenance/reproducibility risk. None is justified merely to obtain a green audit.
+- Next.js **16.4.2**, React/React DOM **19.3.0**, and all existing tools remain unchanged. No install, audit fix, override, lockfile edit or framework upgrade was performed.
+
+### Exposure and recommended mitigation
+
+The installed plugin imports fast-glob in `node_modules/@next/eslint-plugin-next/dist/utils/get-root-dirs.js:11–30`, using configured Next root-directory patterns. Current `eslint.config.mjs:1–25` does not define a custom `settings.next.rootDir` glob; reviewed application/API source does not import the vulnerable chain or accept web-request glob patterns. This narrows the identified exposure but does not prove all development-tool execution paths safe. The advisory remains actionable for development/CI availability when untrusted patterns reach the parser.
+
+Recommendations, **not newly implemented infrastructure**:
+
+1. Keep lint/glob configuration and pattern inputs trusted and reviewed; do not construct lint/rootDir patterns from public request data or untrusted CI parameters. Treat untrusted repository code/config as executable code, not safe input.
+2. Run untrusted pull-request checks in isolated, disposable workers with job/resource time limits, least-privilege tokens and no production secrets. Do not run fork-controlled code in privileged release jobs. This repository has no checked-in GitHub workflow to verify; actual CI/provider settings need owner review.
+3. Use a build stage with development tools and a production runtime containing only required production dependencies. Do not remove dev tools before lint/build. Production dependency audits are already clean, but that does not protect the build worker.
+4. Keep full and production audits visible. If release policy permits deferral, record a narrow, reviewed, time-limited exception for this exact development advisory and an owner/recheck date; do not suppress all high findings or claim FF-08 resolved.
+5. Recheck upstream braces, micromatch and Next ESLint releases before release and regularly thereafter. Once a supported fix exists, update only the necessary chain, rerun all checks and both audit scopes, then reassess FF-08.
+
+No public API exploit, denial-of-service test against a service, or new production dependency vulnerability was established. No unsafe pattern stress test was needed to reproduce the advisory upstream; running such input locally would not create a patched dependency.
+
+### FF-08 final verification and review
+
+| Scope/check | Before | After investigation |
+| --- | --- | --- |
+| Full `npm audit` | 5 high, 0 critical; exit 1 | 5 high, 0 critical; exit 1 |
+| `npm audit --omit=dev` | 0 known vulnerabilities; exit 0 | 0 known vulnerabilities; exit 0 |
+| Underlying advisory | GHSA-vfj7-8cjw-p6xm | Same advisory; no new advisory found |
+| `npm run lint` | — | Passed, exit 0 |
+| `npx tsc --noEmit` | — | Passed, exit 0; sequential final rerun also passed |
+| `npm run build` | — | Passed, exit 0 |
+| First full `npm run test` | — | 376 passed, 8 intentional skips, 0 failures; 50.9 s |
+| Second full `npm run test` | — | 376 passed, 8 intentional skips, 0 failures; 52.6 s |
+
+All informational, low and moderate vulnerability counts are zero in both audit scopes; the full audit's five high affected nodes remain development-only. The final full-audit nonzero exit is the expected unresolved security finding, **not** an environment failure. All requested checks executed successfully as operations; no blocked check is reported as passing. Build/browser execution and registry queries used approved permissions. No vulnerability count was reduced, and no remediation success is claimed.
+
+**Exact changes:** only this appended section of `docs/launch-readiness-audit.md`. `package.json` and `package-lock.json` were compared byte-for-byte against HEAD and remain unchanged and mutually consistent. Application code, APIs, calculations, data, storage, branding, tests and framework versions are untouched. Existing audit artifacts were not rewritten. Raw npm/registry/check logs stayed in temporary files outside the repository.
+
+**Manual review checklist:** inspect the audit follow-up and unchanged package diff; confirm that full audit still reports this exact development advisory and production audit remains zero; review actual CI isolation, token/secret permissions and time/resource limits with the chosen hosting provider; verify runtime packaging omits development tools after the build stage; assign an owner and recheck date before accepting any temporary exception. An optional local smoke test of navigation, one calculator and browser-local tracker loading can accompany review, but no feature behavior changed. No package installation, commit, push or deployment was performed. **FF-08 stays open pending a verified supported upstream fix or separately justified remediation.**
