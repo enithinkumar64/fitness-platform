@@ -57,8 +57,18 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Cloudflare Workers deployment preparation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The app is prepared for an OpenNext-based Cloudflare Workers deployment while preserving `npm run dev`, `npm run build` and the existing tests. Nothing has been deployed.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Read [the deployment guide](docs/cloudflare-deployment.md) before using the new scripts. It explains the secret-free staged build, local Worker preview, Free plan limits, GitHub build settings, privacy review and later deployment steps. Use Node 22 or newer for the pinned Cloudflare tooling.
+
+```bash
+npm run build:cloudflare
+npm run check:cloudflare
+npm run test:cloudflare
+```
+
+USDA credentials must remain absent on Cloudflare. Initial builds default to noindex without a guessed hostname; set build-time `SITE_URL` to the real assigned HTTPS origin and opt into `SITE_INDEXABLE=true` only after release review. Rebuild after changing these values. Existing browser data stays with its original browser/profile/origin; it is not cloud-synchronized.
+
+`npm run deploy:cloudflare` is provided for a later approved release only; do not run it during preparation.

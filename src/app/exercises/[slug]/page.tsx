@@ -1,3 +1,4 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,7 +11,7 @@ export function generateStaticParams() { return EXERCISES.map(({ slug }) => ({ s
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const exercise = findExerciseBySlug((await params).slug);
   if (!exercise) notFound();
-  return { title: `${exercise.name}: Technique & Safety | VAJRYA`, description: `${exercise.description} Read original written steps, technique tips, common mistakes, and safety considerations.` };
+  return { ...siteMetadata(`/exercises/${exercise.slug}`), title: `${exercise.name}: Technique & Safety | VAJRYA`, description: `${exercise.description} Read original written steps, technique tips, common mistakes, and safety considerations.` };
 }
 
 export default async function ExercisePage({ params }: Props) {

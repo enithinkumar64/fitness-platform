@@ -1,3 +1,4 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  openGraph: { siteName: "VAJRYA" },
+  ...siteMetadata("/"),
   title: "VAJRYA | Free Fitness & Nutrition Tools",
   description:
     "Discover VAJRYA's vision for free fitness and nutrition tools, including workout plans, fitness calculators, and progress tracking.",

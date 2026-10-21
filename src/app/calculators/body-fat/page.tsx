@@ -1,8 +1,10 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BodyFatCalculator } from "@/components/calculators/body-fat-calculator";
 
 export const metadata: Metadata = {
+  ...siteMetadata("/calculators/body-fat"),
   title: "Free Adult Body Fat Calculator | VAJRYA",
   description: "Estimate adult body fat with U.S. Navy circumference equations and a separate BMI-based comparison. Metric and imperial measurements for ages 20–100.",
 };

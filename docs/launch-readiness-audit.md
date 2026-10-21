@@ -741,3 +741,76 @@ All informational, low and moderate vulnerability counts are zero in both audit 
 **Exact changes:** only this appended section of `docs/launch-readiness-audit.md`. `package.json` and `package-lock.json` were compared byte-for-byte against HEAD and remain unchanged and mutually consistent. Application code, APIs, calculations, data, storage, branding, tests and framework versions are untouched. Existing audit artifacts were not rewritten. Raw npm/registry/check logs stayed in temporary files outside the repository.
 
 **Manual review checklist:** inspect the audit follow-up and unchanged package diff; confirm that full audit still reports this exact development advisory and production audit remains zero; review actual CI isolation, token/secret permissions and time/resource limits with the chosen hosting provider; verify runtime packaging omits development tools after the build stage; assign an owner and recheck date before accepting any temporary exception. An optional local smoke test of navigation, one calculator and browser-local tracker loading can accompany review, but no feature behavior changed. No package installation, commit, push or deployment was performed. **FF-08 stays open pending a verified supported upstream fix or separately justified remediation.**
+
+## M. Task 19 — Cloudflare Workers preparation, October 20, 2026
+
+**No live deployment, version upload, Cloudflare account/GitHub connection, cloud resource creation, paid activation, commit or push occurred.** This follow-up adds deployment/SEO preparation, not a new launch certification. Original findings and evidence remain historical.
+
+**Adapter decision:** @opennextjs/cloudflare **1.20.12**, Wrangler **4.151.3**, both pinned as development dependencies. Registry peers accept Next 16.4.2. Cloudflare currently recommends vinext for new projects; OpenNext was chosen here to adapt the existing tested Next/Turbopack output rather than introduce a second compiler/runtime or framework migration. App Router, SSG, RSC and route handlers built and ran locally. No formerly installed package version, Next/React version, calculation, API implementation, food data, workout program or browser-storage schema/key changed. Full rationale, official sources and future owner instructions are in `docs/cloudflare-deployment.md`.
+
+**Deployment design:** `wrangler.json` uses nodejs_compat, ASSETS and a self-reference service, with no R2/KV/D1/Queues/Images/Durable Objects or USDA secrets. Static prerendered caching uses read-only Workers assets. The isolated build copies only source/configuration and installed dependencies to ignored `.cloudflare-build/`, excludes original dotenv files, passes only allowlisted build environment settings and checks empty compiled dotenv exports before preview/check/deploy. This is needed because the adapter otherwise packages local dotenv values into Worker output. Original local `next dev`, build/start, private environment files and tests remain intact. Wrapper preview/deploy follow the official adapter cache preparation path.
+
+**FF-06 (original P2): partially mitigated/prepared, not fully resolved.** New validated build-time `SITE_URL` and explicit `SITE_INDEXABLE=true` generate per-page canonicals/Open Graph URLs, a 112-destination sitemap and robots policy without guessing an account hostname. No configured origin/indexing opt-in means noindex/nofollow, disallow-all robots and no sitemap URLs. Root and page-specific existing titles/descriptions remain. Unit tests cover configured and unconfigured states using a reserved test origin; the actual Worker hostname and deployed responses remain unverified. After the first approved noindex deployment, the owner must copy the assigned workers.dev URL, configure/rebuild, review metadata and only then opt into indexing. Preview version URLs are disabled. Favicon/social images remain separate FF-12 work.
+
+**FF-04 (original P1): not closed.** Both staged Worker API endpoints return helpful 503 without the key; bad IDs retain 400 validation. Live USDA must stay disabled in both build and runtime settings until shared deployment-wide protection is approved/verified. Local configuration cannot certify absence of pre-existing dashboard secrets, so that is an explicit owner checklist item. Starter catalog and browser diary remain usable. Browser data is origin/profile-specific, not synchronized or transferred to workers.dev; changing hostname later has the same origin boundary.
+
+**FF-08 (original P2): still open.** Adding required build tooling initially produced nine high affected development nodes. A narrow, tested npm override `@node-minify/core -> glob 10.5.0` removes the added GHSA-5j98-mcp5-4vw2 CLI advisory; parent code uses the same globSync API. Fresh audit returned to **five high development-only affected nodes**, all the existing unpatched braces chain, and **zero production findings**. No forced fix, framework downgrade or unrelated version churn occurred. All pre-existing lockfile nodes that remain have their original versions; new/relocated dependency nodes account for the lockfile changes. The new glob override is scoped and justified, not a claim that the earlier braces vulnerability has been patched.
+
+### Verification
+
+| Check | Result |
+| --- | --- |
+| npm run lint | Passed, exit 0 |
+| npx tsc --noEmit | Passed, exit 0; final sequential rerun passed |
+| npm run build | Passed, exit 0 |
+| npm run test, first | 376 passed, 8 intentional skips, 0 failed; 59.9 s |
+| npm run test, second | 376 passed, 8 intentional skips, 0 failed; 54.6 s |
+| npm run test:unit | 150 passed, 0 failed, 0 skipped |
+| npm run build:cloudflare | Isolated OpenNext build and local static-cache population passed |
+| npm run check:cloudflare | Dry run only; 6,440.70 KiB raw / 1,301.56 KiB gzip, 217 static asset files |
+| npm run test:cloudflare | 4 passed, 0 failed; 4.1 s; real local workerd |
+| Workerd coverage | 112 routes HTTP 200; unknown guide 404; missing-key API 503/invalid ID 400; SEO defaults; mobile diary logging/reload |
+| Secret check | Local private USDA value absent from 1,565 checked Worker/dry-run/client files; compiled dotenv modes empty; no values printed |
+| npm audit / production-only | 5 high development nodes / 0 production findings |
+
+Development-only failures and corrections: initial staging dependency symlinks violated Turbopack's root boundary; local dependency copies fixed resolution. Initial direct Wrangler preview missed the adapter's cache-population step, producing read-only-cache write errors despite successful page responses. Local static-cache population and official adapter preview/deploy paths fixed this; final smoke logs contain no such errors. A restricted local HTTP probe needed approved process permissions. No final build/test remained blocked.
+
+**Cost/runtime limits:** prepared for Workers Free without optional resources. Current official docs list 100,000 Worker requests/day, 10 ms CPU/invocation, 128 MB memory, a 1-second startup limit and 64 MiB uncompressed code; static asset requests are free/unlimited. Free Builds provides 3,000 minutes/month. The local bundle is within the published size limit, but no billed CPU, startup acceptance, traffic load, security headers or actual account quota was established. Some older adapter documentation quotes older bundle caps; verify current platform/account limits before first release. Paid Workers starts at $5/month but was neither selected nor activated. Free-tier production performance is a release check, not a locally proven guarantee.
+
+**Privacy/commercial review:** existing estimate/safety disclaimers remain. Owner setup must review Cloudflare terms, operator/contact/privacy disclosures, browser-local data limits and hosting logs. Ads/analytics/affiliate tracking need their own disclosure/consent review before integration; no provider, banner, legal policy or monetization feature was created. No legal/clinical compliance certification is claimed.
+
+### Files changed or created for Task 19
+
+- `.gitignore`
+- `README.md`
+- `docs/cloudflare-deployment.md`
+- `docs/launch-readiness-audit.md`
+- `eslint.config.mjs`
+- `open-next.config.ts`
+- `package-lock.json`
+- `package.json`
+- `playwright.cloudflare.config.ts`
+- `public/_headers`
+- `scripts/cloudflare.mjs`
+- `src/app/calculators/bmi/page.tsx`
+- `src/app/calculators/body-fat/page.tsx`
+- `src/app/calculators/calories-burned/page.tsx`
+- `src/app/calculators/ideal-weight/page.tsx`
+- `src/app/calculators/macros/page.tsx`
+- `src/app/calculators/one-rep-max/page.tsx`
+- `src/app/calculators/tdee/page.tsx`
+- `src/app/exercises/[slug]/page.tsx`
+- `src/app/exercises/page.tsx`
+- `src/app/layout.tsx`
+- `src/app/nutrition-tracker/page.tsx`
+- `src/app/progress-tracker/page.tsx`
+- `src/app/robots.ts`
+- `src/app/sitemap.ts`
+- `src/app/workout-planner/page.tsx`
+- `src/lib/site-url.ts`
+- `tests/cloudflare/smoke.spec.ts`
+- `tests/unit/site-url.test.mjs`
+- `tsconfig.json`
+- `wrangler.json`
+
+Changes to existing application page files are metadata imports/spreads only; fonts/layout markup/features are preserved. Generated staging/dependency caches are ignored. Existing `docs/audit-artifacts/` content was not modified. See the deployment guide for exact future account/GitHub/build settings, environment variables, rollback/monitoring review and first-hostname sequence. Stop for owner review before any commit, push or actual deployment.

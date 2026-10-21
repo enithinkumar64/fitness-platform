@@ -1,7 +1,9 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WorkoutPlanner } from "@/components/workout-planner/workout-planner";
-export const metadata: Metadata = { title: "Free Workout Planner | VAJRYA", description: "Choose a curated workout split and predefined exercise program matched to your goal, experience, confirmed equipment, and weekly training days." };
+export const metadata: Metadata = {
+  ...siteMetadata("/workout-planner"), title: "Free Workout Planner | VAJRYA", description: "Choose a curated workout split and predefined exercise program matched to your goal, experience, confirmed equipment, and weekly training days." };
 export default function WorkoutPlannerPage() {
   return <main className="mx-auto w-full max-w-7xl flex-1 px-page py-section">
     <p className="font-mono text-xs tracking-widest text-primary">PLAN / PRACTICE / RECOVER</p><h1 className="mt-4 text-heading-1">Free Workout Planner</h1>

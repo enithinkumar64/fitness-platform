@@ -1,7 +1,9 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import { TdeeCalculator } from "@/components/calculators/tdee-calculator";
 
 export const metadata: Metadata = {
+  ...siteMetadata("/calculators/tdee"),
   title: "Free TDEE & Daily Calorie Calculator | VAJRYA",
   description: "Estimate adult BMR, maintenance calories, and daily calorie adjustments using the Mifflin–St Jeor equation. Free metric and imperial TDEE calculator.",
 };

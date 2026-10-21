@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "test": "playwright test",
-    "test:unit": "node --experimental-strip-types --test tests/unit/*.test.mjs"
+    "test:unit": "node --experimental-strip-types --test tests/unit/*.test.mjs",
+    "build:cloudflare": "node scripts/cloudflare.mjs build",
+    "preview:cloudflare": "node scripts/cloudflare.mjs preview",
+    "check:cloudflare": "node scripts/cloudflare.mjs check",
+    "deploy:cloudflare": "node scripts/cloudflare.mjs deploy",
+    "test:cloudflare": "playwright test --config playwright.cloudflare.config.ts"
   },
   "dependencies": {
     "next": "16.4.2",
@@ -16,6 +21,7 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "1.20.12",
     "@playwright/test": "^1.64.1",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
@@ -24,6 +30,12 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "4.151.3"
+  },
+  "overrides": {
+    "@node-minify/core": {
+      "glob": "10.5.0"
+    }
   }
 }

@@ -1,7 +1,9 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import { MacroCalculator } from "@/components/calculators/macro-calculator";
 
 export const metadata: Metadata = {
+  ...siteMetadata("/calculators/macros"),
   title: "Free Goal-Guided Macro Calculator | VAJRYA",
   description: "Explore illustrative macro splits for maintenance, fat loss, and muscle gain. Estimate calories from body measurements and activity, then calculate protein, carbohydrates, and fat for your goal.",
 };

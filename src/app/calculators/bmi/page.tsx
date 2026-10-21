@@ -1,8 +1,10 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BmiCalculator } from "@/components/calculators/bmi-calculator";
 
 export const metadata: Metadata = {
+  ...siteMetadata("/calculators/bmi"),
   title: "Free Adult BMI Calculator | VAJRYA",
   description: "Calculate adult BMI, BMI Prime, Ponderal Index, and height-based reference-weight boundaries. Free metric and imperial calculator for ages 20–100.",
 };

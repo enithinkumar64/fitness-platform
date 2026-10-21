@@ -1,8 +1,10 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CaloriesBurnedCalculator } from "@/components/calculators/calories-burned-calculator";
 
 export const metadata: Metadata = {
+  ...siteMetadata("/calculators/calories-burned"),
   title: "Free Calories Burned Calculator | VAJRYA",
   description: "Estimate gross activity calories from body weight, duration, and 2024 Compendium MET values. Free metric and imperial calculator with 27 activity variants.",
 };

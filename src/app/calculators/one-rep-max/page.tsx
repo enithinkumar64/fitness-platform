@@ -1,8 +1,10 @@
+import { siteMetadata } from "@/lib/site-url";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { OneRepMaxCalculator } from "@/components/calculators/one-rep-max-calculator";
 
 export const metadata: Metadata = {
+  ...siteMetadata("/calculators/one-rep-max"),
   title: "Free One-Rep Max (1RM) Calculator | VAJRYA",
   description: "Estimate one-rep max from a completed set using Epley and Brzycki, with percentage-based load references. Free calculator for 1–12 reps in kg or lb.",
 };

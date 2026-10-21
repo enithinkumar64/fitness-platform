@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vajrya",
+  "main": ".cloudflare-build/.open-next/worker.js",
+  "compatibility_date": "2026-10-20",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {"directory": ".cloudflare-build/.open-next/assets", "binding": "ASSETS"},
+  "services": [{"binding": "WORKER_SELF_REFERENCE", "service": "vajrya"}]
+}
