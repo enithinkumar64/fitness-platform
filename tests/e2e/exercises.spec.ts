@@ -89,7 +89,7 @@ test("homepage and header link to the library with correct active navigation", a
   await expect(homepage.getByText("Explore 100 free exercise guides with step-by-step instructions, technique tips, safety notes, and YouTube demonstrations where available.", { exact: false })).toBeVisible();
   await expect(homepage).not.toContainText(/\b30\s+(?:free\s+)?(?:written\s+)?(?:exercise\s+)?(?:exercises|guides)\b/i);
   // All seven existing working calculator links stay discoverable.
-  for (const slug of ["tdee", "macros", "bmi", "body-fat", "ideal-weight", "calories-burned", "one-rep-max"]) await expect(page.getByRole("main").locator(`a[href='/calculators/${slug}']`)).toHaveCount(1);
+  for (const slug of ["tdee", "macros", "bmi", "body-fat", "ideal-weight", "calories-burned", "one-rep-max"]) await expect(page.getByRole("main").locator(`a[href='/calculators/${slug}']`)).toHaveCount(slug === "tdee" ? 2 : 1);
   await page.getByRole("main").getByRole("link", { name: "Browse Exercise Library", exact: true }).click();
   await expect(page).toHaveURL(/\/exercises$/);
   if (isMobile) await page.getByRole("button", { name: "Open navigation menu" }).click();

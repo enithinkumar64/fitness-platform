@@ -12,6 +12,16 @@ const navigationSections = [
   "Progress",
 ];
 
+const calculators = [
+  ["TDEE & Daily Calories", "/calculators/tdee"],
+  ["Macro Calculator", "/calculators/macros"],
+  ["BMI Calculator", "/calculators/bmi"],
+  ["Body Fat Calculator", "/calculators/body-fat"],
+  ["Ideal Weight Calculator", "/calculators/ideal-weight"],
+  ["Calories Burned Calculator", "/calculators/calories-burned"],
+  ["One-Rep Max Calculator", "/calculators/one-rep-max"],
+];
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -22,15 +32,22 @@ export function SiteHeader() {
   const mobileNavRef = useRef<HTMLElement>(null);
 
   function closeMenu() {
+    headerRef.current?.querySelectorAll("details").forEach(disclosure => { disclosure.open = false; });
     setIsOpen(false);
     toggleRef.current?.focus();
   }
 
   useEffect(() => {
-    if (!isOpen) return;
-
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
+        const disclosure = headerRef.current?.querySelector<HTMLDetailsElement>("details[open]");
+        if (disclosure && headerRef.current?.contains(document.activeElement)) {
+          event.preventDefault();
+          disclosure.querySelector("summary")?.focus();
+          disclosure.open = false;
+          return;
+        }
+        if (!isOpen) return;
         setIsOpen(false);
         if (headerRef.current?.contains(document.activeElement)) {
           toggleRef.current?.focus();
@@ -42,6 +59,7 @@ export function SiteHeader() {
     const desktop = window.matchMedia("(min-width: 64rem)");
     function onResize(event: MediaQueryListEvent) {
       if (event.matches) {
+        headerRef.current?.querySelectorAll("details").forEach(disclosure => { disclosure.open = false; });
         if (
           mobileNavRef.current?.contains(document.activeElement) ||
           document.activeElement === toggleRef.current
@@ -86,19 +104,20 @@ export function SiteHeader() {
               onClick={mobile ? closeMenu : undefined}
               className={`flex min-h-control items-center rounded-control border px-3 py-2 text-sm font-semibold no-underline hover:bg-surface-hover hover:text-primary ${pathname === "/exercises" || pathname.startsWith("/exercises/") ? "border-primary/30 bg-surface text-primary" : "border-transparent text-foreground"}`}
             >Exercises</Link> :
-            <span
-              aria-disabled="true"
-              className={`flex min-h-control cursor-default gap-1 rounded-control px-3 py-2 text-secondary ${
-                mobile
-                  ? "flex-wrap items-center justify-between gap-x-4"
-                  : "flex-col items-center justify-center"
-              }`}
-            >
-              <span className="text-sm font-medium">{section}</span>
-              <span className="font-mono text-[0.625rem] leading-4 tracking-wide uppercase">
-                Coming Soon
-              </span>
-            </span>
+            <details className="relative">
+              <summary className={`flex min-h-control cursor-pointer list-none items-center gap-2 rounded-control border px-3 py-2 text-sm font-semibold hover:bg-surface-hover hover:text-primary ${pathname.startsWith("/calculators/") ? "border-primary/30 bg-surface text-primary" : "border-transparent text-foreground"}`}>
+                <span>Calculators</span> <span aria-hidden="true">⌄</span>
+              </summary>
+              <ul className={mobile ? "ml-3 space-y-1 border-l border-border pl-3" : "absolute left-0 top-full z-20 mt-2 w-72 space-y-1 rounded-control border border-border bg-surface p-2 shadow-lg"}>
+                {calculators.map(([label, href]) => <li key={href}>
+                  <Link href={href} aria-current={pathname === href ? "page" : undefined} onClick={event => {
+                    const disclosure = event.currentTarget.closest("details");
+                    if (disclosure) disclosure.open = false;
+                    if (mobile) closeMenu();
+                  }} className={`flex min-h-control items-center rounded-control px-3 py-2 text-sm no-underline hover:bg-surface-hover hover:text-primary ${pathname === href ? "text-primary" : "text-foreground"}`}>{label}</Link>
+                </li>)}
+              </ul>
+            </details>
             }
           </li>
         ))}
@@ -113,6 +132,7 @@ export function SiteHeader() {
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
           setIsOpen(false);
+          headerRef.current?.querySelectorAll("details").forEach(disclosure => { disclosure.open = false; });
         }
       }}
     >
@@ -160,7 +180,7 @@ export function SiteHeader() {
             aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={isOpen}
             aria-controls={menuId}
-            onClick={() => setIsOpen((open) => !open)}
+            onClick={() => { if (isOpen) closeMenu(); else setIsOpen(true); }}
             className="flex size-11 shrink-0 items-center justify-center rounded-control border border-border-control bg-surface p-0 text-foreground hover:bg-surface-hover active:bg-surface-hover lg:hidden"
           >
             <svg

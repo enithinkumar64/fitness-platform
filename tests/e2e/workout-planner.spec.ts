@@ -17,7 +17,7 @@ test.beforeEach(async({page})=>{await page.goto("/workout-planner");});
 
 test("metadata, homepage discovery, header navigation and calculator links are preserved",async({page,isMobile})=>{
   await expect(page).toHaveTitle("Free Workout Planner | VAJRYA");await page.goto("/");
-  for(const slug of ["tdee","macros","bmi","body-fat","ideal-weight","calories-burned","one-rep-max"])await expect(page.getByRole("main").locator(`a[href='/calculators/${slug}']`)).toHaveCount(1);
+  for(const slug of ["tdee","macros","bmi","body-fat","ideal-weight","calories-burned","one-rep-max"])await expect(page.getByRole("main").locator(`a[href='/calculators/${slug}']`)).toHaveCount(slug === "tdee" ? 2 : 1);
   await page.getByRole("main").getByRole("link",{name:"Free Workout Planner",exact:true}).click();
   if(isMobile)await page.getByRole("button",{name:"Open navigation menu"}).click();
   const nav=page.getByRole("navigation",{name:isMobile?"Primary mobile":"Primary",exact:true});

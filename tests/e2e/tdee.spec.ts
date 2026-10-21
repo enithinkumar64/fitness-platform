@@ -81,7 +81,7 @@ test("keyboard submits and mobile layout does not overflow", async ({ page, isMo
   }
   await page.screenshot({ path: testInfo.outputPath("tdee.png"),fullPage:true });
 });
-test("homepage offers one working calculator link without activating preview cards", async ({ page }) => {
+test("homepage retains its dedicated working TDEE calculator link", async ({ page }) => {
   await page.goto("/");
   const link = page.getByRole("link", { name:"Free TDEE & daily calorie calculator",exact:true });
   await expect(link).toHaveCount(1); await link.click();

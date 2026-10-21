@@ -517,3 +517,150 @@ Suggested fixes are recommendations for separately approved tasks. None were imp
 ## H. Audit integrity
 
 Application changes: **none**. Dependency changes: **none**. Environment edits/exposed values: **none**. Commits, pushes and deployments: **none**. The only intended repository additions are this Markdown report, eight screenshots and one machine-readable evidence file under `docs/audit-artifacts/`. Temporary audit scripts, logs and local server output stayed outside the repository. A final tracked-file hash comparison verifies that the audited source/configuration files were not changed.
+
+---
+
+## I. Final VAJRYA launch-readiness audit — October 20, 2026
+
+This is a **new final-audit snapshot**, following the rebrand and audit fixes. Original issue IDs, severities, reproductions, historical counts, follow-ups and artifacts above are preserved. Earlier open checkboxes are historical, not the current status table. No application code, dependencies, configuration, environment files or existing evidence were changed by this audit. New evidence is isolated in `docs/audit-artifacts/final-2026-10-20/`.
+
+### Verdict and priorities
+
+**Conditionally ready for a controlled release; not yet verified for an unrestricted public launch with live USDA access.** The production build and all executed regression tests pass. No P0 issue was found. The remaining original launch concern of highest severity is **FF-04 (P1, partially mitigated)**: process-local limits are not shared across serverless instances, replicas or regions. Either verify deployment-wide controls or leave `FDC_API_KEY` unset publicly; starter foods and diary logging work without it.
+
+Current original findings: **6 resolved, 3 partially mitigated, 5 still open**. Remaining unresolved/partial severity totals: **P0: 0; P1: 1; P2: 5; P3: 2**. No new confirmed defect outside those original findings was established in this audit; no new issue ID is assigned to duplicate observations. Production hosting, real assistive-technology operation and field performance are **not independently verified**, rather than silently counted as passing.
+
+Must complete before public release:
+
+1. Choose the real HTTPS host/domain and preview-indexing policy. Verify deployment build/start, response behavior and Web Locks support at that origin. This is an operational release gate, not a newly demonstrated application bug.
+2. For live USDA, complete FF-04 shared protection and quota monitoring, or launch with the key unset. Runtime-local controls alone are insufficient evidence.
+3. Complete a real-browser smoke test on the selected host, including persisted tracker edits, reload, cross-tab conflicts, native dialogs and mobile navigation. Review real screen-reader announcements before making accessibility-conformance claims.
+
+Recommended before launch: correct FF-05 availability messaging and FF-07 attribution destinations; implement FF-06 against the real domain; review FF-08 safely. Favicon/social imagery, skip navigation and measured client-payload optimization can follow in separately scoped tasks. No privacy policy or legal-compliance conclusion is invented; the owner should decide needed public disclosures for the intended audience/jurisdiction.
+
+### Original finding status table
+
+| ID | Original severity | Current classification | Independently reviewed evidence and remaining work |
+| --- | --- | --- | --- |
+| FF-01 | P1 | Resolved for new imports | `src/lib/nutrition/usda.ts:32–58` gates Branded data on a positive finite gram serving; unknown/mL bases are rejected. Nutrient units, energy definitions and complete values are checked. `server.ts:54` returns safe 422. Current unit/browser regressions pass, including real-shaped liquid fixtures. Historical saved imports are intentionally not retroactively corrected; no live revalidation of all USDA data is claimed. |
+| FF-02 | P1 | Resolved within documented cooperating-tab scope | `src/hooks/use-browser-store.ts:14–104` subscribes to storage/focus, serializes writes/clears using Web Locks, and retains session-only records/drafts. `src/lib/storage/transactions.ts:14–24` reads latest state, checks snapshots and validates writes. Actual two-page regressions cover stale writes, simultaneous adds, deletion, targets, corruption, missing locks and key isolation. Non-cooperating old code is outside the lock protocol; localStorage is not atomic CAS. |
+| FF-03 | P1 | Resolved for original reproduction | `src/components/nutrition/nutrition-tracker.tsx:162–170` confirms clearing, resets editor/targets and invalidates pending request identity. Storage clears are locked and snapshot-checked. Existing clear/synchronization regressions pass. Additional mocked pending-search check returned zero late-food buttons and zero stale Save entry controls after clear. No undo/backup is supplied, but confirmation addresses the original destructive-action defect. |
+| FF-04 | P1 | Partially mitigated | `src/lib/nutrition/server.ts:60–86`, `proxy-protection.ts:1–43` enforce runtime budgets, coalescing, cache/body bounds, concurrency, timeout and cooldown. Deterministic handler tests pass. No intended host, shared limiter or deployment-wide quota proof exists. Keep public USDA disabled until verified. |
+| FF-05 | P2 | Still open | `src/app/page.tsx:80–108` links working tools but labels the same categories Coming Soon; `src/components/layout/site-header.tsx:89–100` still disables Calculators; `site-footer.tsx:38–43` lists implemented tools as coming soon. Screenshots and tests confirm current behavior; this is contradictory messaging, not a broken-route claim. |
+| FF-06 | P2 | Partially mitigated | Unique VAJRYA title/description and Open Graph/Twitter text now work; root siteName is present (`src/app/layout.tsx:17–23`). Canonicals/metadataBase remain absent; `/robots.txt` and `/sitemap.xml` still return 404. Add only after the owner supplies the host and preview policy. Absence does not itself block crawling. |
+| FF-07 | P2 | Still open | Repeated external GETs to exact apple 171688, banana 173944 and rice 168878 source URLs returned 404 again. UI URL generation is at `src/components/nutrition/nutrition-tracker.tsx:179`; historical serving validation pins the format in `src/lib/nutrition/servings.ts:16–23`. Fix presentation/future sources while accepting historical snapshots. No guessed replacement or key-bearing URL was used. |
+| FF-08 | P2 | Still open | Fresh network-enabled npm audit again reports five high development-chain nodes and zero production findings. This is one underlying braces advisory propagated through the chain. Suggested npm remediation downgrades eslint-config-next to 14.2.35; do not apply blindly to Next 16. See dependency results below. |
+| FF-09 | P2 | Still open | Full guide data is still imported by client-side library/planner/progress paths. The educational chunk remains 132,048 raw bytes; observed encoded size 26,925 bytes. This is confirmed payload overhead, not proof of poor Core Web Vitals. Relevant imports: `src/lib/progress/tracker.ts:1,20`, `src/lib/workout-planner/generator.ts:1`, `src/components/exercises/exercise-library.tsx:4`. |
+| FF-10 | P2 | Resolved for documented semantics | Supplementary paragraphs now belong inside `dd` in `weight-tracker.tsx:14` and `measurement-tracker.tsx:14`. Populated weight/measurement/strength structural and axe tests pass in both Chromium profiles at 320/1440. Real screen-reader interpretation remains a release review. |
+| FF-11 | P2 | Resolved for confirmed repeated DOM-announcement defect | Nutrition uses event/revision-based child identities (`nutrition-tracker.tsx:20–30,155–184`); Progress uses sequenced operation notices (`progress-tracker.tsx:12–22,40–43`). Repeated add/edit/delete, blocked-save, storage-failure and cross-tab tests pass. This verifies DOM updates, not actual spoken output across VoiceOver/NVDA/browser combinations. |
+| FF-12 | P3 | Partially mitigated | VAJRYA wordmarks, metadata, accessible branding and sharing text are verified across all page types. Existing starter N favicon remains; no social preview image exists. Approved brand assets and real sharing-client review remain required for completion. |
+| FF-13 | P3 | Still open | No skip-to-content link/consistent target exists in `src/app/layout.tsx:25–39` and shared header. Main landmarks exist; this remains optional keyboard usability work, not an independently established blanket WCAG failure. |
+| FF-14 | P3 | Resolved for contradictory current-context defect | `PROJECT.md:119–121` explicitly labels the old work record as history and adds the current completed feature inventory; the roadmap identifies routes as proposals. The old starter statements remain within that historical task record. A fully refreshed current route inventory would still improve contributor convenience. |
+
+### Functional, data and saved-data review
+
+Actual public routes confirmed from code, build and crawl: `/`; `/calculators/tdee`, `/calculators/macros`, `/calculators/bmi`, `/calculators/body-fat`, `/calculators/ideal-weight`, `/calculators/calories-burned`, `/calculators/one-rep-max`; `/exercises` and its **100 detail slugs**; `/workout-planner`; `/nutrition-tracker`; `/progress-tracker`. Both nutrition GET handlers remain `/api/nutrition/search` and `/api/nutrition/food`. There is no working `/calculators` index, which is relevant to FF-05.
+
+The independent crawl reached **112 unique public internal paths, all HTTP 200**. An unknown exercise returned 404 correctly. All seven calculator suites passed metric/imperial, validation, result, keyboard and responsive checks. Pure functions retain the published formulas and canonical units: Mifflin–St Jeor/activity multipliers and screened deficits; macro 4/4/9 kcal conversions and withheld-target preservation; BMI thresholds/scale/reference boundaries; inch-based Navy regressions and separately labeled BMI comparison; four historical height formulas with below-five-foot withholding; MET-based calorie estimates; Epley/Brzycki including one-repetition handling. No arithmetic defect was identified in the reviewed code/tests; this is not clinical validation.
+
+Exercise search, combined filters, categories, slug lookup, related guides, 100 IDs and 77 video references remain covered. Exact video availability/playback was not rechecked for all 77. Planner split selection, equipment confirmations, curated ordering/substitutions, recovery and unsupported combinations pass current tests; the generator still draws from approved programming groups rather than freely choosing all library entries.
+
+Nutrition keeps 29 documented starter foods, food-specific portions, gram conversion snapshots, meal/date totals and targets. USDA missing values do not become zero; kcal/kJ definitions are handled separately; Branded label nutrients are not mistaken for full-detail values. USDA/API tests use mocks and deterministic fixtures, not live quota or all-record validation. Historical questionable imports remain a separate review need; source-link failures do not themselves prove incorrect nutrient values.
+
+Both browser stores retain their original keys and schemas. Nutrition v1-to-v2 migration, historical household conversions, Progress IDs/sequences, kg/cm storage, date ordering, custom exercises and eligible estimated-1RM behavior pass. The branding test loads synthetic historical records under both old keys and proves they remain readable without rewriting the food snapshot. No real personal diary was opened. Reload all old tabs on release and preserve the origin: localhost, a new domain, another browser/profile and another port do not share localStorage. No cloud backup, encryption, CSV import or cross-device synchronization is implied. Corruption and storage failures are handled with explicit warnings/session-only data; Web Locks absence blocks persistent writes safely.
+
+### Accessibility, mobile and visual review
+
+Independent initial-state checks covered **13 representative routes × 320/1440 = 26 scans**. Each had one H1, no observed horizontal overflow, no uncaught page errors, and no axe WCAG-tagged violations. Homepage contrast remained **incomplete/manual review at both widths**, not an automated pass. Existing populated Progress and Nutrition axe/semantic/interaction checks also passed in the full regression suite. Keyboard tests cover menu/Escape, focus outlines, form errors/results, macro tabs, tracker edit/delete, native dialogs and expandable chart tables. SVG charts have textual summaries and tables; missing measurements remain absent, not zero. Global reduced-motion overrides remain in `src/app/globals.css`.
+
+Six independent screenshots were captured (homepage and both trackers, 320/1440), and the mobile homepage was visually inspected. Current branding fits; the visible Coming Soon contradiction remains. Regression tests additionally exercise calculator/planner/results layouts. This is representative review rather than visual certification of every state or device.
+
+Supplementary **text-spacing-only** checks (1.5 line height, 0.12em letter spacing, 0.16em word spacing, 2em paragraph spacing) on both trackers at 320, 720 and 1440 produced **zero overflow**. An exploratory combined 200%-body-font-plus-spacing stress at 320 produced 65px/70px overflow; that is not native browser zoom or an isolated WCAG criterion test and is recorded only as a manual-review lead, not a new confirmed conformance defect. Actual 200%/400% browser zoom, clipping, text enlargement, native pickers, screen-reader pronunciation/announcements and dialog focus restoration require real-browser/assistive review. No complete WCAG claim is made.
+
+### Security, privacy and dependency results
+
+`FDC_API_KEY` is read only on the server (`src/lib/nutrition/server.ts:9`) and passed in X-Api-Key. No NEXT_PUBLIC key use, unsafe HTML insertion or eval path was found in reviewed source. Scope-limited secret verification found **no tracked environment files** and **no current configured key or NEXT_PUBLIC_FDC_API_KEY identifier in 23 built client JavaScript chunks**. Only boolean results were recorded; no credential was printed or copied into evidence. This does not repeat a complete history/rotated-secret scan or establish absence of all possible secrets.
+
+Both endpoints share runtime limits: incoming **120/minute**, upstream **30/minute and 600/hour**, **4** concurrent distinct upstream requests, **8-second** timeout, **1 MiB** upstream body cap, **100 entries/8 MiB** cache, search **5 minutes** and detail **24 hours**. Search is 2–80 characters with at most 12 results; IDs have at most nine digits. Both handlers return safe errors; 429 includes Retry-After. Caches/coalescing reduce repeats; typing triggers no USDA request. Budgets reset on process restart and do not combine across instances. An attacker can consume the local shared allowance; there is no trusted per-client identity or global key budget. See FF-04.
+
+CSV fields are quoted and escaped; formula-leading user text is neutralized in `src/lib/progress/tracker.ts:130–141`. Existing tests pass. Spreadsheet application-specific behavior remains manual. Local browser data is readable by users/scripts with access to the profile/origin; privacy messaging discloses browser-only storage and lack of encryption/cloud backup. Deployment HTTPS/HSTS/CSP/framing policies, access logs, retention, support contact and jurisdictional privacy requirements cannot be certified locally.
+
+| Dependency check | Current result |
+| --- | --- |
+| `npm audit --omit=dev` | Exit 0; **0 known vulnerabilities** |
+| `npm audit` (separate development review) | Exit 1; **5 high, 0 critical**, development-only affected nodes |
+| Affected chain | eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces |
+| Underlying advisory | GHSA-vfj7-8cjw-p6xm / CVE-2026-93687; see saved npm JSON |
+| Automated changes | None; no audit fix, upgrade, install or lockfile change |
+
+Initial restricted audit calls could not resolve registry.npmjs.org. Authorized network-enabled retries completed successfully; the table records those actual results, not the network failure as an advisory. Npm's offered chain change is a semver-major downgrade to eslint-config-next 14.2.35. Review supported remediation without blindly applying it. Advisory status is time-specific and not a guarantee against unknown vulnerabilities.
+
+### Performance review
+
+Standalone production build passed and generated **117 entries**, including all 100 static exercise details. `next/font` supplies fonts; hero/brand artwork uses CSS/inline SVG; no automatically embedded exercise videos or external thumbnails were introduced.
+
+Independent fresh-context local production measurements with normal automatic prefetch observed **203,353 encoded JavaScript bytes (198.6 KiB), 10 script resources** on each of `/`, `/workout-planner`, `/nutrition-tracker`, `/progress-tracker`, and zero external resource requests in those initial samples. These totals include prefetch, are build/context specific, and are not critical-path bundle budgets. The full exercise chunk remains **132,048 raw / 26,925 observed encoded bytes**, supporting FF-09. Long Progress histories still render all entries/chart points/tables, so profile realistic long histories on low-end devices before adding pagination or virtualization. No new measured freeze was established.
+
+USDA cache and body controls are bounded and verified with unit fixtures. No real public-host TTFB, throttled-mobile benchmark, Lighthouse score or field LCP/INP/CLS is claimed. No performance dependency/tool was installed. Collect actual production observations before claiming a Core Web Vitals result or choosing speculative optimizations.
+
+### Exact verification results
+
+| Command/check | Outcome |
+| --- | --- |
+| `npm run lint` | Passed, exit 0 |
+| `npx tsc --noEmit` | Passed, exit 0, using installed TypeScript |
+| `npm run build` | Passed, exit 0, 117 generated entries |
+| `npm run test` — first final-audit run | **374 passed, 8 intentional skips, 0 failed; 49.4 s** |
+| `npm run test` — second final-audit run | **374 passed, 8 intentional skips, 0 failed; 50.5 s** |
+| Supplementary `npm run test:unit` | **146 passed, 0 failed, 0 skipped** |
+| Independent initial axe/mobile checks | 26 scans; 0 violations/overflow; 2 homepage contrast incomplete results |
+| Internal crawl | 112 paths, all 200; unknown exercise correctly 404 |
+| USDA public attribution recheck | Three sampled record pages each 404 |
+| Browser coverage | Chromium desktop/mobile profiles; 8 existing viewport-specific opposite-profile skips |
+
+Build and browser runs used approved local process permissions. No final requested check remains blocked. Tests can verify fixture-based behavior but not clinical accuracy, every third-party source, every browser/assistive combination, penetration resistance or production-host configuration.
+
+### Deployment configuration checklist and exact change targets
+
+| Priority | Required decision/action | Files/configuration requiring a later approved change |
+| --- | --- | --- |
+| Must before public USDA | Enable live proxy only after host-wide trusted request limits, shared quota/concurrency controls and safe monitoring are proven; otherwise leave key unset | Hosting environment/edge/reverse-proxy configuration; `src/lib/nutrition/server.ts`, `src/lib/nutrition/proxy-protection.ts` and proxy tests only if implementing a shared adapter. No extra credentials/service approved yet. |
+| Must before release | Use a supported Next 16 Node runtime (Node >=20.9, verify installed Next engines), server-capable hosting, HTTPS and persistent origin; do not publish `.env.local` | Hosting settings/build pipeline. `npm ci`, `npm run build`, `npm run start` (honor host PORT). Static-only hosting cannot run the optional API handlers. Test the actual host before launch. |
+| Must operational decision | Select production domain and redirect/preview policy; define how existing browser-local users move origins | Owner/hosting decision; any origin migration requires its own explicit implementation plan. No browser data is automatically copied to another domain. |
+| Recommended before launch | Correct availability messaging while retaining real links and accurate future labels (FF-05) | `src/app/page.tsx`, `src/components/layout/site-header.tsx`, `src/components/layout/site-footer.tsx`; relevant navigation/free-tools/footer tests |
+| Recommended before launch | Repair USDA attribution without breaking saved serving snapshots (FF-07) | `src/components/nutrition/nutrition-tracker.tsx`, `src/components/nutrition/food-quantity-fields.tsx`, `src/lib/nutrition/servings.ts`, `src/lib/nutrition/usda-portions.ts`, `src/lib/nutrition/foods.ts`, source docs and nutrition tests |
+| Recommended before launch | Add truthful canonical/base, sitemap, robots and staging policy after host is known (FF-06) | `src/app/layout.tsx`, page metadata as needed; new `src/app/sitemap.ts`, `src/app/robots.ts`; metadata/discovery tests and host redirects |
+| Recommended before launch | Review development advisory remediation (FF-08) | `package.json`, `package-lock.json` only in a separately approved tooling task; rerun both audits and all checks |
+| Recommended release review | Safari/Firefox, real mobile, VoiceOver/NVDA, actual zoom/text resizing, contrast incompletes, native confirmations, legacy data and HTTPS Web Locks | Primarily manual evidence; any demonstrated defects get separately scoped code/test changes. No blanket redesign. |
+| Recommended operational setup | Configure security headers, error/uptime monitoring, request/429 metrics and alert ownership; redact credentials, diary contents and sensitive query data | Host policy and `next.config.ts` only if appropriate; optional instrumentation requires its own scope. No monitoring provider is assumed. |
+| Owner privacy decision | Review browser-storage disclosures, USDA query transfer, shared-profile exposure, retention/support contact and legal requirements | Existing tracker UI/docs; new policy/contact pages only if explicitly approved and truthful |
+| Safe after launch | Approved favicon/social image (FF-12), skip link (FF-13), measured client catalog projection (FF-09), refreshed route documentation | `src/app/favicon.ico`, approved new social asset/metadata; shared layout/header/main targets; exercise client projection/imports and tests; `PROJECT.md`/README as appropriate |
+
+Installed Next self-hosting guidance was read at `node_modules/next/dist/docs/01-app/02-guides/self-hosting.md`: reverse proxy and multi-instance cache/version coordination are deployment concerns, not supplied by this local audit. `FDC_API_KEY` is optional and server-only; never rename it to NEXT_PUBLIC_FDC_API_KEY. Confirm aggregate quota with any other consumers of the same key. No production URL is assumed.
+
+**Suggested fix order:** decide hosting/live-USDA policy → implement/verify FF-04 or keep USDA disabled → correct FF-05 and FF-07 → production-domain FF-06 → safe FF-08 review → real-device/accessibility/privacy/deployment smoke checks → approved assets, skip link and measured FF-09 optimization. There is no evidence-based need to rewrite the functioning calculators or redesign the site.
+
+### Evidence and audit integrity
+
+New files under `docs/audit-artifacts/final-2026-10-20/`: `inspection.json`, `supplementary-checks.json`, `secret-scan-scope.json`, `source-link-checks.json`, `npm-audit-production.json`, `npm-audit-all.json`, and six screenshots (`home`, `nutrition-tracker`, `progress-tracker`, each at 320 and 1440). These contain synthetic/empty browser states and no personal diary or secret values. Existing audit artifacts are untouched. Temporary runners/logs stay outside the repository; regression outputs remain ignored.
+
+Only this appended Markdown section and the new evidence files were produced by the final audit. No application code, package, configuration, storage migration or old evidence was edited. No commit, push or deployment was performed.
+
+## J. FF-05 follow-up — outdated availability labels resolved, October 20, 2026
+
+**Original issue: FF-05, P2. Status: resolved for the documented availability/navigation contradiction.** The final-audit status table above remains the historical snapshot before this fix. No other finding is closed by this task.
+
+Root cause: the header, feature cards and footer retained early-stage placeholder markup after their corresponding tools were implemented; regression tests still required those placeholders.
+
+- Header Calculators is now a native keyboard-accessible disclosure linking to all seven existing calculator routes: TDEE, Macros, BMI, Body Fat, Ideal Weight, Calories Burned and One-Rep Max. Desktop uses a small dropdown; mobile expands in the existing in-flow navigation. Enter/Space toggle the summary, Tab reaches links, and Escape collapses the calculator list and restores focus before a second Escape closes mobile navigation. Selecting a calculator or closing the parent menu resets the disclosure. Active calculator links are marked with aria-current.
+- Five homepage cards have real full-card link hit areas and consistent Explore CTAs: Fitness Calculators → `/calculators/tdee`; Workout Plans → `/workout-planner`; Exercise Library → `/exercises`; Nutrition Tracking → `/nutrition-tracker`; Progress Tracking → `/progress-tracker`. The calculator card starts at TDEE; the header exposes all seven options. Healthy Recipes remains informational, noninteractive and honestly marked Coming Soon.
+- Footer Workout Plans, Nutrition Tracking and Progress Tracking are working links under Tools. The hero CTA now says Explore Free Tools, retaining its existing `#whats-coming` anchor for compatibility. Our Vision and all other existing routes/anchors remain intact.
+- A case-insensitive source scan found no other outdated user-facing feature placeholders. Remaining coming-soon copy refers only to Healthy Recipes. The exercise search input's example placeholder is legitimate input guidance. Historical audit/test evidence retains original wording intentionally.
+
+Files changed for this fix: `src/app/page.tsx`, `src/components/layout/site-header.tsx`, `src/components/layout/site-footer.tsx`; `tests/e2e/navigation.spec.ts`, `free-tools.spec.ts`, `footer.spec.ts`, `hero.spec.ts`, `exercises.spec.ts`, `workout-planner.spec.ts`, `tdee.spec.ts`; this appended audit follow-up. No new application file, route, package, global styling, calculation, nutrition data, storage, API or workout-program change was made.
+
+Verification: lint passed; TypeScript (`npx tsc --noEmit`) passed; standalone production build passed. Two final full `npm run test` runs each passed **374 tests, with 8 intentional skips and 0 failures**, taking **1.0m** and **1.1m** as reported by Playwright. Updated coverage checks all seven calculator destinations return 200, dropdown keyboard/Escape/reset behavior, active state, five card hit areas/destinations, footer links, retained hero anchors, the noninteractive recipe card, and expanded mobile menus down to 320px. An additional independent Chromium check inspected expanded menus at 320/1440: zero observed overflow and zero available axe violations; screenshots were visually reviewed. This does not certify full WCAG compliance or other browser engines.
+
+Earlier development runs exposed outdated single-TDEE-link/text assertions and a mobile Escape-handler ordering bug. Those assertions were updated to account for the additional card link, the full-card hit-area test was corrected, and Escape handling was consolidated in the existing document listener. The initial run had 366 passes/8 failures/8 skips; two intermediate runs had 373 passes/1 failure/8 skips; a subsequent intermediate pass had 374 passes/8 skips before the final menu-reset refinement. The two final passing runs above include that refinement. No unresolved verification failure or sandbox restriction remains.
+
+Manual release review: inspect at desktop and real mobile widths; open Calculators with mouse/touch and Enter/Space, traverse with Tab, verify Escape/focus and menu reset; try all card/footer links; confirm Healthy Recipes has no action; verify native disclosure announcements with VoiceOver/Safari or another supported assistive combination. No commit, push or deployment was performed.

@@ -42,31 +42,50 @@ test("desktop navigation is visible and Home is active", async ({ page, isMobile
   const home = nav.getByRole("link", { name: "Home", exact: true });
   await expect(home).toHaveAttribute("aria-current", "page");
   await expect(home).toHaveCSS("color", "rgb(199, 255, 66)");
-  await expect(nav.getByText("Coming Soon", { exact: true })).toHaveCount(1);
+  await expect(nav.getByText("Coming Soon", { exact: true })).toHaveCount(0);
   await expect(nav.getByRole("link", { name: "Exercises", exact: true })).toHaveAttribute("href", "/exercises");
   for (const section of sections) {
     await expect(nav.getByText(section, { exact: true })).toBeVisible();
   }
 });
 
-test("Coming Soon sections cannot navigate", async ({ page, isMobile }) => {
+test("calculator disclosure provides seven working destinations and keyboard controls", async ({ page, isMobile }) => {
   if (isMobile) await openMobileMenu(page);
-  const nav = page.getByRole("navigation", {
-    name: isMobile ? "Primary mobile" : "Primary",
-    exact: true,
-  });
-  await expect(nav.getByRole("link")).toHaveCount(5);
-  for (const section of sections) {
-    // Clicking plain text can move focus outside the header and dismiss it.
-    // Reopen the disclosure as needed to check each independent item.
-    if (isMobile && !(await nav.isVisible())) await openMobileMenu(page);
-    const item = nav.getByRole("listitem").filter({ hasText: section });
-    await expect(item.getByText("Coming Soon", { exact: true })).toBeVisible();
-    await expect(item.locator("[aria-disabled='true']")).toHaveCount(1);
-    await expect(item.getByRole("link")).toHaveCount(0);
-    await expect(item.getByRole("button")).toHaveCount(0);
-    await item.getByText(section, { exact: true }).click();
-    await expect(page).toHaveURL(/\/$/);
+  const nav = page.getByRole("navigation", { name: isMobile ? "Primary mobile" : "Primary", exact: true });
+  const summary = nav.locator("summary");
+  await summary.focus();
+  await expect(summary).toHaveCSS("outline-width", "3px");
+  await page.keyboard.press("Enter");
+  const links = nav.locator("details").getByRole("link");
+  await expect(links).toHaveCount(7);
+  const destinations = ["tdee", "macros", "bmi", "body-fat", "ideal-weight", "calories-burned", "one-rep-max"];
+  for (const [index, slug] of destinations.entries()) {
+    await expect(links.nth(index)).toHaveAttribute("href", `/calculators/${slug}`);
+    expect((await page.request.get(`/calculators/${slug}`)).status()).toBe(200);
+  }
+  await page.keyboard.press("Tab");
+  await expect(links.first()).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(summary).toBeFocused();
+  await expect(links.first()).toBeHidden();
+  if (isMobile) await expect(nav).toBeVisible();
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/calculators\/tdee$/);
+  if (isMobile) {
+    await expect(mobileMenu(page)).toBeHidden();
+    await openMobileMenu(page);
+  }
+  await nav.locator("summary").click();
+  await expect(nav.getByRole("link", { name: "TDEE & Daily Calories", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByText("Coming Soon", { exact: true })).toHaveCount(0);
+  if (isMobile) {
+    await toggle(page).click();
+    await openMobileMenu(page);
+    await expect(nav.locator("details")).not.toHaveAttribute("open", "");
+    await page.keyboard.press("Escape");
+    await expect(nav).toBeHidden();
   }
 });
 
@@ -121,6 +140,9 @@ test.describe("mobile navigation", () => {
       );
       await expect.poll(overflow).toBeLessThanOrEqual(0);
       await openMobileMenu(page);
+      await expect.poll(overflow).toBeLessThanOrEqual(0);
+      await mobileMenu(page).locator("summary").click();
+      await expect(mobileMenu(page).getByRole("link", { name: "One-Rep Max Calculator", exact: true })).toBeVisible();
       await expect.poll(overflow).toBeLessThanOrEqual(0);
     });
   }

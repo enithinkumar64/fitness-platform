@@ -14,28 +14,45 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
-test("all six free tools are clearly labeled, non-interactive previews", async ({ page }) => {
+test("implemented cards navigate while Healthy Recipes remains an honest preview", async ({ page }) => {
   const section = page.getByRole("region", { name: heading, exact: true });
-  await expect(section).toBeVisible();
-  await expect(section.getByText("BUILT FOR YOUR FITNESS JOURNEY", { exact: true })).toBeVisible();
-  await expect(section.getByText("Explore the free fitness tools we’re building for you.", { exact: true })).toBeVisible();
   await expect(section.getByRole("article")).toHaveCount(6);
-  await expect(section.getByText("Coming Soon", { exact: true })).toHaveCount(6);
-  await expect(section.getByRole("link")).toHaveCount(0);
-  await expect(section.getByRole("button")).toHaveCount(0);
-  await expect(section.locator("[tabindex='0'], [onclick], [href]")).toHaveCount(0);
+  await expect(section.getByText("Coming Soon", { exact: true })).toHaveCount(1);
+  await expect(section.getByRole("link")).toHaveCount(5);
+  const destinations: Record<string,string> = {
+    "Fitness Calculators": "/calculators/tdee", "Workout Plans": "/workout-planner",
+    "Exercise Library": "/exercises", "Nutrition Tracking": "/nutrition-tracker", "Progress Tracking": "/progress-tracker",
+  };
   for (const [name, description] of tools) {
     const card = section.getByRole("article", { name, exact: true });
-    await expect(card.getByRole("heading", { name, exact: true, level: 3 })).toBeVisible();
+    await expect(card.getByRole("heading", { name, exact: true })).toBeVisible();
     await expect(card.getByText(description, { exact: true })).toBeVisible();
-    await expect(card.getByText("Coming Soon", { exact: true })).toBeVisible();
-    await card.getByRole("heading").click();
-    await expect(page).toHaveURL(/\/$/);
+    if (name === "Healthy Recipes") {
+      await expect(card.getByText("Coming Soon", { exact: true })).toBeVisible();
+      await expect(card.locator("a, button, [tabindex], [onclick]")).toHaveCount(0);
+      continue;
+    }
+    await expect(card.getByText("Coming Soon", { exact: true })).toHaveCount(0);
+    const link = card.getByRole("link", { name: `Explore ${name}`, exact: true });
+    await expect(link).toHaveAttribute("href", destinations[name]);
+    await link.focus();
+    await expect(link).toHaveCSS("outline-width", "3px");
+    // Test the card's padded hit area, beyond the visible CTA text.
+    await card.scrollIntoViewIfNeeded();
+    const box = await card.boundingBox();
+    expect(box).not.toBeNull();
+    await page.mouse.click(box!.x + 12, box!.y + 12);
+    await expect(page).toHaveURL(new RegExp(`${destinations[name]}$`));
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await page.goto("/");
   }
+  const link = section.getByRole("link", { name: "Explore Workout Plans", exact: true });
+  await link.focus(); await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/workout-planner$/);
 });
 
 test("hero CTA scrolls to the tools and the vision link still works", async ({ page }) => {
-  await page.getByRole("link", { name: "See What's Coming", exact: true }).click();
+  await page.getByRole("link", { name: "Explore Free Tools", exact: true }).click();
   await expect(page).toHaveURL(/#whats-coming$/);
   const section = page.getByRole("region", { name: heading, exact: true });
   await expect(section).toBeFocused();

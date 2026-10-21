@@ -20,18 +20,15 @@ test("footer presents the brand, mission, and copyright", async ({ page }) => {
   }
 });
 
-test("Coming Soon items are informational text", async ({ page }) => {
+test("footer tools link to implemented features without obsolete placeholders", async ({ page }) => {
   const footer = page.getByRole("contentinfo");
-  const list = footer.getByRole("list", { name: "Coming Soon", exact: true });
-  await expect(list.getByRole("listitem")).toHaveText([
-    "Workout Plans", "Nutrition Tracking", "Progress Tracking",
-  ]);
-  await expect(list.getByRole("link")).toHaveCount(0);
-  await expect(list.getByRole("button")).toHaveCount(0);
-  await expect(list.locator("[href], [tabindex], [onclick]")).toHaveCount(0);
-  for (const item of await list.getByRole("listitem").all()) {
-    await item.click();
-    await expect(page).toHaveURL(/\/$/);
+  const list = footer.getByRole("list", { name: "Tools", exact: true });
+  await expect(footer.getByText("Coming Soon", { exact: true })).toHaveCount(0);
+  for (const [label, href] of [["Workout Plans", "/workout-planner"], ["Nutrition Tracking", "/nutrition-tracker"], ["Progress Tracking", "/progress-tracker"]]) {
+    const link = list.getByRole("link", { name: label, exact: true });
+    await expect(link).toHaveAttribute("href", href);
+    await link.click(); await expect(page).toHaveURL(new RegExp(`${href}$`));
+    await page.goto("/");
   }
 });
 
@@ -75,7 +72,7 @@ test("footer adapts to mobile and desktop without overflow", async ({ page, isMo
     await expect(footer).toBeInViewport();
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
     const nav = await footer.getByRole("navigation", { name: "Explore", exact: true }).boundingBox();
-    const upcoming = await footer.getByRole("list", { name: "Coming Soon", exact: true }).boundingBox();
+    const upcoming = await footer.getByRole("list", { name: "Tools", exact: true }).boundingBox();
     expect(nav).not.toBeNull();
     expect(upcoming).not.toBeNull();
     if (width < 640) expect(upcoming!.y).toBeGreaterThan(nav!.y + nav!.height);

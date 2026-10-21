@@ -36,10 +36,10 @@ export function SiteFooter() {
           </nav>
 
           <div className="min-w-0">
-            <h2 id="footer-coming-heading" className="mb-4 font-mono text-xs font-semibold tracking-widest text-foreground uppercase">Coming Soon</h2>
-            <ul aria-labelledby="footer-coming-heading" className="space-y-1 text-sm text-secondary">
-              {["Workout Plans", "Nutrition Tracking", "Progress Tracking"].map((label) => (
-                <li key={label} className="py-3">{label}</li>
+            <h2 id="footer-tools-heading" className="mb-4 font-mono text-xs font-semibold tracking-widest text-foreground uppercase">Tools</h2>
+            <ul aria-labelledby="footer-tools-heading" className="space-y-1 text-sm text-secondary">
+              {[["Workout Plans", "/workout-planner"], ["Nutrition Tracking", "/nutrition-tracker"], ["Progress Tracking", "/progress-tracker"]].map(([label, href]) => (
+                <li key={label}><a href={href} className="inline-flex min-h-control items-center rounded-control py-2 text-sm text-secondary no-underline hover:text-primary hover:underline">{label}</a></li>
               ))}
             </ul>
           </div>

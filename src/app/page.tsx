@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 const freeTools = [
-  { name: "Fitness Calculators", description: "Calories, macros, and TDEE.", icon: "M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM8 7h8M8 11h1m6 0h1m-8 4h1m6 0h1m-8 3h1m6 0h1" },
-  { name: "Workout Plans", description: "Training plans tailored to your goals and schedule.", icon: "M7 12h10M3 10v4m4-7v10m10-10v10m4-7v4M3 12h4m10 0h4" },
-  { name: "Exercise Library", description: "Learn exercises and proper technique.", icon: "M4 4h6l2 2 2-2h6v15h-6l-2 2-2-2H4V4Zm8 2v15M7 8h2m-2 4h2m6-4h2m-2 4h2" },
-  { name: "Nutrition Tracking", description: "Track meals, calories, and macros.", icon: "M4 3v5a3 3 0 0 0 6 0V3M7 3v18M20 21V3c-4 2-5 8 0 9" },
-  { name: "Healthy Recipes", description: "Discover nutritious meal ideas.", icon: "M12 20C4 19 3 13 4 5c8-1 14 0 15 7 0 5-3 8-7 8Zm0 0V12m0 4-4-4m4 1 4-4" },
-  { name: "Progress Tracking", description: "Monitor your fitness journey over time.", icon: "M4 3v17h17M8 15l4-4 4 2 5-7m-5 0h5v5" },
+  { name: "Fitness Calculators", href: "/calculators/tdee", description: "Calories, macros, and TDEE.", icon: "M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM8 7h8M8 11h1m6 0h1m-8 4h1m6 0h1m-8 3h1m6 0h1" },
+  { name: "Workout Plans", href: "/workout-planner", description: "Training plans tailored to your goals and schedule.", icon: "M7 12h10M3 10v4m4-7v10m10-10v10m4-7v4M3 12h4m10 0h4" },
+  { name: "Exercise Library", href: "/exercises", description: "Learn exercises and proper technique.", icon: "M4 4h6l2 2 2-2h6v15h-6l-2 2-2-2H4V4Zm8 2v15M7 8h2m-2 4h2m6-4h2m-2 4h2" },
+  { name: "Nutrition Tracking", href: "/nutrition-tracker", description: "Track meals, calories, and macros.", icon: "M4 3v5a3 3 0 0 0 6 0V3M7 3v18M20 21V3c-4 2-5 8 0 9" },
+  { name: "Healthy Recipes", href: null, description: "Discover nutritious meal ideas.", icon: "M12 20C4 19 3 13 4 5c8-1 14 0 15 7 0 5-3 8-7 8Zm0 0V12m0 4-4-4m4 1 4-4" },
+  { name: "Progress Tracking", href: "/progress-tracker", description: "Monitor your fitness journey over time.", icon: "M4 3v17h17M8 15l4-4 4 2 5-7m-5 0h5v5" },
 ];
 
 export default function Home() {
@@ -33,7 +33,7 @@ export default function Home() {
                 Explore Our Vision <span aria-hidden="true">↗</span>
               </a>
               <a href="#whats-coming" className="inline-flex min-h-12 items-center justify-center gap-4 rounded-control border border-border-control bg-background px-6 py-3 text-sm font-semibold text-foreground no-underline hover:bg-surface hover:text-foreground">
-                See What&apos;s Coming <span aria-hidden="true">↓</span>
+                Explore Free Tools <span aria-hidden="true">↓</span>
               </a>
             </div>
             <p className="mt-4 text-caption text-secondary">In the making. Free at the core. Built for you.</p>
@@ -77,7 +77,7 @@ export default function Home() {
             </p>
           </section>
         </div>
-        <p className="mt-6 text-sm text-secondary">Available now: <Link href="/calculators/tdee" className="inline-flex min-h-control items-center rounded-control font-semibold">Free TDEE &amp; daily calorie calculator</Link>, <Link href="/calculators/macros" className="inline-flex min-h-control items-center rounded-control font-semibold">Free goal-guided macro calculator</Link>, <Link href="/calculators/bmi" className="inline-flex min-h-control items-center rounded-control font-semibold">Free adult BMI calculator</Link>, <Link href="/calculators/body-fat" className="inline-flex min-h-control items-center rounded-control font-semibold">Free body fat calculator</Link>, <Link href="/calculators/ideal-weight" className="inline-flex min-h-control items-center rounded-control font-semibold">Free ideal weight calculator</Link>, <Link href="/calculators/calories-burned" className="inline-flex min-h-control items-center rounded-control font-semibold">Free calories burned calculator</Link>, and <Link href="/calculators/one-rep-max" className="inline-flex min-h-control items-center rounded-control font-semibold">Free one-rep max calculator</Link>. The previews below are still coming soon.</p>
+        <p className="mt-6 text-sm text-secondary">Available now: <Link href="/calculators/tdee" className="inline-flex min-h-control items-center rounded-control font-semibold">Free TDEE &amp; daily calorie calculator</Link>, <Link href="/calculators/macros" className="inline-flex min-h-control items-center rounded-control font-semibold">Free goal-guided macro calculator</Link>, <Link href="/calculators/bmi" className="inline-flex min-h-control items-center rounded-control font-semibold">Free adult BMI calculator</Link>, <Link href="/calculators/body-fat" className="inline-flex min-h-control items-center rounded-control font-semibold">Free body fat calculator</Link>, <Link href="/calculators/ideal-weight" className="inline-flex min-h-control items-center rounded-control font-semibold">Free ideal weight calculator</Link>, <Link href="/calculators/calories-burned" className="inline-flex min-h-control items-center rounded-control font-semibold">Free calories burned calculator</Link>, and <Link href="/calculators/one-rep-max" className="inline-flex min-h-control items-center rounded-control font-semibold">Free one-rep max calculator</Link>. Explore the available tools below; Healthy Recipes is coming soon.</p>
         <p className="mt-4 text-sm text-secondary"><Link href="/exercises" className="inline-flex min-h-control items-center rounded-control font-semibold">Browse Exercise Library</Link> — Explore 100 free exercise guides with step-by-step instructions, technique tips, safety notes, and YouTube demonstrations where available.</p>
         <p className="mt-4 text-sm text-secondary"><Link href="/progress-tracker" className="inline-flex min-h-control items-center rounded-control font-semibold">Free Progress Tracker</Link> — Record weight, measurements and exercise-specific strength history in your browser.</p>
         <p className="mt-4 text-sm text-secondary"><Link href="/nutrition-tracker" className="inline-flex min-h-control items-center rounded-control font-semibold">Free Nutrition Tracker</Link> — Log meals and compare daily nutrition estimates with your chosen targets in this browser.</p>
@@ -92,23 +92,24 @@ export default function Home() {
             Everything you need. Nothing behind a paywall.
           </h2>
           <p className="mt-4 text-body text-secondary sm:text-lg">
-            Explore the free fitness tools we’re building for you.
+            Explore our free fitness tools. Healthy Recipes is coming soon.
           </p>
         </div>
         <ul aria-label="Free tools" className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5">
           {freeTools.map((tool, index) => (
             <li key={tool.name} className="min-w-0">
-              <article aria-labelledby={`tool-${index}`} className="flex h-full flex-col rounded-panel border border-border bg-surface p-6 sm:p-7">
+              <article aria-labelledby={`tool-${index}`} className="relative flex h-full flex-col rounded-panel border border-border bg-surface p-6 sm:p-7">
                 <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
                   <span className="flex size-12 items-center justify-center rounded-control border border-primary/20 bg-primary/5 text-primary" aria-hidden="true">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" focusable="false">
                       <path d={tool.icon} />
                     </svg>
                   </span>
-                  <span className="rounded-full border border-border-control px-3 py-1 font-mono text-xs text-secondary">Coming Soon</span>
+                  {!tool.href && <span className="rounded-full border border-border-control px-3 py-1 font-mono text-xs text-secondary">Coming Soon</span>}
                 </div>
                 <h3 id={`tool-${index}`} className="text-heading-4 font-semibold">{tool.name}</h3>
                 <p className="mt-3 text-sm leading-7 text-secondary">{tool.description}</p>
+                {tool.href && <Link href={tool.href} aria-label={`Explore ${tool.name}`} className="mt-auto inline-flex min-h-control items-center gap-2 pt-5 text-sm font-semibold text-primary no-underline after:absolute after:inset-0 after:rounded-panel hover:underline">Explore <span aria-hidden="true">↗</span></Link>}
               </article>
             </li>
           ))}
