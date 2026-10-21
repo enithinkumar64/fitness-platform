@@ -83,6 +83,26 @@ Budget rejections return HTTP 429 with integer-seconds Retry-After until budget 
 
 **Files:** three Progress components above, new `tests/e2e/progress-accessibility.spec.ts`, and the requested two documents. No formula, storage key/schema, record ID, shared synchronization hook, catalog, package, branding or unrelated component was changed. Historical audit evidence below is retained.
 
+## FF-11 Nutrition follow-up — confirmed DOM defect resolved in both trackers (P2)
+
+**Original ID/severity retained: FF-11, P2.** This follow-up supersedes earlier notes that the Nutrition counterpart was open. Original evidence and prior task records remain below as history.
+
+**Pre-fix confirmation:** the original audit directly measured Progress's repeated-save problem and identified Nutrition's matching string-state pattern. Before changing Nutrition, the new browser regression logged two apples in each Chromium profile and attached a MutationObserver to the existing `Food added.` status paragraph. The second successful addition produced **zero mutations**, despite two valid diary entries. Both expected pre-fix tests failed with received 0 / expected greater than 0. This confirms the Nutrition DOM defect rather than assuming an unmeasured screen-reader outcome.
+
+**Root cause:** repeated actions reused constant strings (`Food added.`, `Entry updated.`, `Entry deleted.`, targets and warning/error messages). React could leave an existing live region's content unchanged. Repeated external synchronization also retained the same text while the diary changed. Conditional USDA error statuses could be inserted already containing text. Existing input labels, native confirmation, focus outlines and live quantity preview were not established defects and were not redesigned.
+
+**Nutrition-only presentation changes:** `src/components/nutrition/nutrition-tracker.tsx` adds local text/revision notices and a `NutritionNotice` span whose child render identity changes when text or revision changes. The live containers retain their polite status / assertive alert semantics. Add/edit/delete, targets and clear success notices refresh even with identical wording; repeated entry/target errors refresh while retaining existing field/error associations and entry-error focus. Blocked operations refresh the existing storage/conflict alert and clear stale success text rather than announcing a second generic failure. Session-only warnings stay explicit. Duplicate generic local-save/clear notices are suppressed when the action-specific notice already confirms that operation. The USDA error status container now exists before its message arrives; no USDA request/parsing change is made.
+
+Repeated synchronization notices use the new displayed diary object's identity. A Nutrition-only storage-event observer increments warning presentation identity for matching events, without reading/writing entries, merging stores or changing the shared synchronization hook. No arbitrary announcement delay, extra focus shift, whole-diary serialization or persistent revision field was introduced. Counters stay in component state. Form drafts, values, serving snapshots, IDs and storage schemas are unchanged.
+
+**Regression evidence:** new `tests/e2e/nutrition-announcements.spec.ts` has six scenarios per Chromium project: repeated additions; repeated edits/deletes with stable IDs/serving snapshots; repeated quantity/target errors with drafts retained; repeated synchronization and blocked stale edits in two real pages; repeated storage failures and clear/cancel; target saves plus keyboard/axe checks. MutationObservers inspect the actual relevant live-container subtree, not unrelated page changes. Populated/error-state axe checks against `main` at 320px and 1440px report **zero violations in all four profile/width combinations** per final suite. Results (including incomplete checks) are attached to the Playwright report. Existing locked axe-core was reused; no dependency added.
+
+**Both portions verified:** the existing `tests/e2e/progress-accessibility.spec.ts` remains passing in the same full runs, including repeated adds/edits/deletes and blocked conflicts. FF-11 is therefore **resolved for the confirmed DOM-update defect on both routes**. Actual speech delivery, ordering, coalescing and verbosity still require VoiceOver/NVDA release review. No full WCAG compliance or universal screen-reader guarantee is claimed.
+
+**Final verification:** lint passed; `npx --no-install tsc --noEmit` passed; standalone `npm run build` passed; unit suite **144 passed, 0 failed, 0 skipped**. Two complete final browser runs each **368 passed, 8 intentional skips, 0 failed**, taking **48.7 s** and **50.5 s**. Production worker ports/Chromium used approved unrestricted execution; no final command remains blocked. An earlier focused run had 72 passes and two failures because the new edit test assumed row position stayed fixed; the existing diary appends an edited record. Correcting the selector to follow the intended entry fixed the test without changing diary behavior. An intermediate full run passed 368 with 8 skips (47.3 s) before suppressing duplicate generic local-success notices.
+
+**Scope:** `src/components/nutrition/nutrition-tracker.tsx`, new `tests/e2e/nutrition-announcements.spec.ts`, `docs/nutrition-tracker.md`, and this report. Progress implementation, nutrition formulas, USDA parsing/protection, serving conversions, diary schemas/IDs and cross-tab synchronization code were not changed. Remaining manual steps are documented in the Nutrition guide and the launch checklist.
+
 ## A. Executive summary
 
 **Recommendation: address the four P1 findings before an unrestricted public launch.** The core site is functional, and the existing verification suite passes. Those tests do not cover several confirmed nutrition and data-retention defects found during this audit.
@@ -240,7 +260,7 @@ Stack: Next.js 16.4.2 App Router, React 19.3.0, TypeScript 5, Tailwind CSS v4, G
 
 ### FF-11 — Repeated save notifications do not update the live region
 
-- **Severity/status:** **P2 — partially addressed**: Progress DOM notifications corrected/verified; Nutrition counterpart and real screen-reader verification remain open. Original pre-fix evidence follows.
+- **Severity/status:** **P2 — resolved for the confirmed DOM-update defect in both Progress and Nutrition**, verified in the Nutrition follow-up above. Real assistive-technology release review remains open; original pre-fix evidence follows.
 - **Affected routes:** `/progress-tracker`; the same constant-message pattern exists in Nutrition.
 - **Files/lines:** `src/components/progress/progress-tracker.tsx:26–27,45`; `src/components/nutrition/nutrition-tracker.tsx:117–125,157`.
 - **Evidence:** after a first successful Progress save, a MutationObserver attached to the `Progress entry saved.` live region recorded **zero mutations on the next successful save**. React receives the same status string, so the live-region text does not change. Nutrition repeatedly sets `Food added.` in the same way; that route's repeated-save screen-reader behavior was not separately measured.
@@ -402,7 +422,8 @@ Coverage limits: Chromium only; not a full assistive-technology test, clinical v
 - [ ] Repair and verify nutrition source destinations without exposing a key (FF-07).
 - [ ] Choose safe development-tooling advisory mitigation; do not downgrade blindly (FF-08).
 - [x] Fix populated Progress list semantics (FF-10); verified with populated axe and structural tests.
-- [ ] Verify real repeated announcements with assistive technology and address Nutrition counterpart (FF-11); Progress DOM mechanism is corrected.
+- [x] Correct and regression-test repeated live-region DOM updates in both trackers (FF-11).
+- [ ] Verify real repeated announcements, ordering and verbosity with assistive technology (FF-11 release review).
 - [ ] Complete Safari/Firefox, real mobile pickers, zoom/text-spacing and screen-reader review.
 - [ ] Verify deployment HTTPS/headers/rate limits and obtain production performance observations.
 - [ ] Approve branding/social/favicon and refresh project work records (FF-12/14).

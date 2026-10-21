@@ -180,3 +180,28 @@ Remaining risks: an attacker can consume the shared local budget and temporarily
 ### Regression coverage
 
 `tests/unit/nutrition-proxy.test.mjs` invokes the actual handler with a fake clock, synthetic API key and mocked USDA responses. It checks thresholds/recovery, rolling boundaries, both endpoints' shared budgets, coalescing/concurrency, cache behavior, invalid input, missing configuration, 404/429/502 distinctions, upstream cooldown and bounded/aborted bodies. Existing nutrition tests use fresh handler instances to isolate budgets and caches. Browser tests exercise rate-limit messages/starter fallback and real invalid-input routes without contacting USDA. No test consumes live USDA quota. Final verification results are recorded in the audit follow-up.
+
+## FF-11 (original P2): Nutrition accessibility announcements
+
+### Confirmed defect and scope
+
+The original audit measured the repeated-save defect on Progress and identified the same constant-string pattern in Nutrition. Before this change, a real Nutrition browser regression logged two apples successfully but observed **zero mutations** in the existing `Food added.` status region after the second addition, in both Chromium profiles. The two pre-fix regression failures were expected evidence, not a calculation failure.
+
+Repeated target/validation messages and blocked storage/conflict attempts also reused constant strings. External synchronization could update the diary while retaining the same status text. These are notification-presentation concerns; the shared synchronization policy is unchanged. The existing per-quantity live preview, native dialogs and keyboard focus styling were already present and were not redesigned. Actual speech behavior is not inferred solely from visual changes or DOM mutation counts.
+
+### Presentation-only correction
+
+`src/components/nutrition/nutrition-tracker.tsx` now provides local text/revision notices and a small `NutritionNotice` span. The span receives a fresh render identity when the notification's text or explicit revision changes, inside the existing live container. The component adjusts its own render identity before DOM commit; there is no arbitrary delay, large diary serialization, storage mutation or forced focus change.
+
+- Existing action-specific success messages for additions, edits, deletes, target saves and clearing use fresh identities even when wording repeats.
+- Entry and target validation alerts refresh for repeated identical errors. Existing entry-error focus and error/field associations remain; form drafts are not reset by notification code.
+- Blocked writes/clears refresh the existing assertive storage/conflict alert and clear stale success text. Accepted session-only changes retain the shared hook's explicit storage warning; they are not presented as cloud-backed or persistently saved.
+- Repeated external synchronization messages use the displayed diary object's identity, so a new synchronized store refreshes the existing polite status even if its text is identical. A local storage-event observer updates only warning presentation identity for matching Nutrition events; it does not read/write diary data, merge changes, or change the shared hook. Other tracker-key events are ignored.
+- Duplicate generic local-save/clear notices are suppressed when the action-specific notice already confirms that same operation. External/reload notices remain. Errors are not duplicated in a second generic failure live region. The USDA error status container is present before its text arrives; USDA parsing/request behavior is unchanged.
+- Sequence/revision values are neither displayed as numbers nor persisted. Existing classes, controls, nutrition values, serving conversions, entry IDs, schema version, clear confirmation and cross-tab conflict rules are unchanged.
+
+### Evidence and release review
+
+`tests/e2e/nutrition-announcements.spec.ts` covers repeated additions/edits/deletions, unchanged record IDs and serving snapshots, repeated target saves/errors, repeated invalid quantities with retained input, repeated synchronization notices, stale-edit conflicts with drafts preserved, session-only failures, repeated confirmed clearing/cancel behavior, keyboard focus and populated/error axe scans at 320px/1440px. Observers verify actual live-region DOM updates. Existing Nutrition/USDA/storage/cross-tab tests and the Progress FF-11 counterpart are included in full verification. Axe is the existing locked dependency; none was installed.
+
+The confirmed FF-11 DOM-update defect is resolved and verified in both trackers. Lint, TypeScript and standalone production build passed; all 144 unit tests passed. Two final full browser runs each passed 368 tests with 8 intentional skips (48.7 s / 50.5 s), including the Progress counterpart. Details are recorded in `docs/launch-readiness-audit.md`. This does not certify complete WCAG compliance or prove announcements on every screen reader. Before release, use VoiceOver/Safari and NVDA with Chrome/Firefox to check actual repeated success/error/conflict speech, polite/assertive ordering and excessive duplication or coalescing. Also review native dialog reading/keyboard controls, real mobile date/select controls, 200% zoom/text spacing and any axe incomplete checks. Use synthetic records in an isolated profile. The existing live nutrition preview was not changed; its verbosity can be reviewed separately if real users find it excessive.
