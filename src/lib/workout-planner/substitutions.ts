@@ -1,6 +1,6 @@
 import type { Equipment } from "../exercises/types.ts";
 import type { GroupId, SubstitutionGroup } from "./types.ts";
-// Approval here means explicitly included in FormFuel's editorial program,
+// Approval here means explicitly included in VAJRYA's editorial program,
 // not individual clearance, certification, or equivalence of exact loading.
 export const GYM_EQUIPMENT: readonly { value: Equipment; label: string }[] = [
   { value: "Dumbbells", label: "Dumbbells" }, { value: "Bench", label: "Stable adjustable exercise bench" },

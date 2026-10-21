@@ -13,7 +13,7 @@ async function calculate(page: Page) {
 test.beforeEach(async ({ page }) => { await page.goto("/calculators/calories-burned"); });
 
 test("page metadata, homepage navigation, and contextual link work", async ({ page }) => {
-  await expect(page).toHaveTitle("Free Calories Burned Calculator | FormFuel");
+  await expect(page).toHaveTitle("Free Calories Burned Calculator | VAJRYA");
   await expect(page.getByRole("heading", { name: "Calories burned calculator", exact: true })).toBeVisible();
   await expect(form(page).getByRole("spinbutton")).toHaveCount(3);
   await expect(page.getByRole("navigation", { name: "Related calculators" }).getByRole("link")).toHaveAttribute("href", "/calculators/tdee");

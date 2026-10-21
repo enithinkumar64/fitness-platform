@@ -1,6 +1,6 @@
 import type { Exercise } from "./types.ts";
 
-// Original FormFuel written guides. Persistent IDs are future planner references.
+// Original VAJRYA written guides. Persistent IDs are future planner references.
 export const ADDITIONAL_EXERCISES: readonly Exercise[] = [
   {
     "id": "ex-barbell-bench-press",

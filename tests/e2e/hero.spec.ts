@@ -4,7 +4,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/");
 });
 
-test("hero presents the FormFuel vision and categories", async ({ page }) => {
+test("hero presents the VAJRYA vision and categories", async ({ page }) => {
   const hero = page.getByRole("region", { name: "TRAIN SMARTER. FUEL BETTER. STAY FREE.", exact: true });
   await expect(hero.getByRole("heading", { level: 1 })).toHaveText("TRAIN SMARTER. FUEL BETTER. STAY FREE.");
   await expect(hero.getByText("STAY FREE.", { exact: true })).toHaveCSS("color", "rgb(199, 255, 66)");

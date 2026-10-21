@@ -14,7 +14,7 @@ async function calculate(page: Page) {
 test.beforeEach(async ({ page }) => { await page.goto("/calculators/bmi"); });
 
 test("page metadata, discovery, and contextual navigation work", async ({ page }) => {
-  await expect(page).toHaveTitle("Free Adult BMI Calculator | FormFuel");
+  await expect(page).toHaveTitle("Free Adult BMI Calculator | VAJRYA");
   await expect(page.getByRole("heading", { name: "Adult BMI calculator", exact: true })).toBeVisible();
   await expect(form(page).getByRole("combobox")).toHaveCount(0);
   const related = page.getByRole("navigation", { name: "Related calculators" });

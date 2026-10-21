@@ -10,10 +10,10 @@ test("footer presents the brand, mission, and copyright", async ({ page }) => {
   await footer.scrollIntoViewIfNeeded();
   await expect(footer).toBeInViewport();
   for (const text of [
-    "FormFuel",
+    "VAJRYA",
     "Train smarter. Fuel better. Stay free.",
     "Making fitness and nutrition accessible to everyone.",
-    "© 2026 FormFuel. All rights reserved.",
+    "© 2026 VAJRYA. All rights reserved.",
     "Free at the core.",
   ]) {
     await expect(footer.getByText(text, { exact: true })).toBeVisible();

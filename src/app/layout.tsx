@@ -15,9 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FormFuel | Free Fitness & Nutrition Tools",
+  openGraph: { siteName: "VAJRYA" },
+  title: "VAJRYA | Free Fitness & Nutrition Tools",
   description:
-    "Discover FormFuel's vision for free fitness and nutrition tools, including workout plans, fitness calculators, and progress tracking.",
+    "Discover VAJRYA's vision for free fitness and nutrition tools, including workout plans, fitness calculators, and progress tracking.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

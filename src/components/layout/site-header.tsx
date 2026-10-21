@@ -120,7 +120,7 @@ export function SiteHeader() {
         <div className="flex min-h-20 items-center justify-between gap-3 py-3">
           <Link
             href="/"
-            aria-label="FormFuel home"
+            aria-label="VAJRYA home"
             onClick={() => setIsOpen(false)}
             className="flex min-h-control shrink-0 items-center gap-2 rounded-control text-foreground no-underline hover:text-foreground sm:gap-3"
           >
@@ -141,7 +141,7 @@ export function SiteHeader() {
               </svg>
             </span>
             <span className="text-xl font-bold tracking-tight sm:text-2xl">
-              Form<span className="text-primary">Fuel</span>
+              VAJ<span className="text-primary">RYA</span>
             </span>
           </Link>
 

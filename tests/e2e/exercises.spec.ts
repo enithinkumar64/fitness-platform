@@ -7,7 +7,7 @@ const filters = (page: Page) => page.getByRole("search", { name: "Filter exercis
 test.beforeEach(async ({ page }) => { await page.goto("/exercises"); });
 
 test("directory metadata, all 100 cards, and visible matching count render", async ({ page }) => {
-  await expect(page).toHaveTitle("Free Exercise Library | FormFuel");
+  await expect(page).toHaveTitle("Free Exercise Library | VAJRYA");
   await expect(page.getByRole("heading", { name: "Exercise Library", exact: true, level: 1 })).toBeVisible();
   await expect(results(page).getByRole("article")).toHaveCount(100);
   await expect(results(page).getByRole("status")).toHaveText("100 exercises found");
@@ -63,7 +63,7 @@ test("empty state explains no matches and can restore the directory", async ({ p
 test("card navigation opens a complete detail guide with dynamic metadata and related links", async ({ page }) => {
   await results(page).getByRole("link", { name: "Goblet Squat", exact: true }).click();
   await expect(page).toHaveURL(/\/exercises\/goblet-squat$/);
-  await expect(page).toHaveTitle("Goblet Squat: Technique & Safety | FormFuel");
+  await expect(page).toHaveTitle("Goblet Squat: Technique & Safety | VAJRYA");
   await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /A squat with one dumbbell/);
   await expect(page.getByRole("heading", { name: "Goblet Squat", level: 1, exact: true })).toBeVisible();
   const instructions = page.getByRole("region", { name: "How to perform", exact: true });
@@ -152,7 +152,7 @@ for (const category of new Set(EXERCISES.filter((item) => item.video).map((item)
       await expect(link).toHaveAttribute("href", video.url);
       await expect(link).toHaveAttribute("target", "_blank");
       await expect(link).toHaveAttribute("rel", "noopener noreferrer");
-      await expect(section).toContainText("does not imply the creator endorses FormFuel");
+      await expect(section).toContainText("does not imply the creator endorses VAJRYA");
       await expect(page.locator("iframe, video")).toHaveCount(0);
     }
   });
@@ -229,7 +229,7 @@ for (const [slug, name] of [
   test(`expanded guide ${name} has unique metadata, instructions, and working related links`, async ({ page }) => {
     const response = await page.goto(`/exercises/${slug}`);
     expect(response?.status()).toBe(200);
-    await expect(page).toHaveTitle(`${name}: Technique & Safety | FormFuel`);
+    await expect(page).toHaveTitle(`${name}: Technique & Safety | VAJRYA`);
     await expect(page.getByRole("heading", { name, exact: true, level: 1 })).toBeVisible();
     await expect(page.getByRole("region", { name: "How to perform", exact: true }).locator("ol > li")).toHaveCount(3);
     const related = page.getByRole("region", { name: "Related exercise guides", exact: true }).getByRole("link").first();

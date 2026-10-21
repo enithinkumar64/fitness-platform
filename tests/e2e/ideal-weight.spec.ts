@@ -13,7 +13,7 @@ async function calculate(page: Page) {
 test.beforeEach(async ({ page }) => { await page.goto("/calculators/ideal-weight"); });
 
 test("page metadata, homepage discovery, and contextual links work", async ({ page }) => {
-  await expect(page).toHaveTitle("Free Ideal Weight Calculator | FormFuel");
+  await expect(page).toHaveTitle("Free Ideal Weight Calculator | VAJRYA");
   await expect(page.getByRole("heading", { name: "Ideal weight calculator", exact: true })).toBeVisible();
   await expect(form(page).getByLabel(/Weight/)).toHaveCount(0);
   const nav = page.getByRole("navigation", { name: "Related calculators" });

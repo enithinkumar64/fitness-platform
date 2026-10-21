@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { MacroCalculator } from "@/components/calculators/macro-calculator";
 
 export const metadata: Metadata = {
-  title: "Free Goal-Guided Macro Calculator | FormFuel",
+  title: "Free Goal-Guided Macro Calculator | VAJRYA",
   description: "Explore illustrative macro splits for maintenance, fat loss, and muscle gain. Estimate calories from body measurements and activity, then calculate protein, carbohydrates, and fat for your goal.",
 };
 

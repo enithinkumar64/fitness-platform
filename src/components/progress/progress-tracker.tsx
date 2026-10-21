@@ -29,7 +29,7 @@ export function ProgressTracker() {
   }
   function download() {
     const url=URL.createObjectURL(new Blob([exportCsv(store)],{type:'text/csv;charset=utf-8'}));
-    const anchor=document.createElement('a');anchor.href=url;anchor.download=`formfuel-progress-${localDate()}.csv`;document.body.appendChild(anchor);anchor.click();anchor.remove();
+    const anchor=document.createElement('a');anchor.href=url;anchor.download=`VAJRYA-progress-${localDate()}.csv`;document.body.appendChild(anchor);anchor.click();anchor.remove();
     // Delay revocation until the browser has consumed the download request.
     setTimeout(()=>URL.revokeObjectURL(url),1000);
     announce('CSV export requested. It contains only your recorded progress.');

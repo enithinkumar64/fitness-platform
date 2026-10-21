@@ -1,4 +1,8 @@
-# Fitness Platform
+# VAJRYA Fitness Platform
+
+Brand: **VAJRYA**. Tagline: **Train smarter. Fuel better. Stay free.**
+
+VAJRYA is the current public name of the project formerly branded FormFuel. The existing project directory, repository, routes, storage keys, Web Lock names and historical saved-data identifiers are retained for compatibility. See README.md for the rebrand boundary and review checklist.
 
 ## Product vision
 
@@ -113,6 +117,9 @@ A page or feature is complete when:
 For documentation-only tasks, review the text, check the diff for formatting problems, and confirm file scope. Application checks are unnecessary when no application code or configuration changed.
 
 ## Work record
+
+The initial documentation-task record below is retained as history and is not a current feature inventory. The application now includes seven calculators, 100 exercise guides, the curated Workout Planner, Nutrition Tracker and Progress Tracker. This branding task updates the public name to VAJRYA without implementing roadmap features or changing data/calculations. The launch audit records completed follow-ups and outstanding launch requirements.
+
 
 ### Completed
 

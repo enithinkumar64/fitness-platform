@@ -12,7 +12,7 @@ async function calculate(page: Page) {
 test.beforeEach(async ({ page }) => { await page.goto("/calculators/body-fat"); });
 
 test("page, metadata, homepage discovery, and related links work", async ({ page }) => {
-  await expect(page).toHaveTitle("Free Adult Body Fat Calculator | FormFuel");
+  await expect(page).toHaveTitle("Free Adult Body Fat Calculator | VAJRYA");
   await expect(page.getByRole("heading", { name: "Body fat calculator", exact: true })).toBeVisible();
   const nav = page.getByRole("navigation", { name: "Related calculators" });
   for (const [label, href] of [["Adult BMI calculator", "/calculators/bmi"], ["TDEE & daily calorie calculator", "/calculators/tdee"], ["Goal-guided macro calculator", "/calculators/macros"]]) await expect(nav.getByRole("link", { name: label, exact: true })).toHaveAttribute("href", href);

@@ -16,7 +16,7 @@ async function generate(page: Page){await form(page).getByRole("button",{name:"G
 test.beforeEach(async({page})=>{await page.goto("/workout-planner");});
 
 test("metadata, homepage discovery, header navigation and calculator links are preserved",async({page,isMobile})=>{
-  await expect(page).toHaveTitle("Free Workout Planner | FormFuel");await page.goto("/");
+  await expect(page).toHaveTitle("Free Workout Planner | VAJRYA");await page.goto("/");
   for(const slug of ["tdee","macros","bmi","body-fat","ideal-weight","calories-burned","one-rep-max"])await expect(page.getByRole("main").locator(`a[href='/calculators/${slug}']`)).toHaveCount(1);
   await page.getByRole("main").getByRole("link",{name:"Free Workout Planner",exact:true}).click();
   if(isMobile)await page.getByRole("button",{name:"Open navigation menu"}).click();

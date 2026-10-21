@@ -71,7 +71,7 @@ export default function Home() {
             <p className="mb-3 font-mono text-xs tracking-widest text-primary">THE WHY</p>
             <h2 id="vision-heading" className="text-heading-4">Our vision</h2>
             <p className="mt-3 max-w-lg text-sm leading-7 text-secondary">
-              Train smarter. Fuel better. Stay free. We&apos;re building FormFuel to
+              Train smarter. Fuel better. Stay free. We&apos;re building VAJRYA to
               bring everyday fitness and nutrition together, with core tools that
               stay completely free.
             </p>

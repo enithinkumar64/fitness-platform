@@ -12,7 +12,7 @@ async function measurements(page: Page) {
 test.beforeEach(async ({ page }) => { await page.goto("/calculators/macros"); });
 
 test("body measurements automatically produce BMR, TDEE, and macros", async ({ page }) => {
-  await expect(page).toHaveTitle("Free Goal-Guided Macro Calculator | FormFuel");
+  await expect(page).toHaveTitle("Free Goal-Guided Macro Calculator | VAJRYA");
   await expect(form(page).getByLabel("Daily calorie target (kcal)")).toHaveCount(0);
   await measurements(page); await submit(page);
   await expect(results(page)).toBeFocused();

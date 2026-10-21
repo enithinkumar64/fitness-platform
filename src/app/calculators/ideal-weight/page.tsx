@@ -4,7 +4,7 @@ import { IdealWeightCalculator } from "@/components/calculators/ideal-weight-cal
 import { FORMULAS } from "@/lib/calculators/ideal-weight";
 
 export const metadata: Metadata = {
-  title: "Free Ideal Weight Calculator | FormFuel",
+  title: "Free Ideal Weight Calculator | VAJRYA",
   description: "Compare Robinson, Miller, Devine, and Hamwi height-based reference-weight estimates with a separate adult BMI interval. Metric and imperial, ages 20–100.",
 };
 

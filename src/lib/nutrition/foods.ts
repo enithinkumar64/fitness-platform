@@ -4,7 +4,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-171688",
     "name": "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "171688",
     "dataType": "SR Legacy",
     "per100g": {
@@ -69,7 +69,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-173944",
     "name": "Bananas, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "173944",
     "dataType": "SR Legacy",
     "per100g": {
@@ -134,7 +134,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-169910",
     "name": "Mangos, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "169910",
     "dataType": "SR Legacy",
     "per100g": {
@@ -159,7 +159,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-171705",
     "name": "Avocados, raw, all commercial varieties",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "171705",
     "dataType": "SR Legacy",
     "per100g": {
@@ -204,7 +204,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-173424",
     "name": "Egg, whole, cooked, hard-boiled",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "173424",
     "dataType": "SR Legacy",
     "per100g": {
@@ -239,7 +239,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-170457",
     "name": "Tomatoes, red, ripe, raw, year round average",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "170457",
     "dataType": "SR Legacy",
     "per100g": {
@@ -294,7 +294,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-168462",
     "name": "Spinach, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "168462",
     "dataType": "SR Legacy",
     "per100g": {
@@ -319,7 +319,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-169975",
     "name": "Cabbage, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "169975",
     "dataType": "SR Legacy",
     "per100g": {
@@ -354,7 +354,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-170379",
     "name": "Broccoli, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "170379",
     "dataType": "SR Legacy",
     "per100g": {
@@ -389,7 +389,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-171477",
     "name": "Chicken, broilers or fryers, breast, meat only, cooked, roasted",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "171477",
     "dataType": "SR Legacy",
     "per100g": {
@@ -414,7 +414,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-172421",
     "name": "Lentils, mature seeds, cooked, boiled, without salt",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "172421",
     "dataType": "SR Legacy",
     "per100g": {
@@ -449,7 +449,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-172688",
     "name": "Bread, whole-wheat, commercially prepared",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "172688",
     "dataType": "SR Legacy",
     "per100g": {
@@ -474,7 +474,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-172183",
     "name": "Egg, white, raw, fresh",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "172183",
     "dataType": "SR Legacy",
     "per100g": {
@@ -509,7 +509,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-174276",
     "name": "Soy protein isolate",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "174276",
     "dataType": "SR Legacy",
     "per100g": {
@@ -523,7 +523,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-173757",
     "name": "Chickpeas (garbanzo beans, bengal gram), mature seeds, cooked, boiled, without salt",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "173757",
     "dataType": "SR Legacy",
     "per100g": {
@@ -548,7 +548,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-170567",
     "name": "Nuts, almonds",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "170567",
     "dataType": "SR Legacy",
     "per100g": {
@@ -613,7 +613,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-171287",
     "name": "Egg, whole, raw, fresh",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "171287",
     "dataType": "SR Legacy",
     "per100g": {
@@ -668,7 +668,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-172470",
     "name": "Peanut butter, smooth style, without salt",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "172470",
     "dataType": "SR Legacy",
     "per100g": {
@@ -703,7 +703,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-173686",
     "name": "Fish, salmon, Atlantic, wild, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "173686",
     "dataType": "SR Legacy",
     "per100g": {
@@ -728,7 +728,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-171077",
     "name": "Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "171077",
     "dataType": "SR Legacy",
     "per100g": {
@@ -742,7 +742,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-168917",
     "name": "Quinoa, cooked",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "168917",
     "dataType": "SR Legacy",
     "per100g": {
@@ -767,7 +767,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-168878",
     "name": "Rice, white, long-grain, regular, enriched, cooked",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "168878",
     "dataType": "SR Legacy",
     "per100g": {
@@ -792,7 +792,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-171413",
     "name": "Oil, olive, salad or cooking",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "171413",
     "dataType": "SR Legacy",
     "per100g": {
@@ -837,7 +837,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-169228",
     "name": "Eggplant, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "169228",
     "dataType": "SR Legacy",
     "per100g": {
@@ -862,7 +862,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-170393",
     "name": "Carrots, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "170393",
     "dataType": "SR Legacy",
     "per100g": {
@@ -927,7 +927,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-170020",
     "name": "Peas and onions, frozen, unprepared",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "170020",
     "dataType": "SR Legacy",
     "per100g": {
@@ -952,7 +952,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-168482",
     "name": "Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program)",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "168482",
     "dataType": "SR Legacy",
     "per100g": {
@@ -987,7 +987,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-169291",
     "name": "Squash, summer, zucchini, includes skin, raw",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "169291",
     "dataType": "SR Legacy",
     "per100g": {
@@ -1052,7 +1052,7 @@ export const STARTER_FOODS: Food[] = [
   {
     "id": "starter-171265",
     "name": "Milk, whole, 3.25% milkfat, with added vitamin D",
-    "source": "FormFuel starter catalog \u00b7 USDA FoodData Central",
+    "source": "VAJRYA starter catalog \u00b7 USDA FoodData Central",
     "sourceId": "171265",
     "dataType": "SR Legacy",
     "per100g": {

@@ -9,7 +9,7 @@ async function fillMetric(page: Page) {
 async function calculate(page: Page) { await form(page).getByRole("button", { name: "Calculate daily calories" }).click(); }
 test.beforeEach(async ({ page }) => { await page.goto("/calculators/tdee"); });
 test("page metadata, labels, and estimates", async ({ page }) => {
-  await expect(page).toHaveTitle("Free TDEE & Daily Calorie Calculator | FormFuel");
+  await expect(page).toHaveTitle("Free TDEE & Daily Calorie Calculator | VAJRYA");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("TDEE & daily calorie calculator");
   for (const label of ["Age (years)","Formula coefficient","Weight (kg)","Height (cm)","Activity level"]) await expect(form(page).getByLabel(label, { exact: true })).toBeVisible();
   await fillMetric(page); await calculate(page);

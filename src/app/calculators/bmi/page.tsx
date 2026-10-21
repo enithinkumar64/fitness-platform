@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BmiCalculator } from "@/components/calculators/bmi-calculator";
 
 export const metadata: Metadata = {
-  title: "Free Adult BMI Calculator | FormFuel",
+  title: "Free Adult BMI Calculator | VAJRYA",
   description: "Calculate adult BMI, BMI Prime, Ponderal Index, and height-based reference-weight boundaries. Free metric and imperial calculator for ages 20–100.",
 };
 

@@ -13,7 +13,7 @@ async function calculate(page: Page) {
 test.beforeEach(async ({ page }) => { await page.goto("/calculators/one-rep-max"); });
 
 test("page metadata, homepage navigation, and related links work", async ({ page }) => {
-  await expect(page).toHaveTitle("Free One-Rep Max (1RM) Calculator | FormFuel");
+  await expect(page).toHaveTitle("Free One-Rep Max (1RM) Calculator | VAJRYA");
   await expect(page.getByRole("heading", { name: "One-rep max calculator", exact: true })).toBeVisible();
   await expect(form(page).getByRole("spinbutton")).toHaveCount(2);
   const nav = page.getByRole("navigation", { name: "Related calculators" });

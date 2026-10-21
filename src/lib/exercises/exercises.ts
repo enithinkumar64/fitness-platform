@@ -1,7 +1,7 @@
 import { ADDITIONAL_EXERCISES } from "./additional-exercises.ts";
 import { DIRECTORY_CATEGORIES, MUSCLE_GROUPS, EQUIPMENT, DIFFICULTIES, type Exercise, type ExerciseFilters } from "./types.ts";
 
-// Original FormFuel editorial content. IDs are persistent planner references;
+// Original VAJRYA editorial content. IDs are persistent planner references;
 // slugs are readable URLs. Difficulty is a broad skill label, not clearance to train.
 // Video URLs, titles, and channel attribution checked against YouTube oEmbed and
 // published watch-page descriptions on 2026-10-18. External references only;

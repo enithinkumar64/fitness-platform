@@ -1,4 +1,6 @@
-# FormFuel Exercise Library expansion review
+# VAJRYA Exercise Library expansion review
+
+The dated verification below predates the VAJRYA rebrand and retains its original FormFuel attribution wording as historical evidence.
 
 The catalog contains exactly 100 guides: 30 preserved guides and 70 additions. All original IDs, slugs, primary/secondary muscle metadata, instructions, tips, mistakes, safety notes and related IDs are protected by a unit-test fingerprint. The original eight video destinations are also protected by tests.
 

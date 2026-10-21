@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ExerciseLibrary } from "@/components/exercises/exercise-library";
 
 export const metadata: Metadata = {
-  title: "Free Exercise Library | FormFuel",
+  title: "Free Exercise Library | VAJRYA",
   description: "Browse 100 exercise guides with written instructions, technique tips, and safety considerations. Filter by muscle group, equipment, and difficulty.",
 };
 

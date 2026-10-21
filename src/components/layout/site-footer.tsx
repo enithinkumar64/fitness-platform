@@ -16,7 +16,7 @@ export function SiteFooter() {
                   <path d="M7 12h10M3 10v4m4-7v10m10-10v10m4-7v4M3 12h4m10 0h4" />
                 </svg>
               </span>
-              <span>Form<span className="text-primary">Fuel</span></span>
+              <span>VAJ<span className="text-primary">RYA</span></span>
             </p>
             <p className="mt-5 text-sm font-medium leading-7">Train smarter. Fuel better. Stay free.</p>
             <p className="mt-2 max-w-xs text-sm leading-7 text-secondary">Making fitness and nutrition accessible to everyone.</p>
@@ -46,7 +46,7 @@ export function SiteFooter() {
         </div>
 
         <div className="flex flex-col gap-3 border-t border-border py-6 text-xs leading-6 text-secondary sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 FormFuel. All rights reserved.</p>
+          <p>© 2026 VAJRYA. All rights reserved.</p>
           <p className="flex items-center gap-2 font-mono">
             <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-primary" />
             Free at the core.

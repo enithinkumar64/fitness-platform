@@ -17,17 +17,17 @@ test.beforeEach(async ({ page }) => {
   expect(response?.status()).toBe(200);
 });
 
-test("homepage loads with its main content and FormFuel header", async ({ page }) => {
+test("homepage loads with its main content and VAJRYA header", async ({ page }) => {
   await expect(page.getByRole("main")).toBeVisible();
   await expect(page.getByRole("main").getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByRole("banner")).toBeVisible();
-  await expect(page.getByRole("link", { name: "FormFuel home", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "VAJRYA home", exact: true })).toBeVisible();
 });
 
 test("logo navigates back to Home", async ({ page }) => {
   // A query distinguishes the starting URL without requiring a second app page.
   await page.goto("/?navigation-test=logo");
-  const logo = page.getByRole("link", { name: "FormFuel home", exact: true });
+  const logo = page.getByRole("link", { name: "VAJRYA home", exact: true });
   await expect(logo).toHaveAttribute("href", "/");
   await logo.click();
   await expect(page).toHaveURL(/\/$/);

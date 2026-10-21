@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { TdeeCalculator } from "@/components/calculators/tdee-calculator";
 
 export const metadata: Metadata = {
-  title: "Free TDEE & Daily Calorie Calculator | FormFuel",
+  title: "Free TDEE & Daily Calorie Calculator | VAJRYA",
   description: "Estimate adult BMR, maintenance calories, and daily calorie adjustments using the Mifflin–St Jeor equation. Free metric and imperial TDEE calculator.",
 };
 

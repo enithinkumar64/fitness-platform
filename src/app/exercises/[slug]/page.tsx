@@ -10,7 +10,7 @@ export function generateStaticParams() { return EXERCISES.map(({ slug }) => ({ s
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const exercise = findExerciseBySlug((await params).slug);
   if (!exercise) notFound();
-  return { title: `${exercise.name}: Technique & Safety | FormFuel`, description: `${exercise.description} Read original written steps, technique tips, common mistakes, and safety considerations.` };
+  return { title: `${exercise.name}: Technique & Safety | VAJRYA`, description: `${exercise.description} Read original written steps, technique tips, common mistakes, and safety considerations.` };
 }
 
 export default async function ExercisePage({ params }: Props) {
@@ -39,7 +39,7 @@ export default async function ExercisePage({ params }: Props) {
       <a href={exercise.video.url} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex min-h-control items-center rounded-control border border-border-control px-4 py-3 text-sm font-semibold">
         Watch on YouTube<span className="sr-only"> (opens in a new tab)</span>
       </a>
-      <p className="mt-4 max-w-3xl text-xs leading-6 text-secondary">The video belongs to its creator. Linking to it does not imply the creator endorses FormFuel. Availability on YouTube may change.</p>
+      <p className="mt-4 max-w-3xl text-xs leading-6 text-secondary">The video belongs to its creator. Linking to it does not imply the creator endorses VAJRYA. Availability on YouTube may change.</p>
     </section>}
     <div className="mt-10 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
       <section aria-labelledby="instructions-heading" className="min-w-0 rounded-panel border border-border bg-surface p-5 sm:p-8"><h2 id="instructions-heading" className="text-heading-3">How to perform</h2><ol className="mt-6 list-decimal space-y-5 pl-6 text-sm leading-7 text-secondary">{exercise.instructions.map((step) => <li key={step} className="pl-2 marker:font-mono marker:text-primary">{step}</li>)}</ol></section>

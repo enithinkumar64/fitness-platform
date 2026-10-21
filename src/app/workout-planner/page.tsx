@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { WorkoutPlanner } from "@/components/workout-planner/workout-planner";
-export const metadata: Metadata = { title: "Free Workout Planner | FormFuel", description: "Choose a curated workout split and predefined exercise program matched to your goal, experience, confirmed equipment, and weekly training days." };
+export const metadata: Metadata = { title: "Free Workout Planner | VAJRYA", description: "Choose a curated workout split and predefined exercise program matched to your goal, experience, confirmed equipment, and weekly training days." };
 export default function WorkoutPlannerPage() {
   return <main className="mx-auto w-full max-w-7xl flex-1 px-page py-section">
     <p className="font-mono text-xs tracking-widest text-primary">PLAN / PRACTICE / RECOVER</p><h1 className="mt-4 text-heading-1">Free Workout Planner</h1>
-    <p className="mb-8 mt-5 max-w-3xl text-body text-secondary">Choose an adult-oriented workout split and curated program. Approved exercise alternatives link to FormFuel’s educational library; the planner does not select from all 100 guides or assess your health and abilities. No account needed.</p>
+    <p className="mb-8 mt-5 max-w-3xl text-body text-secondary">Choose an adult-oriented workout split and curated program. Approved exercise alternatives link to VAJRYA’s educational library; the planner does not select from all 100 guides or assess your health and abilities. No account needed.</p>
     <WorkoutPlanner />
     <section aria-labelledby="planner-guidance" className="mt-10 max-w-3xl space-y-4 text-sm leading-7 text-secondary">
       <h2 id="planner-guidance" className="text-heading-3 text-foreground">Understanding your starting plan</h2>
@@ -18,7 +18,7 @@ export default function WorkoutPlannerPage() {
       <p>Begin with an easy warm-up and lighter practice sets before working sets. Choose resistance you can control, leaving about 2–3 good repetitions unperformed. Read each exercise guide and seek qualified coaching for unfamiliar movements. Stop for pain, dizziness or loss of control; do not train through symptoms.</p>
       <p>Recovery and consistent technique matter more than forcing the schedule. Reduce days, sets or difficulty if recovery is inadequate. When the top of a range feels controlled across repeated sessions, consider a small increase in available resistance or a modest progression with coaching. Change one thing at a time; progress is not guaranteed.</p>
       <p>These general templates cannot account for injuries, medical conditions, pregnancy or individual recovery. Seek qualified guidance where needed. Experience alone does not establish that an exercise is suitable.</p>
-      <p>Evidence context: <a href="https://acsm.org/resistance-training-guidelines-update-2026/">ACSM’s 2026 resistance-training guidance</a>. FormFuel’s specific splits, rep ranges and conservative starting volumes are implementation choices, not a reproduction of that guidance.</p>
+      <p>Evidence context: <a href="https://acsm.org/resistance-training-guidelines-update-2026/">ACSM’s 2026 resistance-training guidance</a>. VAJRYA’s specific splits, rep ranges and conservative starting volumes are implementation choices, not a reproduction of that guidance.</p>
       <Link href="/exercises" className="inline-flex min-h-control items-center rounded-control font-semibold">Browse Exercise Library</Link>
     </section>
   </main>;

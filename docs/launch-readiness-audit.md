@@ -1,6 +1,68 @@
-# FormFuel launch-readiness audit — Phase 1
+# VAJRYA launch-readiness audit — Phase 1
 
 **Audit date:** October 20, 2026 (America/Los_Angeles). **Scope:** the existing local production build, repository, current dependency advisories, isolated browser profiles, and a small number of public USDA requests. No application code, configuration, packages, tests, environment files, commits, deployment or Git history were changed. Only this report and its audit artifacts were created.
+
+## VAJRYA branding follow-up — verified
+
+The public name is now **VAJRYA**, with the unchanged tagline “Train smarter. Fuel better. Stay free.” The original report title was **FormFuel launch-readiness audit — Phase 1**. All original observations, severity counts, dated verification results, screenshots and evidence below remain historical; this branding follow-up does not close unrelated launch findings.
+
+Header/footer wordmarks reuse the existing icon and typography. Homepage copy, all page and exercise metadata, accessibility labels, current catalog source labels, download filename branding and current test expectations use VAJRYA. Open Graph site name is VAJRYA; page-specific Open Graph and Twitter titles derive from each page's metadata and are browser-tested. No domain, canonical URL or social image was invented. The starter favicon and unused starter public assets are unchanged; the related asset/SEO work in FF-12 remains outstanding.
+
+**Compatibility:** `formfuel-nutrition-v1`, `formfuel-progress-v1`, Web Lock prefix `formfuel:${key}` and runtime identifier `__formfuelNutritionProxyV1` are deliberately retained. Historical stored-food sources/fixtures and original audit evidence retain FormFuel. A narrow display formatter renders the legacy starter-catalog attribution as VAJRYA without rewriting saved snapshots. Schema versions, stable IDs, endpoints, routes, repository and directory names are unchanged. Existing same-origin browser data remains available; a future domain/origin change needs a separate migration decision. Reload all open tabs after updating.
+
+**Data review:** comparison against the pre-change catalog confirmed that all 29 starter-food records differ only in their app source-label branding; USDA identifiers, nutrients and portions are unchanged. Nutrition/progress storage libraries, server API implementation and synchronization hook are byte-for-byte unchanged. Exercise/program source changes are comments only. No calculation or workout-program change was made.
+
+**Verification:** lint passed; `npx tsc --noEmit` passed; standalone `npm run build` passed; unit tests **146 passed, 0 failed, 0 skipped**. Two final full `npm run test` runs each finished with **374 passed, 8 intentional skips, 0 failed**, in **49.5 s** and **50.4 s**. New tests verify current metadata across 13 representative routes, navigation/wordmarks at mobile and desktop widths, and legacy tracker-data compatibility. Existing calculator, library, planner, tracker and cross-tab suites pass. Header screenshots were inspected at 320px and 1440px. Production build/browser execution used approved unrestricted execution. An earlier overlapping TypeScript/browser-build attempt encountered disappearing generated `.next/types` files; sequential TypeScript reruns passed. No final verification remains blocked.
+
+**Remaining review:** manually inspect brand appearance on real devices and sharing clients, screen-reader pronunciation of VAJRYA, and existing-data behavior in the owner's browser profile. Chromium automation does not establish full accessibility compliance or coverage of all browser engines. No commit, push, deployment, dependency installation or new logo was performed. This name update does not change the existing audit's hosting, privacy or reliability limitations.
+
+### Branding change file manifest
+
+- `PROJECT.md`
+- `README.md`
+- `docs/exercise-library-review.md`
+- `docs/launch-readiness-audit.md`
+- `docs/nutrition-tracker.md`
+- `docs/progress-tracker.md`
+- `src/app/calculators/bmi/page.tsx`
+- `src/app/calculators/body-fat/page.tsx`
+- `src/app/calculators/calories-burned/page.tsx`
+- `src/app/calculators/ideal-weight/page.tsx`
+- `src/app/calculators/macros/page.tsx`
+- `src/app/calculators/one-rep-max/page.tsx`
+- `src/app/calculators/tdee/page.tsx`
+- `src/app/exercises/[slug]/page.tsx`
+- `src/app/exercises/page.tsx`
+- `src/app/layout.tsx`
+- `src/app/nutrition-tracker/page.tsx`
+- `src/app/page.tsx`
+- `src/app/progress-tracker/page.tsx`
+- `src/app/workout-planner/page.tsx`
+- `src/components/layout/site-footer.tsx`
+- `src/components/layout/site-header.tsx`
+- `src/components/nutrition/nutrition-tracker.tsx`
+- `src/components/progress/progress-tracker.tsx`
+- `src/lib/branding.ts`
+- `src/lib/exercises/additional-exercises.ts`
+- `src/lib/exercises/exercises.ts`
+- `src/lib/nutrition/foods.ts`
+- `src/lib/workout-planner/substitutions.ts`
+- `tests/e2e/bmi.spec.ts`
+- `tests/e2e/body-fat.spec.ts`
+- `tests/e2e/branding.spec.ts`
+- `tests/e2e/calories-burned.spec.ts`
+- `tests/e2e/exercises.spec.ts`
+- `tests/e2e/footer.spec.ts`
+- `tests/e2e/hero.spec.ts`
+- `tests/e2e/ideal-weight.spec.ts`
+- `tests/e2e/macros.spec.ts`
+- `tests/e2e/metadata.spec.ts`
+- `tests/e2e/navigation.spec.ts`
+- `tests/e2e/one-rep-max.spec.ts`
+- `tests/e2e/progress.spec.ts`
+- `tests/e2e/tdee.spec.ts`
+- `tests/e2e/workout-planner.spec.ts`
+- `tests/unit/branding.test.mjs`
 
 ## Fix 1 follow-up — verified
 
