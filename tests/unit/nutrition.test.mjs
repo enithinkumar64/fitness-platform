@@ -125,3 +125,24 @@ test('food route rejects unsupported basis without food payload; gram detail rem
   assert.equal(response.status,200);assert.equal((await response.json()).food.per100g.calories,100);
  }finally{globalThis.fetch=oldFetch;if(oldKey===undefined)delete process.env.FDC_API_KEY;else process.env.FDC_API_KEY=oldKey;}
 });
+
+test('FF-07 attribution fix preserves all 29 starter records and 65 serving snapshots',async()=>{
+ const {createHash}=await import('node:crypto');
+ // Golden digest captured before the link-only fix: IDs, values, names and portions.
+ assert.equal(createHash('sha256').update(JSON.stringify(STARTER_FOODS)).digest('hex'),'9baa01e2f116450177f0f1574415a32586f3aed116797130abbeab44fc359f82');
+ const entry=n.makeEntry('ff07-legacy','2026-10-19','Breakfast',apple,2,findServing(apple,'medium apple').id);
+ const saved=JSON.stringify({...n.EMPTY,entries:[entry]});
+ const restored=n.parseDiary(saved).entries[0];
+ assert.equal(restored.serving.reference,'https://fdc.nal.usda.gov/food-details/171688/nutrients');
+ assert.equal(restored.serving.gramsPerServing,182);
+ assert.equal(restored.grams,364);
+ assert.deepEqual(restored.food,entry.food);
+ assert.deepEqual(restored.consumed,entry.consumed);
+});
+test('FF-07 public attribution destination is the verified search fallback, not a fabricated permalink',async()=>{
+ const {USDA_FOOD_SEARCH_URL}=await import('../../src/lib/nutrition/attribution.ts');
+ assert.equal(USDA_FOOD_SEARCH_URL,'https://fdc.nal.usda.gov/food-search/');
+ const url=new URL(USDA_FOOD_SEARCH_URL);
+ assert.equal(url.protocol,'https:');assert.equal(url.search,'');assert.equal(url.hash,'');
+ // Liveness is separately verified/documented; URL shape alone does not prove it.
+});

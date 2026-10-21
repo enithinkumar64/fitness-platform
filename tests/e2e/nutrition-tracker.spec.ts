@@ -82,7 +82,7 @@ test('grams-only food, invalid household quantities, keyboard focus and 320px pr
 test('mocked USDA details expose verified portions and preview before logging',async({page})=>{
  await page.route('**/api/nutrition/search?*',r=>r.fulfill({json:{foods:[{sourceId:'999',name:'Mock rice',dataType:'Survey (FNDDS)',brand:''}]}}));
  await page.route('**/api/nutrition/food?*',r=>r.fulfill({json:{food:{id:'usda-999',name:'Mock rice',source:'USDA FoodData Central',sourceId:'999',dataType:'Survey (FNDDS)',per100g:{calories:130,protein:2.69,carbohydrates:28.17,fat:0.28},servings:[{id:'usda-999-portion-1',label:'cup',pluralLabel:'cups',gramsPerServing:158,source:'USDA FoodData Central',sourceId:'999',reference:'https://fdc.nal.usda.gov/food-details/999/nutrients',qualifier:'Synthetic API test fixture: 1 cup = 158 g'}]}}}));
- await page.getByLabel('Search foods',{exact:true}).fill('mock rice');await page.getByRole('button',{name:'Search USDA FoodData Central',exact:true}).click();await page.getByRole('button',{name:/Mock rice · Survey/}).click();await expect(page.getByRole('status',{name:'Nutrition preview'})).toContainText('158 g');await page.getByLabel('Quantity',{exact:true}).fill('0.5');await page.getByRole('button',{name:'Add food',exact:true}).click();await expect(page.getByRole('article',{name:'Breakfast',exact:true})).toContainText('0.5 cups · 79 g');
+ await page.getByLabel('Search foods',{exact:true}).fill('mock rice');await page.getByRole('button',{name:'Search USDA FoodData Central',exact:true}).click();await page.getByRole('button',{name:/Mock rice · Survey/}).click();await expect(page.getByRole('status',{name:'Nutrition preview'})).toContainText('158 g');await expect(page.getByRole('link',{name:'Find food on USDA',exact:true})).toHaveAttribute('href','https://fdc.nal.usda.gov/food-search/');await expect(page.getByRole('link',{name:'Find portion source on USDA',exact:true})).toHaveAttribute('href','https://fdc.nal.usda.gov/food-search/');await expect(page.getByRole('main')).toContainText('FDC ID 999');await page.getByLabel('Quantity',{exact:true}).fill('0.5');await page.getByRole('button',{name:'Add food',exact:true}).click();await expect(page.getByRole('article',{name:'Breakfast',exact:true})).toContainText('0.5 cups · 79 g');
 });
 test('legacy grams diary migrates and can be edited using supported household portions',async({page})=>{
  await page.evaluate(()=>localStorage.setItem('formfuel-nutrition-v1',JSON.stringify({version:1,targets:{},entries:[{id:'legacy',date:new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')+'-'+String(new Date().getDate()).padStart(2,'0'),meal:'Breakfast',food:{id:'starter-171688',name:'Apples, raw',source:'FormFuel starter catalog · USDA FoodData Central',sourceId:'171688',dataType:'SR Legacy',per100g:{calories:52,protein:0.26,carbohydrates:13.81,fat:0.17}},grams:100,consumed:{calories:52,protein:0.26,carbohydrates:13.81,fat:0.17}}]})));
@@ -126,4 +126,33 @@ test('real search and detail routes reject invalid inputs before any USDA reques
   const response=await request.get(path);expect(response.status()).toBe(400);expect(response.headers()['cache-control']).toBe('private, no-store');
   const body=await response.json();expect(body.error).toMatch(/Search must|Invalid USDA food/);expect(body.food).toBeUndefined();
  }
+});
+
+test('FF-07 food and household attribution use clearly labeled USDA search without changing saved snapshots',async({page})=>{
+ for(const [query,id] of [['Apples','171688'],['Bananas','173944'],['Rice, white','168878']]){
+  await page.getByLabel('Search foods',{exact:true}).fill(query);
+  await page.getByRole('button',{name:new RegExp(`^${query}`)}).click();
+  await expect(page.getByRole('main')).toContainText(`FDC ID ${id}`);
+  for(const name of ['Find food on USDA','Find portion source on USDA']){
+   const link=page.getByRole('link',{name,exact:true});
+   await expect(link).toHaveAttribute('href','https://fdc.nal.usda.gov/food-search/');
+   await expect(link).toHaveAttribute('target','_blank');
+   await expect(link).toHaveAttribute('rel','noopener noreferrer');
+  }
+  await expect(page.getByRole('main')).toContainText('opens Food Search; search by food name and match this ID');
+  await expect(page.locator('main a[href*="/food-details/"]')).toHaveCount(0);
+ }
+ await page.getByLabel('Search foods',{exact:true}).fill('Apples');
+ await page.getByRole('button',{name:/^Apples, raw/}).click();
+ await page.getByLabel('Quantity',{exact:true}).fill('2');
+ await page.getByRole('button',{name:'Add food',exact:true}).click();
+ await expect(page.getByRole('button',{name:/^Edit Apples, raw/})).toBeVisible();
+ const saved=await page.evaluate(()=>localStorage.getItem('formfuel-nutrition-v1'));
+ const entry=JSON.parse(saved!).entries[0];
+ expect(entry.food.sourceId).toBe('171688');expect(entry.grams).toBe(364);
+ expect(entry.serving.gramsPerServing).toBe(182);
+ expect(entry.serving.reference).toBe('https://fdc.nal.usda.gov/food-details/171688/nutrients');
+ await page.reload();await page.getByRole('button',{name:/^Edit Apples, raw/}).click();
+ await expect(page.getByRole('link',{name:'Find portion source on USDA',exact:true})).toHaveAttribute('href','https://fdc.nal.usda.gov/food-search/');
+ expect(await page.evaluate(()=>localStorage.getItem('formfuel-nutrition-v1'))).toBe(saved);
 });
