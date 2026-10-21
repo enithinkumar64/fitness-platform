@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {parseSiteUrl,siteMetadata} from '../../src/lib/site-url.ts';
@@ -23,4 +24,11 @@ test('SEO stays noindex without explicit production opt-in; configured sitemap c
   assert.equal(robots().sitemap,'https://seo-test.example/sitemap.xml');assert.equal(robots().rules.disallow,'/api/');
   const metadata=siteMetadata('/calculators/tdee');assert.equal(metadata.alternates.canonical,'/calculators/tdee');assert.equal(metadata.openGraph.url,'https://seo-test.example/calculators/tdee');
  }finally{if(oldUrl===undefined)delete process.env.SITE_URL;else process.env.SITE_URL=oldUrl;if(oldIndex===undefined)delete process.env.SITE_INDEXABLE;else process.env.SITE_INDEXABLE=oldIndex;}
+});
+
+test('checked-in Cloudflare production settings use the approved live origin',()=>{
+ const config=JSON.parse(readFileSync(new URL('../../deployment/production-seo.json',import.meta.url),'utf8'));
+ assert.equal(parseSiteUrl(config.SITE_URL),'https://vajrya.e-nithinkumar64.workers.dev');
+ assert.equal(config.SITE_INDEXABLE,'true');
+ assert.deepEqual(Object.keys(config).sort(),['SITE_INDEXABLE','SITE_URL']);
 });

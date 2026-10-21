@@ -12,12 +12,36 @@ test('both USDA endpoints fail safely without a key and retain validation',async
   }
   expect((await request.get('/api/nutrition/food?id=bad')).status()).toBe(400);
 });
-test('unconfigured hostname keeps the Worker out of the index',async({page,request})=>{
-  await page.goto('/');await expect(page).toHaveTitle(/VAJRYA/);
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content',/noindex/);
-  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
-  expect(await (await request.get('/robots.txt')).text()).toContain('Disallow: /');
-  expect(await (await request.get('/sitemap.xml')).text()).not.toContain('<loc>');
+test('SEO matches the selected production or preview profile',async({request})=>{
+  const origin='https://vajrya.e-nithinkumar64.workers.dev';
+  if(process.env.CLOUDFLARE_SEO_PREVIEW === 'true'){
+    const html=await (await request.get('/')).text();
+    expect(html).toContain('name="robots" content="noindex, nofollow"');
+    expect(html).toContain(`rel="canonical" href="${origin}"`);
+    expect(await (await request.get('/robots.txt')).text()).toMatch(/Disallow: \/\s*$/m);
+    expect(await (await request.get('/sitemap.xml')).text()).not.toContain('<loc>');
+    return;
+  }
+  const xml=await (await request.get('/sitemap.xml')).text();
+  const urls=[...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(match=>match[1]);
+  expect(urls).toHaveLength(112);expect(new Set(urls).size).toBe(112);
+  for(const url of urls){
+    expect(url.startsWith(`${origin}/`)).toBe(true);
+    const response=await request.get(new URL(url).pathname);
+    expect(response.status()).toBe(200);
+    expect(response.headers()['x-robots-tag'] ?? '').not.toMatch(/noindex|nofollow/i);
+    const html=await response.text();
+    // Next serializes the root origin without a trailing slash.
+    const metadataUrl = url === `${origin}/` ? origin : url;
+    expect(html).toContain(`rel="canonical" href="${metadataUrl}"`);
+    expect(html).toContain(`property="og:url" content="${metadataUrl}"`);
+    expect(html).toContain('name="robots" content="index, follow"');
+    expect(html).not.toMatch(/content="[^"]*noindex|content="[^"]*nofollow/i);
+  }
+  const robots=await (await request.get('/robots.txt')).text();
+  expect(robots).toContain('Allow: /');expect(robots).toContain('Disallow: /api/');
+  expect(robots).toContain(`Sitemap: ${origin}/sitemap.xml`);
+  expect(robots).not.toMatch(/Disallow: \/\s*$/m);
 });
 test('starter food logging persists in workerd at mobile width',async({page})=>{
   await page.setViewportSize({width:320,height:900});await page.goto('/nutrition-tracker');

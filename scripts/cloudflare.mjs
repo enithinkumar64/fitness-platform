@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 const root = process.cwd(), stage = resolve(root, '.cloudflare-build');
 const mode = process.argv[2];
+const previewBuild = process.argv.includes('--preview');
 if (!['build', 'preview', 'check', 'deploy'].includes(mode)) throw Error('Use build, preview, check or deploy.');
 const run = (command, args, env) => {
   const result = spawnSync(command, args, { cwd: stage, env, stdio: 'inherit' });
@@ -25,6 +26,13 @@ if (mode === 'build') {
   writeFileSync(resolve(stage,'wrangler.json'), JSON.stringify(config,null,2));
   writeFileSync(resolve(stage,'.dev.vars'), '# Intentionally empty: no USDA key in Workers preview.\n');
   const env = Object.fromEntries(['PATH','HOME','TMPDIR','TMP','TEMP','SystemRoot','NODE_EXTRA_CA_CERTS','SITE_URL','SITE_INDEXABLE'].flatMap(key => process.env[key] === undefined ? [] : [[key,process.env[key]]]));
+  // Repository settings are authoritative: stale dashboard variables cannot disable production SEO.
+  const seo = JSON.parse(readFileSync(resolve(root, 'deployment/production-seo.json'), 'utf8'));
+  const origin = new URL(seo.SITE_URL);
+  if (origin.protocol !== 'https:' || origin.origin !== seo.SITE_URL || seo.SITE_INDEXABLE !== 'true') throw Error('Invalid production SEO configuration.');
+  env.SITE_URL = seo.SITE_URL;
+  env.SITE_INDEXABLE = previewBuild ? 'false' : seo.SITE_INDEXABLE;
+  writeFileSync(resolve(stage, 'seo-profile.json'), JSON.stringify({ preview: previewBuild }));
   env.CI = 'true'; env.NODE_ENV = 'production'; env.NEXT_TELEMETRY_DISABLED = '1';
   env.CLOUDFLARE_LOAD_DEV_VARS_FROM_DOT_ENV = 'false';
   run(process.execPath, [resolve(root,'node_modules/@opennextjs/cloudflare/dist/cli/index.js'),'build'], env);
@@ -36,6 +44,9 @@ if (!['production','development','test'].every(name => compiledEnv.includes(`exp
   throw Error('Refusing Worker output with bundled dotenv values. Rebuild from the isolated staging copy.');
 }
 if (mode !== 'build') {
+  const profile = JSON.parse(readFileSync(resolve(stage, 'seo-profile.json'), 'utf8'));
+  if (mode === 'deploy' && profile.preview) throw Error('Refusing to deploy a preview artifact. Run npm run build:cloudflare.');
+  if (mode === 'preview' && !profile.preview && !process.argv.includes('--verify-production')) throw Error('For local preview run npm run build:cloudflare:preview first. Production verification requires --verify-production.');
   const env = { ...process.env, CLOUDFLARE_LOAD_DEV_VARS_FROM_DOT_ENV: 'false', WRANGLER_SEND_METRICS: 'false' };
   delete env.FDC_API_KEY; delete env.NEXT_PUBLIC_FDC_API_KEY;
   if (mode === 'check') {

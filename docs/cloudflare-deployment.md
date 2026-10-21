@@ -1,6 +1,6 @@
 # VAJRYA Cloudflare Workers deployment preparation
 
-Prepared October 20, 2026. **Nothing has been deployed. No account, paid plan, resource, domain, cloud credential or Git integration was activated.** Review these changes before any later deployment.
+Preparation recorded October 20, 2026. The owner subsequently confirmed deployment at **https://vajrya.e-nithinkumar64.workers.dev**. The indexing configuration below awaits owner review and a later deployment; no deployment was performed by this update.
 
 ## Adapter decision
 
@@ -30,7 +30,7 @@ npm run preview:cloudflare
 npm run test:cloudflare
 ```
 
-Build first. `check:cloudflare` is a **local dry run**, not an upload. Preview runs workerd locally at `http://localhost:8787`; stop it before `test:cloudflare`, which starts its own preview. Tests do not deploy. Normal Playwright uses its separate production Next server at port 3100.
+Build production first with `build:cloudflare`, then use `check:cloudflare` (a **local dry run**, not an upload) and `test:cloudflare` for production-artifact verification. For ordinary preview, build with `npm run build:cloudflare:preview`, then run `npm run preview:cloudflare` at `http://localhost:8787`. Tests do not deploy. Normal Playwright uses its separate Next server at port 3100. To run the smoke suite against a preview artifact use `CLOUDFLARE_SEO_PREVIEW=true npm run test:cloudflare`. Stop any manual preview before running tests.
 
 **Do not run the following yet:** `npm run deploy:cloudflare`. It is the actual remote deployment command provided for a future approved release. It deploys the already built artifact; rebuild after changing source/configuration or SEO variables. No upload/version-publish command was executed during preparation.
 
@@ -46,21 +46,20 @@ Do not add **FDC_API_KEY**, **NEXT_PUBLIC_FDC_API_KEY**, or USDA credentials to 
 
 ## Production URL and indexing (FF-06)
 
-No final hostname is configured or invented. The Worker name is `vajrya`; its account subdomain is not known until the owner creates/configures the Worker. A worker name is not a complete production URL. If changing the Worker name, change the self-reference service name in `wrangler.json` to match.
+The production origin is **https://vajrya.e-nithinkumar64.workers.dev**. `deployment/production-seo.json` is the checked-in source of truth: `SITE_URL` is that origin and `SITE_INDEXABLE` is exactly `true`. `npm run build:cloudflare` injects these public values into the isolated build, overriding any stale dashboard SITE settings. GitHub rebuilds therefore do not depend on manually configured SEO variables. Do not add secrets to this file.
 
-| Build environment variable | Initial value | After the real URL is assigned |
-| --- | --- | --- |
-| `SITE_URL` | Unset | Copy the exact public HTTPS origin from Cloudflare; no path, query, fragment, credentials, custom port or localhost/IP address |
-| `SITE_INDEXABLE` | Unset / `false` | Set exactly `true` only after public release review |
-| `FDC_API_KEY` | **Absent** | Keep absent |
+The existing `src/lib/site-url.ts` supplies canonical and Open Graph URLs. `/sitemap.xml` lists 112 public destinations (including all 100 exercise guides), with no APIs, query strings, personal data or invented modification dates. `/robots.txt` allows public crawling, excludes `/api/`, and points to the production sitemap. Public production metadata says `index, follow`. Indexability permits crawling; it does not guarantee Google will index or rank the site.
 
-Supply SITE settings as **build variables**, then rebuild/redeploy. They are public metadata, not secrets. Changing only a runtime variable cannot update prerendered metadata. They are intentionally not taken from `.env.local` by the Cloudflare wrapper. For an explicitly configured local build, set shell SITE variables before `npm run build:cloudflare`; the hostname in unit tests is reserved test data, not an assigned deployment address.
+Development (`npm run dev`) and ordinary Next builds retain their existing noindex defaults when SITE variables are absent. Do not set indexing variables in local dotenv files. For a **local or branch preview**, use `npm run build:cloudflare:preview`, then `npm run preview:cloudflare`. This artifact keeps production canonical URLs but emits noindex/nofollow, disallows crawling and has an empty sitemap. The preview command rejects production artifacts by default; `npm run test:cloudflare` explicitly previews production artifacts only for local verification. `deploy:cloudflare` refuses preview artifacts to avoid accidentally replacing the live site with noindex output. Rebuild production with `npm run build:cloudflare` before a later approved production deployment.
 
-`src/lib/site-url.ts` validates the origin and supplies canonical/Open Graph URLs for each known page; titles and descriptions remain unchanged. Exercise metadata uses its actual slug. `/sitemap.xml` contains the 112 actual public destinations when configured and indexable, excluding APIs, query strings and saved user data. It does not invent last-modified dates. `/robots.txt` references the configured sitemap and excludes API crawling when indexing is enabled.
+Cloudflare dashboard checklist:
+- Production build: **`npm run build:cloudflare`**; deploy: **`npm run deploy:cloudflare`**. Keep Node 22+ and installation of devDependencies.
+- Remove obsolete `SITE_URL`/`SITE_INDEXABLE` dashboard build overrides to avoid confusion; repository production settings take precedence. Runtime-only settings do not update prerendered pages.
+- Keep **FDC_API_KEY and NEXT_PUBLIC_FDC_API_KEY absent** in build variables, runtime variables, secrets and bindings. Starter foods remain available.
+- Keep automatic branch/version previews disabled. `preview_urls: false` remains configured. If branch previews are later enabled, give them the preview build command and a separate reviewed deployment workflow; the current production deploy command deliberately refuses preview artifacts.
+- Review any Cloudflare dashboard response-header/redirect rules: they must not add `X-Robots-Tag: noindex` to production or block crawlers. No account settings were inspected or changed here.
 
-With no URL or no explicit indexing opt-in, pages say **noindex, nofollow**, robots disallows crawling and the sitemap contains no URL entries. No localhost canonical is emitted. Preview version URLs are disabled in Wrangler configuration. If enabling preview deployments later, build them with `SITE_INDEXABLE=false` and never expose their hostname as a production canonical. Robots directives are indexing guidance, **not access control**.
-
-FF-06 is **partially mitigated/prepared**, not fully resolved until the owner supplies the real hostname and verifies canonical, Open Graph, sitemap and robots responses on the deployed origin. Favicon/social preview artwork remains the separately tracked FF-12 work.
+After approving, committing/pushing and rebuilding/deploying yourself, inspect live `/robots.txt`, `/sitemap.xml`, canonical and og:url tags on the homepage and a guide, and confirm no noindex/nofollow meta or response header. The currently deployed version is unchanged by this local edit. Add the exact HTTPS origin as a URL-prefix property in Google Search Console, verify ownership using an offered supported method, and submit `/sitemap.xml`. Verification may need a separate owner-authorized configuration change. FF-06 remains awaiting post-deployment verification; favicon/social artwork is separate FF-12 work.
 
 ## First deployment later — owner steps
 
@@ -70,8 +69,8 @@ These are instructions for **after review and approval**, not actions already pe
 2. After approving the code, save and push it yourself when ready. Cloudflare's Git integration builds committed repository content, not unsaved local changes. This task has not committed or pushed anything.
 3. In **Workers & Pages**, choose the Workers/Git repository connection/import workflow. Authorize the Cloudflare GitHub app for this existing repository only. Select the production branch and repository-root directory. Keep the repository name unchanged. UI labels may evolve; do not choose a Pages static-export preset or accept an automatic vinext migration.
 4. Review build settings **before saving/deploying**: Node 22 LTS or newer (for example set `NODE_VERSION=22.20.0` if the build UI requires it); install with `npm ci` including devDependencies; build command **`npm run build:cloudflare`**; deployment command **`npm run deploy:cloudflare`**. There is no Pages output-folder setting. Do not run `npm run build` alone as the Worker build. Do not omit devDependencies before building.
-5. Confirm all USDA credentials are absent from both build and runtime settings, and the project has no existing secret bindings. Initially leave SITE_URL unset and indexing disabled. Disable automatic preview/branch deployments if not intended. Connecting/saving a build can immediately deploy: stop until explicit release approval.
-6. When deployment is approved, allow the first noindex deployment, copy the **actual assigned workers.dev HTTPS address** from Cloudflare, and verify the app. Set that exact origin as build SITE_URL while keeping SITE_INDEXABLE false, rebuild and check canonicals/OG. When release checks pass, set SITE_INDEXABLE true and rebuild/deploy again. Do not use a sample hostname. A custom domain is optional and not purchased or configured here.
+5. Confirm all USDA credentials are absent from both build and runtime settings, and the project has no existing secret bindings. Use the reviewed repository production SEO settings; do not add USDA credentials. Disable automatic preview/branch deployments if not intended. Connecting/saving a build can immediately deploy: stop until explicit release approval.
+6. The first deployment has now been confirmed by the owner. For the indexing release, review the production configuration above, then rebuild and deploy only after approval. A custom domain is optional and is not configured here.
 7. Smoke-test all routes, unknown guide 404, mobile navigation, one calculator, starter food logging, Progress saving/CSV and cross-tab conflicts. Verify `/robots.txt`, `/sitemap.xml`, unique canonicals, Open Graph URLs, API 503 without a key, HTTPS and browser Web Locks. Inspect host errors/CPU/request metrics, including cold starts, before advertising the Free deployment as reliable. Do not log diary contents, sensitive notes or credentials.
 8. Keep a rollback path to the previous reviewed Worker version, monitor usage/errors, and confirm Cloudflare account quotas/terms again on release day. Do not automatically enable a paid plan if the free runtime proves insufficient.
 
@@ -93,7 +92,7 @@ Nutrition/Progress keep their original storage keys, schemas, IDs, units and cro
 
 The site retains educational estimate disclaimers, adult bounds, screening safeguards and original external-video attribution. Before monetization, the owner should establish truthful operator/contact/privacy information: browser-local sensitive tracking, hosting request/log handling, data deletion limits and third-party links. Review applicable privacy/consent requirements for the intended users, especially **before** adding ad networks, analytics or affiliate tracking. Affiliate/sponsored relationships and advertising must be distinguishable and appropriately disclosed; see [FTC endorsement/advertising guidance](https://www.ftc.gov/business-guidance/advertising-marketing/endorsements-influencers-reviews). No ads, analytics, consent provider, policy page, legal identity or medical claim was invented in this task. This preparation is not a legal-compliance or clinical certification.
 
-## Verification and dependency notes
+## Original preparation verification and dependency notes (historical)
 
 - Original lint, TypeScript and Next production build passed. Two full Next Playwright runs: **376 passed, 8 intentional skips** each (59.9 s / 54.6 s).
 - Unit tests: **150 passed** including new URL/indexing/sitemap tests. They use a reserved test origin and do not invent the real hostname.
@@ -105,3 +104,18 @@ The site retains educational estimate disclaimers, adult bounds, screening safeg
 - Initial isolated dependency symlinks failed Turbopack's filesystem boundary; dependency copies fixed it. Direct Wrangler preview before cache population returned working pages but logged cache write errors; the adapter's documented local cache-population/preview path fixed those. Restricted local HTTP probing needed approved process permissions. No final build/test was blocked.
 
 Review `docs/launch-readiness-audit.md` for FF-04, FF-06, FF-08 and remaining release decisions. No live deployment, upload, cloud resource creation, GitHub connection, paid activation, commit or push was performed.
+
+## Production indexing follow-up — October 20, 2026
+
+Owner supplied the deployed origin. Only production build configuration, preview safeguards, SEO regression tests and documentation changed; metadata helpers already supported the required tags. No application features, credentials or saved-data identifiers changed. No commit, push or deployment was performed.
+
+Verification:
+- ESLint and TypeScript passed; ordinary Next production build passed and its generated homepage retained noindex/nofollow with no canonical when unconfigured.
+- All **151 unit tests** passed, including the approved production-origin configuration and existing indexing/sitemap logic.
+- Existing homepage metadata browser tests: **2 passed** (desktop/mobile).
+- Production workerd smoke suite: **4 passed**, including canonical, og:url, index/follow and no conflicting robots header on all **112 public pages**, production robots and 112 unique sitemap URLs. It also checks USDA-disabled behavior and starter-food persistence.
+- Preview build passed; preview workerd smoke suite: **4 passed**, including noindex/nofollow, disallow-all robots and empty sitemap. Production canonical origin remains consistent in preview.
+- Initial restricted build failed to download existing Google Fonts; the approved network-enabled build passed. The first production test expected a trailing slash on the homepage canonical; Next serializes the equivalent bare origin, so the assertion was corrected and the full smoke suite passed. Neither issue required an application change.
+- Live robots/sitemap requests were unavailable through the web inspection tool. Live post-deployment verification and dashboard rule review remain owner steps; local artifact verification does not certify the currently deployed version.
+
+Search Console submission follows [Google's sitemap guidance](https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap). Dashboard commands/settings follow [Cloudflare Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/). Indexing eligibility is not a guarantee of inclusion or ranking.

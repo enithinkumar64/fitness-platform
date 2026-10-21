@@ -69,6 +69,6 @@ npm run check:cloudflare
 npm run test:cloudflare
 ```
 
-USDA credentials must remain absent on Cloudflare. Initial builds default to noindex without a guessed hostname; set build-time `SITE_URL` to the real assigned HTTPS origin and opt into `SITE_INDEXABLE=true` only after release review. Rebuild after changing these values. Existing browser data stays with its original browser/profile/origin; it is not cloud-synchronized.
+USDA credentials must remain absent on Cloudflare. Cloudflare production builds use checked-in `deployment/production-seo.json`: `SITE_URL=https://vajrya.e-nithinkumar64.workers.dev` and `SITE_INDEXABLE=true`. GitHub rebuilds receive these settings automatically. Use `npm run build:cloudflare:preview` for noindex local previews; ordinary Next development remains noindex without environment overrides. Rebuild and deploy only after review; see the deployment guide for dashboard and live verification steps. Existing browser data stays with its original browser/profile/origin; it is not cloud-synchronized.
 
 `npm run deploy:cloudflare` is provided for a later approved release only; do not run it during preparation.
