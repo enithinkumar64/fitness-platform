@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   ...siteMetadata("/"),
+  verification: {
+    google: "Pqe3iOhMcMEIxfPdxFP0sociuwzobgmZDVcUmLYnYrA",
+  },
   title: "VAJRYA | Free Fitness & Nutrition Tools",
   description:
     "Discover VAJRYA's vision for free fitness and nutrition tools, including workout plans, fitness calculators, and progress tracking.",
